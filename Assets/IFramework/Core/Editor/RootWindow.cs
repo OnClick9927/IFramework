@@ -275,7 +275,7 @@ namespace IFramework
                         T t = Constant.ResponseModel.Dispose<T>(req.downloadHandler.text);
                         if (t == null) return;
                         bool bo = t.CheckCode();
-                        if (bo && callback != null) callback.Invoke(t);
+                        if ( callback != null) callback.Invoke(t);
                     });
                 }
                 private static void PostRequest<T>(string url, WWWForm forms, Action<T> callback) where T : Constant.ResponseModel
@@ -285,7 +285,7 @@ namespace IFramework
                         T t = Constant.ResponseModel.Dispose<T>(req.downloadHandler.text);
                         if (t == null) return;
                         bool bo = t.CheckCode();
-                        if (bo && callback != null) callback.Invoke(t);
+                        if ( callback != null) callback.Invoke(t);
                     });
                 }
 
@@ -561,6 +561,8 @@ namespace IFramework
             public static void GetSignupCode(SignupInfo info)
             {
                 WebRequest.GetSignupCode(info.email, (m) => {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     _window.ShowNotification(new GUIContent("邮件发送成功"));
                 });
             }
@@ -568,6 +570,8 @@ namespace IFramework
             {
                 WebRequest.Signup(info.email, info.password, info.name, info.code, (m) =>
                 {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     WriteUserJson(info.name, m.token);
                     LoginWithToken();
                     _window.ShowNotification(new GUIContent("注册成功"));
@@ -577,6 +581,11 @@ namespace IFramework
             {
                 WebRequest.Login(userjson.token, (m) =>
                 {
+                    if (m.code != Constant.ErrorCode.Sucess)
+                    {
+                        Logout();
+                        return;
+                    }
                     FreshWebPackages();
                 });
             }
@@ -596,6 +605,8 @@ namespace IFramework
                 };
                 WebRequest.GetPackageList((m) =>
                 {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     Constant.PackageListModel local = new Constant.PackageListModel();
                     if (File.Exists(pkgjsonPath))
                     {
@@ -654,6 +665,11 @@ namespace IFramework
             {
                 WebRequest.Login(info.email, info.password, (m) =>
                 {
+                    if (m.code!= Constant.ErrorCode.Sucess)
+                    {
+                        Logout();
+                        return;
+                    }
                     WriteUserJson(m.name, m.token);
                     FreshWebPackages();
                 });
@@ -661,6 +677,8 @@ namespace IFramework
             public static void ForgetPassword(ForgetPassworldInfo info)
             {
                 WebRequest.ForgetPassword(info.email, (m) => {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     _window.ShowNotification(new GUIContent("邮件发送成功"));
                 });
             }
@@ -669,6 +687,8 @@ namespace IFramework
             public static void GetChangePasswordCode(ChangePasswordInfo info)
             {
                 WebRequest.GetChangePasswordCode(info.email, (m) => {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     _window.ShowNotification(new GUIContent("邮件发送成功"));
                 });
             }
@@ -676,6 +696,8 @@ namespace IFramework
             public static void ChangePassword(ChangePasswordInfo info)
             {
                 WebRequest.ChangePassword(info.email, info.password, info.code, (m) => {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     _window.ShowNotification(new GUIContent("密码修改成功"));
                 });
             }
@@ -694,6 +716,8 @@ namespace IFramework
                     string.Join("@", info.dependences),
                     info.assetPath, info.buffer,
                     (m) => {
+                        if (m.code != Constant.ErrorCode.Sucess) return;
+
                         _window.ShowNotification(new GUIContent("上传成功"));
                         FreshWebPackages();
                     });
@@ -703,6 +727,7 @@ namespace IFramework
             {
                 WebRequest.DownLoadPkg(name, version, (req) =>
                 {
+
                     string path = Path.Combine(pkgPath, string.Format("{0}_{1}.unitypackage", name, version));
                     File.WriteAllBytes(path, req.downloadHandler.data);
                     AssetDatabase.ImportPackage(path, true);
@@ -714,6 +739,8 @@ namespace IFramework
                 if (!login) return;
                 WebRequest.DeletePkg(userjson.name, name, version, (m) =>
                 {
+                    if (m.code != Constant.ErrorCode.Sucess) return;
+
                     _window.ShowNotification(new GUIContent("删除成功"));
                     FreshWebPackages();
                 });

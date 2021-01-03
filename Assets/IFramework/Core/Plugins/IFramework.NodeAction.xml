@@ -4,6 +4,63 @@
         <name>IFramework.NodeAction</name>
     </assembly>
     <members>
+        <member name="T:IFramework.NodeAction.ActionNode">
+            <summary>
+            节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ActionNode.isDone">
+            <summary>
+            是否完成
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ActionNode.autoRecyle">
+            <summary>
+            自动回收
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnMoveNext">
+            <summary>
+            下一帧
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnNodeReset">
+            <summary>
+            调用时机：repeat 节点完成一次
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnDispose">
+            <summary>
+            释放
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.Config(System.Boolean)">
+            <summary>
+            设置自动回收
+            </summary>
+            <param name="autoRecyle"></param>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnDataReset">
+            <summary>
+            数据重置
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnRecyle">
+            <summary>
+            被回收时
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnBegin">
+            <summary>
+            开始时
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnCompelete">
+            <summary>
+            结束时
+            </summary>
+        </member>
         <member name="T:IFramework.NodeAction.ActionNodeExtension">
             <summary>
             静态扩展
@@ -19,7 +76,7 @@
         </member>
         <member name="M:IFramework.NodeAction.ActionNodeExtension.Run``1(``0,IFramework.Modules.Coroutine.ICoroutineModule)">
             <summary>
-            运行于自定义的 ICoroutineModule 上
+            运行于 ICoroutineModule 上
             </summary>
             <typeparam name="T"></typeparam>
             <param name="self"></param>
@@ -28,7 +85,7 @@
         </member>
         <member name="M:IFramework.NodeAction.ActionNodeExtension.Run``1(``0)">
             <summary>
-            运行于环境默认的 ICoroutineModule上
+            直接运行于环境默认的上
             </summary>
             <typeparam name="T"></typeparam>
             <param name="self"></param>
@@ -79,15 +136,6 @@
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnFrame``1(``0,System.Action{``0})">
-            <summary>
-            每一帧回调
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
         <member name="M:IFramework.NodeAction.ActionNodeExtension.OnCompelete``1(``0,System.Action)">
             <summary>
             结束回调
@@ -115,32 +163,23 @@
             <param name="action"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnFrame``1(``0,System.Action)">
-            <summary>
-            每一帧回调
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
         <member name="M:IFramework.NodeAction.ActionNodeExtension.TimeSpan``1(``0,System.TimeSpan,System.Boolean)">
             <summary>
             开启一个时间节点
             </summary>
             <typeparam name="T"></typeparam>
             <param name="self"></param>
-            <param name="timeSpan"></param>
+            <param name="time"></param>
             <param name="autoRecyle"></param>
             <returns></returns>
         </member>
         <member name="M:IFramework.NodeAction.ActionNodeExtension.Until``1(``0,System.Func{System.Boolean},System.Boolean)">
             <summary>
-            开启一个条件结束节点
+            开启一个条件结束节点,直到条件成立
             </summary>
             <typeparam name="T"></typeparam>
             <param name="self"></param>
-            <param name="func"></param>
+            <param name="condition"></param>
             <param name="autoRecyle"></param>
             <returns></returns>
         </member>
@@ -150,8 +189,8 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="self"></param>
-            <param name="func"></param>
-            <param name="loop"></param>
+            <param name="condition"></param>
+            <param name="body"></param>
             <param name="autoRecyle"></param>
             <returns></returns>
         </member>
@@ -161,7 +200,7 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="self"></param>
-            <param name="action"></param>
+            <param name="body"></param>
             <param name="autoRecyle"></param>
             <returns></returns>
         </member>
@@ -172,7 +211,41 @@
             <typeparam name="T"></typeparam>
             <param name="self"></param>
             <param name="condition"></param>
-            <param name="callback"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Frame``1(``0,System.Int32,System.Boolean)">
+            <summary>
+            开启一个帧节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="frame"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.DoWhile``1(``0,System.Func{System.Boolean},System.Action,System.Boolean)">
+            <summary>
+            开启一个do while节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="condition"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.For``1(``0,System.Action,System.Func{System.Boolean},System.Action,System.Action,System.Boolean)">
+            <summary>
+            开启一个 for 节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="initializer"></param>
+            <param name="condition"></param>
+            <param name="iterator"></param>
+            <param name="body"></param>
             <param name="autoRecyle"></param>
             <returns></returns>
         </member>
@@ -207,6 +280,71 @@
             <param name="autoRecyle"></param>
             <returns></returns>
         </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.LastNode``1(``0,System.Action{IFramework.NodeAction.IActionNode})">
+            <summary>
+            获取容器节点中的最后一个
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.LastNode``2(``0,System.Action{``1})">
+            <summary>
+            获取容器节点中的最后一个
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="T1"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.NodeAction.ContainerNode">
+            <summary>
+            容器节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ContainerNode.count">
+            <summary>
+            子级节点个数
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ContainerNode.last">
+            <summary>
+            子节点最后一个
+            </summary>
+        </member>
+        <member name="F:IFramework.NodeAction.ContainerNode.nodeList">
+            <summary>
+            所有子节点
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ContainerNode.Append(IFramework.NodeAction.ActionNode)">
+            <summary>
+            添加子节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.NodeAction.ContainerNode.OnRecyle">
+            <summary>
+            回收时
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ContainerNode.OnNodeReset">
+            <summary>
+            调用时机：repeat 节点完成一次
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IForNode">
+            <summary>
+            for 节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IFrameNode">
+            <summary>
+            帧节点
+            </summary>
+        </member>
         <member name="T:IFramework.NodeAction.IActionNode">
             <summary>
             节点
@@ -230,6 +368,11 @@
         <member name="T:IFramework.NodeAction.IContainerNode">
             <summary>
             容器节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.IContainerNode.last">
+            <summary>
+            最后一个节点
             </summary>
         </member>
         <member name="T:IFramework.NodeAction.IEventNode">

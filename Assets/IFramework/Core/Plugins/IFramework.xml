@@ -1322,6 +1322,11 @@
             释放
             </summary>
         </member>
+        <member name="M:IFramework.Modules.FrameworkModule.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
         <member name="T:IFramework.Modules.FrameworkModuleContainer">
             <summary>
             模块容器
@@ -2523,16 +2528,6 @@
             是否被回收
             </summary>
         </member>
-        <member name="P:IFramework.IRecyclable.guid">
-            <summary>
-            唯一ID
-            </summary>
-        </member>
-        <member name="P:IFramework.IRecyclable.name">
-            <summary>
-            名字
-            </summary>
-        </member>
         <member name="M:IFramework.IRecyclable.Recyle">
             <summary>
             回收
@@ -2914,11 +2909,6 @@
             环境类型
             </summary>
         </member>
-        <member name="P:IFramework.FrameworkEnvironment.envName">
-            <summary>
-            环境名称
-            </summary>
-        </member>
         <member name="P:IFramework.FrameworkEnvironment.deltaTime">
             <summary>
             最近一次 Update 方法用时
@@ -2938,7 +2928,7 @@
             <summary>
             ctor
             </summary>
-            <param name="envName"></param>
+            <param name="name"></param>
             <param name="envType"></param>
         </member>
         <member name="M:IFramework.FrameworkEnvironment.Init(System.Collections.Generic.IEnumerable{System.Type})">

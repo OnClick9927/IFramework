@@ -7,12 +7,12 @@
  *History:        2018.11--
 *********************************************************************************/
 using UnityEditor;
-using IFramework.Modules.Coroutine;
 using System;
 using UnityEditor.Compilation;
 using System.IO;
 using System.Collections.Generic;
 using IFramework.Modules;
+using System.Runtime.CompilerServices;
 
 namespace IFramework
 {
@@ -104,20 +104,19 @@ namespace IFramework
             {
                 if (string.IsNullOrEmpty(_fpath))
                 {
-                    string[] assetPaths = AssetDatabase.GetAllAssetPaths();
-                    for (int i = 0; i < assetPaths.Length; i++)
-                    {
-                        if (assetPaths[i].Contains(frameworkName+"/"+ _relativeCorePath))
-                        {
-                            string tempPath = assetPaths[i];
-                            int index = tempPath.IndexOf(_relativeCorePath);
-                            _fpath = tempPath.Substring(0, index);
-                            break;
-                        }
-                    }
+                    var path = GetFilePath().ToAssetsPath();
+                    int index = path.IndexOf(_relativeCorePath);
+                    path = path.Substring(0, index);
+
+                    UnityEngine.Debug.Log(path);
+                    _fpath = path;
                 }
                 return _fpath;
             }
+        }
+        private static string GetFilePath([CallerFilePath] string path = "")
+        {
+            return path;
         }
         public static string corePath { get { return frameworkPath.CombinePath(_relativeCorePath); } }
         public static string memoryPath
@@ -151,7 +150,7 @@ namespace IFramework
         [InitializeOnLoadMethod]
         static void EditorEnvInit()
         {
-            UnityEngine.Debug.Log("IFramework: Root Path right?   " + frameworkPath);
+            UnityEngine.Debug.Log("IFramework: EditorEnv Init?   " + frameworkPath);
             Framework.CreateEnv("IFramework_Editor", envType).InitWithAttribute();
             assemblyCompilationStarted += (str) => {
                 Framework.env0.Dispose();

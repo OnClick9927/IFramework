@@ -9,6 +9,8 @@
 using UnityEngine;
 using IFramework.Tweens;
 using UnityEngine.UI;
+using IFramework.NodeAction;
+using System;
 
 namespace IFramework_Demo
 {
@@ -50,12 +52,15 @@ namespace IFramework_Demo
             //}, 5, false)
             //.SetRecyle(false);
 
-
-
+            Debug.Log(Time.time);
             tc = cube.DoMove(cube.transform.position + Vector3.right * 5, 2, false)
                   .SetLoop(4, LoopType.PingPong)
                   .SetAnimationCurve(curve)
-                  .SetRecyle(false);
+                  .SetRecyle(false)
+                  .OnCompelete(() => {
+                      Debug.Log(Time.time);
+                  })
+                  ;
             //cube.DoMove(cube.transform.position + Vector3.up * 2, 2)
             //         .SetLoop(-1, LoopType.PingPong)
             //         .SetCurve(TweenCurves.scurve)

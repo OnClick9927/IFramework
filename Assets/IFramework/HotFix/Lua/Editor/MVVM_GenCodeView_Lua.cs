@@ -17,13 +17,14 @@ namespace IFramework.UI
 {
     public partial class UIMoudleWindow
     {
+        [System.Serializable]
         public class MVVM_GenCodeView_Lua : UIMoudleWindowTab
         {
             private string hotFixScriptPath { get { return Application.dataPath.CombinePath("Project/Lua").ToAssetsPath(); } }
-            public string PanelGenDir;
-            public string panelName;
-            public string UIMapName = "UIMap_MVVM";
-            private string UIMapDir;
+            [SerializeField] private string UIMapDir;
+            [SerializeField] private string PanelGenDir;
+            [SerializeField] private string panelName;
+            [SerializeField] private string UIMapName = "UIMap_MVVM";
             string uimapPath { get { return UIMapDir.CombinePath(UIMapName).Append(".lua"); } }
 
             string ViewName
@@ -360,7 +361,20 @@ namespace IFramework.UI
 
             public override void OnEnable()
             {
+                var last = EditorTools.Prefs.GetObject<MVVM_GenCodeView_Lua, MVVM_GenCodeView_Lua>(key);
+                if (last != null)
+                {
+                    this.UIMapDir = last.UIMapDir;
+                    this.PanelGenDir = last.PanelGenDir;
+                    this.UIMapName = last.UIMapName;
+                    this.panelName = last.panelName;
+                }
+            }
+            private const string key = "MVVM_GenCodeView";
 
+            public override void OnDisable()
+            {
+                EditorTools.Prefs.SetObject<MVVM_GenCodeView_Lua, MVVM_GenCodeView_Lua>(key, this);
             }
         }
     }

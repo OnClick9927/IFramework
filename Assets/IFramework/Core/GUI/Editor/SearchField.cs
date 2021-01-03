@@ -15,6 +15,7 @@ namespace IFramework.GUITool
 {
     public class SearchField :GUIBase,IRectGUI
     {
+        //private Guid uuid = Guid.NewGuid();
         public string value = "";
         public event Action<string> onEndEdit;
         public event Action<string> onValueChange;
@@ -45,7 +46,7 @@ namespace IFramework.GUITool
             base.OnGUI(position);
             if (info != null)
             {
-                controlID = GUIUtility.GetControlID("EditorSearchField".GetHashCode(), FocusType.Keyboard, position);
+                controlID = GUIUtility.GetControlID(("EditorSearchField" /*+ uuid.ToString()*/).GetHashCode(), FocusType.Keyboard, position);
 
                 int _mode = mode;
                 object[] args = new object[] { controlID,position, modes, _mode, value };
@@ -65,10 +66,14 @@ namespace IFramework.GUITool
                 Event e = Event.current;
                 if ((e.keyCode == KeyCode.Return || e.keyCode == KeyCode.Escape || e.character == '\n'))
                 {
-                    GUIUtility.keyboardControl = -1;
-                    if (e.type != EventType.Repaint && e.type != EventType.Layout)
-                        Event.current.Use();
-                    if (onEndEdit != null) onEndEdit(value);
+                    if (GUIUtility.keyboardControl == controlID)
+                    {
+                        GUIUtility.keyboardControl = -1;
+                        if (e.type != EventType.Repaint && e.type != EventType.Layout)
+                            Event.current.Use();
+                        if (onEndEdit != null) onEndEdit(value);
+                    }
+      
                 }
             }
            

@@ -19,10 +19,10 @@ namespace IFramework_Demo
  		private Int32 _count;
 		public Int32 count
 		{
-			get { return GetProperty(ref _count, this.GetPropertyName(() => _count)); }
+			get { return GetProperty(ref _count); }
 			private set			{
 				Tmodel.count = value;
-				SetProperty(ref _count, value, this.GetPropertyName(() => _count));
+				SetProperty(ref _count, value);
 			}
 		}
         protected override void SubscribeMessage()

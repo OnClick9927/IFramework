@@ -21,7 +21,7 @@ namespace IFramework.Tweens
         private float _time;
 
         protected event Action onCompelete;
-        protected float percent { get { return (_time / duration).Clamp01(); } }
+        protected float percent { get { return ((_time) / duration).Clamp01(); } }
         protected float convertPercent { get { return _converter.Convert(percent, _time, duration); } }
         protected float deltaPercent { get { return delta + (1 - delta) * percent; } }
 
@@ -61,7 +61,7 @@ namespace IFramework.Tweens
                 _node = null;
             }
             onCompelete = null;
-            _time = 0f;
+            _time = 0;
             _converter = ValueCurveCoverter.Default;
             compeleted = false;
         }
@@ -70,26 +70,27 @@ namespace IFramework.Tweens
         public void Run()
         {
             _node = this.Sequence(this.env)
-                         .While(IsFinish, LoopEvent)
+                         .DoWhile(IsFinish, LoopEvent)
                          .OnCompelete(OnCompelete)
                          .Run();
         }
         private bool IsFinish()
         {
-            return percent < 1;
+            return percent<1;
         }
         private void LoopEvent()
         {
             if (recyled) return;
             _time += deltaTime * timeScale;
             MoveNext();
+
         }
         private void OnCompelete()
         {
             _time = 0;
+            compeleted = true;
             if (onCompelete != null)
                 onCompelete();
-            compeleted = true;
         }
     }
 

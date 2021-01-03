@@ -55,6 +55,8 @@ namespace IFramework.UI
             public virtual string name { get; }
             public virtual void OnGUI() { }
             public virtual void OnEnable() { }
+            public virtual void OnDisable() { }
+
         }
 
         public class RunTimeView : UIMoudleWindowTab
@@ -62,6 +64,8 @@ namespace IFramework.UI
             private const float typeWith = 200;
             private const float paneltypeWith = 100;
             private SearchField searcher;
+            private SearchField searcher2;
+
             private UIModule moudle;
             [SerializeField] private Vector2 stackSroll, cacheScroll;
             [SerializeField] private string searchText_module = string.Empty;
@@ -80,22 +84,43 @@ namespace IFramework.UI
 
             [SerializeField] private bool IsStackOn = true;
             [SerializeField] private bool IsCacheOn = true;
-
+            public EnvironmentType envType= EnvironmentType.Ev1;
             public override string name { get { return "Runtime"; } }
 
             public override void OnEnable()
             {
                 searcher = new SearchField("", null, 0);
-
+                searcher2 = new SearchField(searchTxt_panel, null, 0);
                 searcher.onEndEdit += (str) =>
                 {
                     searchText_module = str;
                     if (!EditorApplication.isPlaying) return;
-                    moudle = Framework.env1.modules.FindModule<UIModule>(str);
-                    if (moudle == null)
+                    FrameworkEnvironment env1 = Framework.GetEnv(envType);
+                    try
                     {
-                        EditorWindow.focusedWindow.ShowNotification(new GUIContent("Not Find,Moudle Must Bind Framework First"));
+                        if (env1 != null)
+                        {
+                            moudle = env1.modules.FindModule<UIModule>(str);
+                            if (moudle == null)
+                            {
+                                EditorWindow.focusedWindow.ShowNotification(new GUIContent("Not Find,Moudle Must Bind Framework First"));
+                            }
+                        }
+                        else
+                        {
+                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("This Env is Null"));
+                        }
                     }
+                    catch (Exception)
+                    {
+                        EditorWindow.focusedWindow.ShowNotification(new GUIContent("Unknow Err"));
+                    }
+                   
+
+                };
+                searcher2.onEndEdit += (str) =>
+                {
+                    searchTxt_panel = str;
                 };
             }
             public override void OnGUI()
@@ -103,9 +128,13 @@ namespace IFramework.UI
                 this.BeginHorizontal()
                           .Label("Search UIMoudle ")
                           .FlexibleSpace()
+                          .Pan(() => {
+                              envType = (EnvironmentType)EditorGUILayout.EnumPopup(envType);
+                          })
                           .Label("", GUILayout.MaxWidth(300))
                           .Pan(() =>
                           {
+
                               searcher.OnGUI(GUILayoutUtility.GetLastRect());
                           })
                       .EndHorizontal();
@@ -124,12 +153,10 @@ namespace IFramework.UI
                     .BeginHorizontal(Styles.toolbar)
                         .Label("Search Panel By Name")
                         .FlexibleSpace()
-                        .TextField(ref searchTxt_panel, Styles.searchField, GUILayout.MaxWidth(300))
-                        .Button(() =>
-                        {
-                            searchTxt_panel = "";
-                            GUI.FocusControl(null);
-                        }, "", Styles.cancelBtn)
+                        .Label("", GUILayout.MaxWidth(300))
+                        .Pan(() => {
+                            searcher2.OnGUI(GUILayoutUtility.GetLastRect());
+                        })
                     .EndHorizontal()
                     .BeginHorizontal(Styles.toolbar)
                         .Label("Name")
@@ -282,17 +309,18 @@ namespace IFramework.UI
                 }
             }
         }
+        [System.Serializable]
         public class MVVM_GenCodeView : UIMoudleWindowTab
         {
+            private const string key= "MVVM_GenCodeView";
             public override string name { get { return "MVVN_GenCode_CS"; } }
-            public string UIMapDir;
-            public string PanelGenDir;
-            public string UIMapName = "UIMap_MVVM";
-
-            private List<string> panelTypes;
-            private string panelType;
-            private List<string> modelTypes;
-            private string modelType;
+            [SerializeField] private string UIMapDir;
+            [SerializeField] private string PanelGenDir;
+            [SerializeField] private string UIMapName = "UIMap_MVVM";
+            [SerializeField] private List<string> panelTypes;
+            [SerializeField] private string panelType;
+            [SerializeField] private List<string> modelTypes;
+            [SerializeField] private string modelType;
 
             string genpath;
             string uimapGenPath { get { return genpath.CombinePath("MapGen_MVVM.txt"); } }
@@ -302,11 +330,27 @@ namespace IFramework.UI
 
             public override void OnEnable()
             {
+                var last = EditorTools.Prefs.GetObject<MVVM_GenCodeView, MVVM_GenCodeView>(key);
+                if (last!=null)
+                {
+                    this.UIMapDir = last.UIMapDir;
+                    this.PanelGenDir = last.PanelGenDir;
+                    this.UIMapName = last.UIMapName;
+
+                    this.panelTypes = last.panelTypes;
+                    this.panelType = last.panelType;
+                    this.modelTypes = last.modelTypes;
+                    this.modelType = last.modelType;
+                }
                 genpath = EditorEnv.memoryPath.CombinePath("UI");
                 if (!Directory.Exists(genpath))
                 {
                     Directory.CreateDirectory(genpath);
                 }
+            }
+            public override void OnDisable()
+            {
+                EditorTools.Prefs.SetObject<MVVM_GenCodeView, MVVM_GenCodeView>(key,this);
             }
             private int hashID;
             private bool DropdownButton(int id, Rect position, GUIContent content)
@@ -582,11 +626,15 @@ namespace IFramework.UI
                 return result.Append(string.Format("\t\tprivate {0} _{1};\n", ft.Name, fn))
                                 .Append(string.Format("\t\tpublic {0} {1}\n", ft.Name, fn))
                                 .Append(string.Format("\t\t{0}\n","{"))
-                                .Append(string.Format("\t\t\tget {0} return GetProperty(ref _{1}, this.GetPropertyName(() => _{1})); {2}\n", "{", fn, "}"))
+                                //.Append(string.Format("\t\t\tget {0} return GetProperty(ref _{1}, this.GetPropertyName(() => _{1})); {2}\n", "{", fn, "}"))
+                                .Append(string.Format("\t\t\tget {0} return GetProperty(ref _{1}); {2}\n", "{", fn, "}"))
+
                                 .Append(string.Format("\t\t\tprivate set"))
                                 .Append(string.Format("\t\t\t{0}\n","{"))
                                 .Append(string.Format("\t\t\t\tTmodel.{0} = value;\n", fn))
-                                .Append(string.Format("\t\t\t\tSetProperty(ref _{0}, value, this.GetPropertyName(() => _{0}));\n", fn))
+                                //.Append(string.Format("\t\t\t\tSetProperty(ref _{0}, value, this.GetPropertyName(() => _{0}));\n", fn))
+                                .Append(string.Format("\t\t\t\tSetProperty(ref _{0}, value);\n", fn))
+
                                 .Append(string.Format("\t\t\t{0}\n","}"))
                                 .Append(string.Format("\t\t{0}\n\n","}"));
             }
@@ -780,7 +828,7 @@ namespace IFramework.UI
         private Dictionary<string,UIMoudleWindowTab> _tabs;
         private string[] _names;
         private int viewIndex;
-
+        private const string key = "UIMoudleWindow";
 
 
         private void OnEnable() 
@@ -795,7 +843,15 @@ namespace IFramework.UI
             {
                 item.OnEnable();
             }
-            viewIndex = 0;
+            viewIndex = EditorTools.Prefs.GetInt<UIMoudleWindow>(key, viewIndex); 
+        }
+        private void OnDisable()
+        {
+            foreach (var item in _tabs.Values)
+            {
+                item.OnDisable();
+            }
+            EditorTools.Prefs.SetInt<UIMoudleWindow>(key, viewIndex);
         }
         private void OnGUI()
         {

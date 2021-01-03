@@ -148,9 +148,11 @@ namespace IFramework.Tweens
                 {
                     _repeat = r.Sequence((s) =>
                     {
-                        s.Until(IsFinish)
+
+                      s.Until(IsFinish)
                             .OnBegin(OnLoopBegin)
-                            .OnCompelete(OnLoopCompelete);
+                            .OnCompelete(OnLoopCompelete)
+                            ;
                     });
                 }, loop)
                 .OnCompelete(OnTweenFinish)
