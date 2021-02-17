@@ -29,8 +29,8 @@ namespace IFramework.UI
         void CreateCanvas();
 
 
-        UIPanel Get(Type type, string name, UILayer layer = UILayer.Common, string path = "");
-        T Get<T>(string name, UILayer layer = UILayer.Common, string path = "") where T : UIPanel;
+        UIPanel Get(Type type, string name, UILayer layer = UILayer.Common);
+        T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel;
         void GoBack();
         void GoForWard();
 
@@ -41,8 +41,8 @@ namespace IFramework.UI
         bool ExistInMemory(UIPanel panel);
         bool ExistInStack(UIPanel panel);
         bool HaveLoad(string panelName);
-        UIPanel Load(Type type, string name, UILayer layer = UILayer.Common, string path = "");
-        T Load<T>(string name, UILayer layer = UILayer.Common, string path = "") where T : UIPanel;
+        UIPanel Load(Type type, string name, UILayer layer = UILayer.Common);
+        T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel;
         UIPanel MemoryPeek();
         void Push(UIPanel ui);
         void SetCamera(Camera ca, bool isLast = true, int index = -1);

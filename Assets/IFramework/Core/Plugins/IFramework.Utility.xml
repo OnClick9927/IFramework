@@ -405,5 +405,95 @@
         <member name="M:IFramework.Utility.Verifier.Crc32.HashFinal">
             在加密流对象处理完最后的数据后完成哈希计算。
         </member>
+        <member name="T:IFramework.ValueCurve">
+            <summary>
+            用于取值的曲线
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.count">
+            <summary>
+            点的总个数
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.step">
+            <summary>
+            步长
+            </summary>
+        </member>
+        <member name="M:IFramework.ValueCurve.#ctor(System.Collections.Generic.List{IFramework.Point2},System.Single)">
+            <summary>
+            ctor
+            </summary>
+            <param name="points"></param>
+            <param name="step"></param>
+        </member>
+        <member name="M:IFramework.ValueCurve.AddPoint(IFramework.Point2)">
+            <summary>
+            添加点
+            </summary>
+            <param name="point"></param>
+        </member>
+        <member name="M:IFramework.ValueCurve.RemovePoint(IFramework.Point2)">
+            <summary>
+            移除点
+            </summary>
+            <param name="point"></param>
+        </member>
+        <member name="M:IFramework.ValueCurve.GetStep(System.Int32)">
+            <summary>
+            获取一步
+            </summary>
+            <param name="step"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ValueCurve.GetPercent(System.Single)">
+            <summary>
+            按照百分比获取步
+            </summary>
+            <param name="mul"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ValueCurve.GetYWithX(System.Single)">
+            <summary>
+            通过x获取y
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ValueCurve.ClacSteps">
+            <summary>
+            计算每一步
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.ccurve">
+            <summary>
+            0，0 -- 1，1 对称往上拱起
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.scurve">
+            <summary>
+             0，0 -- 1，1 s形状
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.linecurve">
+            <summary>
+             0，0 -- 1，1 直线
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.ccurve_rough">
+            <summary>
+            0，0 -- 1，1 对称往上拱起(粗糙)
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.scurve_rough">
+            <summary>
+             0，0 -- 1，1 s形状(粗糙)
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.linecurve_rough">
+            <summary>
+             0，0 -- 1，1 直线(粗糙)
+            </summary>
+        </member>
     </members>
 </doc>

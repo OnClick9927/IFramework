@@ -42,7 +42,7 @@ namespace IFramework.UI
     }
     public interface IPanelLoader
     {
-        UIPanel Load(Type type, string name, UILayer layer = UILayer.Common, string path = "");
+        UIPanel Load(Type type, string name);
     }
     public partial class UIModule : IUIModule
     {
@@ -219,7 +219,7 @@ namespace IFramework.UI
             this._groups = groups;
         }
 
-        public UIPanel Load(Type type, string name, UILayer layer = UILayer.Common, string path = "")
+        public UIPanel Load(Type type, string name, UILayer layer = UILayer.Common)
         {
             if (_groups == null)
                 throw new Exception("Please Set ModuleType First");
@@ -231,7 +231,7 @@ namespace IFramework.UI
             }
             for (int i = 0; i < _loaders.Count; i++)
             {
-                var result = _loaders[i].Load(type, name, layer, path);
+                var result = _loaders[i].Load(type, name);
                 if (result == null) continue;
                 ui = result;
                 ui = GameObject.Instantiate(ui);
@@ -242,12 +242,12 @@ namespace IFramework.UI
                 _groups.Subscribe(ui);
                 return ui;
             }
-            Log.E(string.Format("NO ui Type: {0}  Path: {1}  Layer: {2}  Name: {3}", type, path, layer, name));
+            Log.E(string.Format("NO ui Type: {0}    Layer: {1}  Name: {2}", type, layer, name));
             return ui;
         }
-        public T Load<T>(string name, UILayer layer = UILayer.Common, string path = "") where T : UIPanel
+        public T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
         {
-            return (T)Load(typeof(T), name, layer, path);
+            return (T)Load(typeof(T), name, layer);
         }
         public bool HaveLoad(string panelName)
         {
@@ -308,20 +308,20 @@ namespace IFramework.UI
             _groups.InvokeViewState(arg);
         }
 
-        public UIPanel Get(Type type, string name, UILayer layer = UILayer.Common, string path = "")
+        public UIPanel Get(Type type, string name, UILayer layer = UILayer.Common)
         {
             //if (UICache.Count > 0) ClearCache(arg);
             if (current != null && current.name == name && current.GetType() == type)
                 return current;
             var panel = _groups.FindPanel(name);
             if (panel == null)
-                panel = Load(type, name, layer, path);
+                panel = Load(type, name, layer);
             Push(panel);
             return panel;
         }
-        public T Get<T>(string name, UILayer layer = UILayer.Common, string path = "") where T : UIPanel
+        public T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
         {
-            return (T)Get(typeof(T), name, layer, path);
+            return (T)Get(typeof(T), name, layer);
         }
     }
 }
