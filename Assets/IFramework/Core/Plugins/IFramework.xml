@@ -539,12 +539,13 @@
             <param name="undo"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.Modules.Recorder.OperationRecorderEx.Subscribe``1(``0)">
+        <member name="M:IFramework.Modules.Recorder.OperationRecorderEx.Subscribe``1(``0,System.Boolean)">
             <summary>
             注册
             </summary>
             <typeparam name="T"></typeparam>
             <param name="t"></param>
+            <param name="redo"></param>
             <returns></returns>
         </member>
         <member name="T:IFramework.Modules.Config.ConfigModule">
@@ -3395,6 +3396,1500 @@
             清除所有
             </summary>
         </member>
+        <member name="T:IFramework.Net.OnReceivedHandler">
+            <summary>
+            接收数据处理,返回的是实际接收到的数据
+            </summary>
+            <param name="sToken"></param>
+            <param name="content"></param>
+        </member>
+        <member name="T:IFramework.Net.OnReceivedSegmentHandler">
+            <summary>
+            接受数据处理，返回预设的缓冲区大小和实际接收到的数据偏移和数量
+            </summary>
+            <param name="session"></param>
+        </member>
+        <member name="T:IFramework.Net.OnSentHandler">
+            <summary>
+            发送数据处理
+            </summary>
+            <param name="session"></param>
+        </member>
+        <member name="T:IFramework.Net.OnAcceptedHandler">
+            <summary>
+            接受连接对象处理
+            </summary>
+            <param name="sToken"></param>
+        </member>
+        <member name="T:IFramework.Net.OnDisconnectedHandler">
+            <summary>
+            断开连接对象处理
+            </summary>
+            <param name="sToken"></param>
+        </member>
+        <member name="T:IFramework.Net.OnConnectedHandler">
+            <summary>
+            建立连接对象处理
+            </summary>
+            <param name="sToken"></param>
+            <param name="isConnected"></param>
+        </member>
+        <member name="P:IFramework.Net.SocketToken.TokenId">
+            <summary>
+            会话编号
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.SocketToken.TokenSocket">
+            <summary>
+            会话socket对象
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.SocketToken.TokenIpEndPoint">
+            <summary>
+            会话的终结点
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.SocketToken.#ctor(System.Int32)">
+            <summary>
+            构造
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.SocketToken.Close">
+            <summary>
+            关闭该连接对象，释放相关资源,非完全释放Socket对象
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.SocketToken.Dispose">
+            <summary>
+            关闭该连接对象并释放该对象资源
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.SocketToken.CompareTo(IFramework.Net.SocketToken)">
+            <summary>
+            根据SocketId比较大小
+            </summary>
+            <param name="sToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.SocketToken.Dispose(System.Boolean)">
+            <summary>
+            释放资源
+            </summary>
+            <param name="isDisposing"></param>
+        </member>
+        <member name="P:IFramework.Net.Http.HttpHeader.Extensions">
+            <summary>
+            extend reserve
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Http.HttpHeader.DNT">
+            <summary>
+            do not track
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.#ctor(System.Int32)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="capacity">初始容量</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.#ctor(System.Byte[])">
+            <summary>
+            构造方法
+            </summary>
+            <param name="bytes">初始字节数组</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Allocate(System.Int32,System.Boolean)">
+            <summary>
+            构建一个capacity长度的字节缓存区ByteBuffer对象
+            </summary>
+            <param name="capacity">初始容量</param>
+            <param name="fromPool">
+            true表示获取一个池化的ByteBuffer对象，池化的对象必须在调用Dispose后才会推入池中，此方法为线程安全的。
+            当为true时，从池中获取的对象的实际capacity值。
+            </param>
+            <returns>ByteBuffer对象</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Allocate(System.Byte[],System.Boolean)">
+            <summary>
+            构建一个以bytes为字节缓存区的ByteBuffer对象，一般不推荐使用
+            </summary>
+            <param name="bytes">初始字节数组</param>
+            <param name="fromPool">
+            true表示获取一个池化的ByteBuffer对象，池化的对象必须在调用Dispose后才会推入池中，此方法为线程安全的。
+            </param>
+            <returns>ByteBuffer对象</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.FixLength(System.Int32)">
+            <summary>
+            根据value，确定大于此length的最近的2次方数，如length=7，则返回值为8；length=12，则返回16
+            </summary>
+            <param name="value">参考容量</param>
+            <returns>比参考容量大的最接近的2次方数</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Flip(System.Byte[])">
+            <summary>
+            翻转字节数组，如果本地字节序列为高字节序列，则进行翻转以转换为低字节序列
+            </summary>
+            <param name="bytes">待转为高字节序的字节数组</param>
+            <returns>低字节序列的字节数组</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.FixSizeAndReset(System.Int32,System.Int32)">
+            <summary>
+            确定内部字节缓存数组的大小
+            </summary>
+            <param name="currLen">当前容量</param>
+            <param name="futureLen">将来的容量</param>
+            <returns>当前缓冲区的最大容量</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.EnsureWritableBytes(System.Int32)">
+            <summary>
+            确保有这么多字节可以用来写入
+            </summary>
+            <param name="minBytes"></param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            将bytes字节数组从startIndex开始的length字节写入到此缓存区
+            </summary>
+            <param name="bytes">待写入的字节数据</param>
+            <param name="startIndex">写入的开始位置</param>
+            <param name="length">写入的长度</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteBytes(System.Byte[],System.Int32)">
+            <summary>
+            将字节数组中从0到length的元素写入缓存区
+            </summary>
+            <param name="bytes">待写入的字节数据</param>
+            <param name="length">写入的长度</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteBytes(System.Byte[])">
+            <summary>
+            将字节数组全部写入缓存区
+            </summary>
+            <param name="bytes">待写入的字节数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Write(IFramework.Net.KCP.BufferQueue)">
+            <summary>
+            将一个ByteBuffer的有效字节区写入此缓存区中
+            </summary>
+            <param name="buffer">待写入的字节缓存区</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteShort(System.Int16)">
+            <summary>
+            写入一个int16数据
+            </summary>
+            <param name="value">short数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteUshort(System.UInt16)">
+            <summary>
+            写入一个uint16数据
+            </summary>
+            <param name="value">ushort数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteInt(System.Int32)">
+            <summary>
+            写入一个int32数据
+            </summary>
+            <param name="value">int数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteUint(System.UInt32)">
+            <summary>
+            写入一个uint32数据
+            </summary>
+            <param name="value">uint数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteLong(System.Int64)">
+            <summary>
+            写入一个int64数据
+            </summary>
+            <param name="value">long数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteUlong(System.UInt64)">
+            <summary>
+            写入一个uint64数据
+            </summary>
+            <param name="value">ulong数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteFloat(System.Single)">
+            <summary>
+            写入一个float数据
+            </summary>
+            <param name="value">float数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteByte(System.Byte)">
+            <summary>
+            写入一个byte数据
+            </summary>
+            <param name="value">byte数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteByte(System.Int32)">
+            <summary>
+            写入一个byte数据
+            </summary>
+            <param name="value">byte数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteDouble(System.Double)">
+            <summary>
+            写入一个double类型数据
+            </summary>
+            <param name="value">double数据</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteChar(System.Char)">
+            <summary>
+            写入一个字符
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteBoolean(System.Boolean)">
+            <summary>
+            写入一个布尔型数据
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadByte">
+            <summary>
+            读取一个字节
+            </summary>
+            <returns>字节数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Get(System.Int32,System.Int32)">
+            <summary>
+            获取从index索引处开始len长度的字节
+            </summary>
+            <param name="index"></param>
+            <param name="len"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Read(System.Int32)">
+            <summary>
+            从读取索引位置开始读取len长度的字节数组
+            </summary>
+            <param name="len">待读取的字节长度</param>
+            <returns>字节数组</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadUshort">
+            <summary>
+            读取一个uint16数据
+            </summary>
+            <returns>ushort数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadShort">
+            <summary>
+            读取一个int16数据
+            </summary>
+            <returns>short数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadUint">
+            <summary>
+            读取一个uint32数据
+            </summary>
+            <returns>uint数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadInt">
+            <summary>
+            读取一个int32数据
+            </summary>
+            <returns>int数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadUlong">
+            <summary>
+            读取一个uint64数据
+            </summary>
+            <returns>ulong数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadLong">
+            <summary>
+            读取一个long数据
+            </summary>
+            <returns>long数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadFloat">
+            <summary>
+            读取一个float数据
+            </summary>
+            <returns>float数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadDouble">
+            <summary>
+            读取一个double数据
+            </summary>
+            <returns>double数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadChar">
+            <summary>
+            读取一个字符
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadBoolean">
+            <summary>
+            读取布尔型数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadBytes(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            从读取索引位置开始读取len长度的字节到disbytes目标字节数组中
+            </summary>
+            <param name="disbytes">读取的字节将存入此字节数组</param>
+            <param name="disstart">目标字节数组的写入索引</param>
+            <param name="len">读取的长度</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetByte(System.Int32)">
+            <summary>
+            获取一个字节
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetByte">
+            <summary>
+            获取一个字节
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetDouble(System.Int32)">
+            <summary>
+            获取一个双精度浮点数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetDouble">
+            <summary>
+            获取一个双精度浮点数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetFloat(System.Int32)">
+            <summary>
+            获取一个浮点数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetFloat">
+            <summary>
+            获取一个浮点数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetLong(System.Int32)">
+            <summary>
+            获取一个长整形数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetLong">
+            <summary>
+            获取一个长整形数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetUlong(System.Int32)">
+            <summary>
+            获取一个长整形数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetUlong">
+            <summary>
+            获取一个长整形数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetInt(System.Int32)">
+            <summary>
+            获取一个整形数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetInt">
+            <summary>
+            获取一个整形数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetUint(System.Int32)">
+            <summary>
+            获取一个整形数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetUint">
+            <summary>
+            获取一个整形数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetShort(System.Int32)">
+            <summary>
+            获取一个短整形数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetShort">
+            <summary>
+            获取一个短整形数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetUshort(System.Int32)">
+            <summary>
+            获取一个短整形数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetUshort">
+            <summary>
+            获取一个短整形数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetChar(System.Int32)">
+            <summary>
+            获取一个char数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetChar">
+            <summary>
+            获取一个char数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetBoolean(System.Int32)">
+            <summary>
+            获取一个布尔数据，不改变数据内容
+            </summary>
+            <param name="index">字节索引</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.GetBoolean">
+            <summary>
+            获取一个布尔数据，不改变数据内容
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.DiscardReadBytes">
+            <summary>
+            清除已读字节并重建缓存区
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.KCP.BufferQueue.reader">
+            <summary>
+            设置/获取读指针位置
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.KCP.BufferQueue.writer">
+            <summary>
+            设置/获取写指针位置
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.MarkReaderIndex">
+            <summary>
+            标记读取的索引位置
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.MarkWriterIndex">
+            <summary>
+            标记写入的索引位置
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ResetReaderIndex">
+            <summary>
+            将读取的索引位置重置为标记的读取索引位置
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ResetWriterIndex">
+            <summary>
+            将写入的索引位置重置为标记的写入索引位置
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.KCP.BufferQueue.canRead">
+            <summary>
+            可读的有效字节数
+            </summary>
+            <returns>可读的字节数</returns>
+        </member>
+        <member name="P:IFramework.Net.KCP.BufferQueue.canWrite">
+            <summary>
+            可写的剩余空间数
+            </summary>
+            <returns>可写的字节数</returns>
+        </member>
+        <member name="P:IFramework.Net.KCP.BufferQueue.capacity">
+            <summary>
+            获取缓存区容量大小
+            </summary>
+            <returns>缓存区容量</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ToArray">
+            <summary>
+            获取可读的字节数组
+            </summary>
+            <returns>字节数据</returns>
+        </member>
+        <member name="T:IFramework.Net.KCP.BufferQueue.DataType">
+            <summary>
+            简单的数据类型
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteValue(System.Int32,IFramework.Net.KCP.BufferQueue.DataType)">
+            <summary>
+            写入一个数据
+            </summary>
+            <param name="value">待写入的数据</param>
+            <param name="type">待写入的数据类型</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadValue(IFramework.Net.KCP.BufferQueue.DataType)">
+            <summary>
+            读取一个值，值类型根据type决定，int或short或byte
+            </summary>
+            <param name="type">值类型</param>
+            <returns>int数据</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteUTF8String(System.String,IFramework.Net.KCP.BufferQueue.DataType)">
+            <summary>
+            写入一个UTF-8字符串，UTF-8字符串无高低字节序问题
+            <para>写入缓冲区的结构为字符串字节长度（类型由lenType指定） + 字符串字节数组</para>
+            </summary>
+            <param name="content">待写入的字符串</param>
+            <param name="lenType">写入的字符串长度类型</param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.WriteUTF(System.String)">
+            <summary>
+            写入以short表示的字符串字节长度和字符串字节数据
+            </summary>
+            <param name="content"></param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadUTF8String(System.Int32)">
+            <summary>
+            读取一个UTF-8字符串，UTF-8字符串无高低字节序问题
+            </summary>
+            <param name="len">需读取的字符串长度</param>
+            <returns>字符串</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadUTF8String(IFramework.Net.KCP.BufferQueue.DataType)">
+            <summary>
+            读取一个UTF-8字符串，UTF-8字符串无高低字节序问题
+            </summary>
+            <param name="lenType">字符串长度类型</param>
+            <returns>字符串</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ReadUTF">
+            <summary>
+            读取short类型的字符串字节长度，然后根据此长度读取对应数量的字节数据后转为字符串
+            </summary>
+            <returns>UTF-8字符串</returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Copy">
+            <summary>
+            复制一个对象，具有与原对象相同的数据，不改变原对象的数据，不包括已读数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Clone">
+            <summary>
+            深度复制，具有与原对象相同的数据，不改变原对象的数据，包括已读数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.ForEach(System.Action{System.Byte})">
+            <summary>
+            遍历所有的字节数据
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Clear">
+            <summary>
+            清空此对象，但保留字节缓存数组（空数组）
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.KCP.BufferQueue.Dispose">
+            <summary>
+            释放对象，清除字节缓存数组，如果此对象为可池化，那么调用此方法将会把此对象推入到池中等待下次调用
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.KCP.Kcp.Mss">
+            <summary>
+            每个分片最大  大小
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.SocketBufferManager.BlockSize">
+            <summary>
+            块缓冲区大小
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.SocketBufferManager.#ctor(System.Int32,System.Int32)">
+            <summary>
+            缓冲区管理构造
+            </summary>
+            <param name="maxCounts"></param>
+            <param name="blockSize"></param>
+        </member>
+        <member name="M:IFramework.Net.SocketBufferManager.SetBuffer(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+            设置缓冲区
+            </summary>
+            <param name="agrs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.SocketBufferManager.WriteBuffer(System.Net.Sockets.SocketAsyncEventArgs,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            写入缓冲区
+            </summary>
+            <param name="agrs"></param>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="cnt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.SocketBufferManager.FreeBuffer(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+            释放缓冲区
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:IFramework.Net.SocketBufferManager.BufferToSegments(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            自动按发送缓冲区的块大小分多次包
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.NetProtocolProvider.Decode(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            解码
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.NetProtocolProvider.Encode(IFramework.Packets.Packet)">
+            <summary>
+            编码
+            </summary>
+            <param name="pkg"></param>
+            <returns></returns>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpClientProvider.SentCallback">
+            <summary>
+            发送回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpClientProvider.RecievedCallback">
+            <summary>
+            接收数据回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpClientProvider.ReceivedOffsetCallback">
+            <summary>
+            接受数据回调，返回缓冲区和偏移量
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpClientProvider.DisconnectedCallback">
+            <summary>
+            断开连接回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpClientProvider.ConnectedCallback">
+            <summary>
+            连接回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpClientProvider.IsConnected">
+            <summary>
+            是否连接状态
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造
+            </summary>
+            <param name="chunkBufferSize">发送块缓冲区大小</param>
+            <param name="bufferNumber">缓冲发送数</param>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.Connect(System.Int32,System.String)">
+            <summary>
+            异步建立连接
+            </summary>
+            <param name="port"></param>
+            <param name="ip"></param>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.ConnectTo(System.Int32,System.String)">
+            <summary>
+            异步等待连接返回结果
+            </summary>
+            <param name="port"></param>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.ConnectSync(System.Int32,System.String)">
+            <summary>
+            同步连接
+            </summary>
+            <param name="port"></param>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.Send(IFramework.Net.SegmentOffset,System.Boolean)">
+            <summary>
+            根据偏移发送缓冲区数据
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="size"></param>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.SendFile(System.String)">
+            <summary>
+            发送文件
+            </summary>
+            <param name="filename"></param>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.SendSync(IFramework.Net.SegmentOffset,IFramework.Net.SegmentOffset)">
+            <summary>
+            同步发送并接收数据,不设置receiveSegment 默认为只发数据
+            </summary>
+            <param name="buffer"></param>
+            <param name="receiveBlock"></param>
+            <param name="recAct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.ReceiveSync(IFramework.Net.SegmentOffset,System.Action{IFramework.Net.SegmentOffset})">
+            <summary>
+            同步接收数据
+            </summary>
+            <param name="receiveBlock"></param>
+            <param name="receivedAction"></param>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpClientProvider.Disconnect">
+            <summary>
+            断开连接
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpServerProvider.AcceptedCallback">
+            <summary>
+            接受连接回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpServerProvider.ReceivedCallback">
+            <summary>
+            接收数据回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpServerProvider.ReceivedOffsetCallback">
+             <summary>
+            接收数据缓冲区，返回缓冲区的实际偏移和数量
+             </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpServerProvider.SentCallback">
+            <summary>
+            发送回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpServerProvider.DisconnectedCallback">
+            <summary>
+            断开连接回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Tcp.TcpServerProvider.NumberOfConnections">
+            <summary>
+            连接数
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Tcp.TcpServerProvider.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造
+            </summary>
+            <param name="maxConnections">最大连接数</param>
+            <param name="chunkBufferSize">接收块缓冲区</param>
+        </member>
+        <member name="E:IFramework.Net.Udp.SocketReceive.OnReceived">
+            <summary>
+            接收事件
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketReceive.#ctor(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="port">本机接收数据端口</param>
+            <param name="bufferSize">接收缓冲区大小</param>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketReceive.StartReceive">
+            <summary>
+            开始接收数据
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketReceive.StopReceive">
+            <summary>
+            停止接收数据
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketReceive.SocketArgs_Completed(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+            接收完成事件
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketReceive.ProcessReceive(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+            处理接收信息
+            </summary>
+            <param name="arg"></param>
+        </member>
+        <member name="E:IFramework.Net.Udp.SocketSend.SentEventHandler">
+            <summary>
+            发送事件回调
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketSend.#ctor(System.Int32,System.Int32)">
+            <summary>
+            初始化发送对象
+            </summary>
+            <param name="maxCountClient">客户端最大数</param>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketSend.Send(IFramework.Net.SegmentOffset,System.Net.IPEndPoint,System.Boolean)">
+            <summary>
+            发送数据
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <param name="size"></param>
+            <param name="waiting"></param>
+            <param name="remoteEP"></param>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketSend.SendSync(IFramework.Net.SegmentOffset,System.Net.IPEndPoint)">
+            <summary>
+            同步发送数据
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="size"></param>
+            <param name="remoteEP"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketSend.DisposeSocketPool">
+            <summary>
+            释放缓冲池
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketSend.ProcessSent(System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+            处理发送的数据
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:IFramework.Net.Udp.SocketSend.ClientSocket_Completed(System.Object,System.Net.Sockets.SocketAsyncEventArgs)">
+            <summary>
+            完成发送事件
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:IFramework.Net.Udp.UdpClientProvider.ReceivedCallbackHandler">
+            <summary>
+            接收回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Udp.UdpClientProvider.SentCallbackHandler">
+            <summary>
+            发送回调处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Udp.UdpClientProvider.ReceivedOffsetHandler">
+            <summary>
+            接收缓冲区回调
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpClientProvider.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpClientProvider.Connect(System.Int32,System.String)">
+            <summary>
+            尝试连接
+            </summary>
+            <param name="port"></param>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpClientProvider.SendSync(IFramework.Net.SegmentOffset,IFramework.Net.SegmentOffset)">
+            <summary>
+            同步发送
+            </summary>
+            <param name="buffer"></param>
+            <param name="recAct"></param>
+            <param name="recBufferSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpClientProvider.ReceiveSync(IFramework.Net.SegmentOffset,System.Action{IFramework.Net.SegmentOffset})">
+            <summary>
+            同步接收
+            </summary>
+            <param name="recAct"></param>
+            <param name="recBufferSize"></param>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpClientProvider.StartReceive">
+            <summary>
+            开始接收数据
+            </summary>
+            <param name="remoteEP"></param>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpClientProvider.Initialize">
+            <summary>
+            初始化对象
+            </summary>
+            <param name="recBufferSize"></param>
+            <param name="port"></param>
+        </member>
+        <member name="P:IFramework.Net.Udp.UdpServerProvider.ReceivedCallbackHandler">
+            <summary>
+            接收事件响应回调
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Udp.UdpServerProvider.SentCallbackHandler">
+            <summary>
+            发送事件响应回调
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.Udp.UdpServerProvider.DisconnectedCallbackHandler">
+            <summary>
+            断开连接事件回调
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpServerProvider.#ctor(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpServerProvider.Start(System.Int32)">
+            <summary>
+            启动服务
+            </summary>
+            <param name="port">接收数据端口</param>
+            <param name="recBufferSize">接收缓冲区</param>
+            <param name="maxConnectionCount">最大客户端连接数</param>
+        </member>
+        <member name="M:IFramework.Net.Udp.UdpServerProvider.Stop">
+            <summary>
+            停止服务
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AcceptInfo.SecWebSocketAccept">
+            <summary>
+            接入访问验证码
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AcceptInfo.SecWebSocketLocation">
+            <summary>
+            客户端来源
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AcceptInfo.SecWebSocketOrigin">
+            <summary>
+            服务端来源
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AccessInfo.Host">
+            <summary>
+            连接主机
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AccessInfo.Origin">
+            <summary>
+            连接源
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AccessInfo.SecWebSocketExtensions">
+            <summary>
+            安全扩展
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AccessInfo.SecWebSocketKey">
+            <summary>
+            安全密钥
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.AccessInfo.SecWebSocketVersion">
+            <summary>
+            安全版本
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.BaseInfo.HttpProto">
+            <summary>
+            http连接协议
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.BaseInfo.Connection">
+            <summary>
+            连接类型
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.BaseInfo.Upgrade">
+            <summary>
+            连接方式
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.DataFrame.IsEof">
+            <summary>
+            如果为true则该消息为消息尾部,如果false为零则还有后续数据包;
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.DataFrame.Rsv1">
+            <summary>
+            RSV1,RSV2,RSV3,各1位，用于扩展定义的,如果没有扩展约定的情况则必须为0
+            </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.DataFrame.OpCode">
+             <summary>
+            0x0表示附加数据帧
+            0x1表示文本数据帧
+            0x2表示二进制数据帧
+            0x3-7暂时无定义，为以后的非控制帧保留
+            0x8表示连接关闭
+            0x9表示ping
+            0xA表示pong
+            0xB-F暂时无定义，为以后的控制帧保留
+             </summary>
+        </member>
+        <member name="P:IFramework.Net.WebSocket.DataFrame.Mask">
+            <summary>
+            true使用掩码解析消息
+            </summary>
+        </member>
+        <member name="M:IFramework.Net.WebSocket.WSClientProvider.Connect(System.String)">
+            <summary>
+            wsUrl:ws://ip:port
+            </summary>
+            <param name="wsUrl"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.NodeAction.ActionNode">
+            <summary>
+            节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ActionNode.isDone">
+            <summary>
+            是否完成
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ActionNode.autoRecyle">
+            <summary>
+            自动回收
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnMoveNext">
+            <summary>
+            下一帧
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnNodeReset">
+            <summary>
+            调用时机：repeat 节点完成一次
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnDispose">
+            <summary>
+            释放
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.Config(System.Boolean)">
+            <summary>
+            设置自动回收
+            </summary>
+            <param name="autoRecyle"></param>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnDataReset">
+            <summary>
+            数据重置
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnRecyle">
+            <summary>
+            被回收时
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnBegin">
+            <summary>
+            开始时
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNode.OnCompelete">
+            <summary>
+            结束时
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.ActionNodeExtension">
+            <summary>
+            静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.ActionEnumerator``1(``0)">
+            <summary>
+            获取节点运行的 迭代器
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Run``1(``0,IFramework.Modules.Coroutine.ICoroutineModule)">
+            <summary>
+            运行于 ICoroutineModule 上
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="moudle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Run``1(``0)">
+            <summary>
+            直接运行于环境默认的上
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Sequence(System.Object,IFramework.EnvironmentType,System.Boolean)">
+            <summary>
+            开启顺序节点
+            </summary>
+            <param name="self"></param>
+            <param name="envType"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Sequence(System.Object,IFramework.FrameworkEnvironment,System.Boolean)">
+            <summary>
+            开启顺序节点
+            </summary>
+            <param name="self"></param>
+            <param name="env"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnCompelete``1(``0,System.Action{``0})">
+            <summary>
+            结束回调
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnBegin``1(``0,System.Action{``0})">
+            <summary>
+            开始回调
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnRecyle``1(``0,System.Action{``0})">
+            <summary>
+            被回收回调
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnCompelete``1(``0,System.Action)">
+            <summary>
+            结束回调
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnBegin``1(``0,System.Action)">
+            <summary>
+            开始回调
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.OnRecyle``1(``0,System.Action)">
+            <summary>
+            被回收回调
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.TimeSpan``1(``0,System.TimeSpan,System.Boolean)">
+            <summary>
+            开启一个时间节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="time"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Until``1(``0,System.Func{System.Boolean},System.Boolean)">
+            <summary>
+            开启一个条件结束节点,直到条件成立
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="condition"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.While``1(``0,System.Func{System.Boolean},System.Action,System.Boolean)">
+            <summary>
+            开启一个条件运行节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="condition"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Event``1(``0,System.Action,System.Boolean)">
+            <summary>
+            开启一个事件节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Condition``1(``0,System.Func{System.Boolean},System.Action,System.Boolean)">
+            <summary>
+            开启一个 IF 节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="condition"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Frame``1(``0,System.Int32,System.Boolean)">
+            <summary>
+            开启一个帧节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="frame"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.DoWhile``1(``0,System.Func{System.Boolean},System.Action,System.Boolean)">
+            <summary>
+            开启一个do while节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="condition"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.For``1(``0,System.Action,System.Func{System.Boolean},System.Action,System.Action,System.Boolean)">
+            <summary>
+            开启一个 for 节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="initializer"></param>
+            <param name="condition"></param>
+            <param name="iterator"></param>
+            <param name="body"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Repeat``1(``0,System.Action{IFramework.NodeAction.IRepeatNode},System.Int32,System.Boolean)">
+            <summary>
+            开启一个重复运行节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <param name="repeat"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Sequence``1(``0,System.Action{IFramework.NodeAction.ISequenceNode},System.Boolean)">
+            <summary>
+            开启一个 顺序运行节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.Spawn``1(``0,System.Action{IFramework.NodeAction.ISpawnNode},System.Boolean)">
+            <summary>
+            开启一个并行运行节点
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <param name="autoRecyle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.LastNode``1(``0,System.Action{IFramework.NodeAction.IActionNode})">
+            <summary>
+            获取容器节点中的最后一个
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.NodeAction.ActionNodeExtension.LastNode``2(``0,System.Action{``1})">
+            <summary>
+            获取容器节点中的最后一个
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="T1"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.NodeAction.ContainerNode">
+            <summary>
+            容器节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ContainerNode.count">
+            <summary>
+            子级节点个数
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.ContainerNode.last">
+            <summary>
+            子节点最后一个
+            </summary>
+        </member>
+        <member name="F:IFramework.NodeAction.ContainerNode.nodeList">
+            <summary>
+            所有子节点
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ContainerNode.Append(IFramework.NodeAction.ActionNode)">
+            <summary>
+            添加子节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.NodeAction.ContainerNode.OnRecyle">
+            <summary>
+            回收时
+            </summary>
+        </member>
+        <member name="M:IFramework.NodeAction.ContainerNode.OnNodeReset">
+            <summary>
+            调用时机：repeat 节点完成一次
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IActionNode">
+            <summary>
+            节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.IActionNode.isDone">
+            <summary>
+            是否完成
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.IActionNode.autoRecyle">
+            <summary>
+            自动回收
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IConditionNode">
+            <summary>
+            条件节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IContainerNode">
+            <summary>
+            容器节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.IContainerNode.last">
+            <summary>
+            最后一个节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IEventNode">
+            <summary>
+            事件节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IForNode">
+            <summary>
+            for 节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IFrameNode">
+            <summary>
+            帧节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IRepeatNode">
+            <summary>
+            重复节点
+            </summary>
+        </member>
+        <member name="P:IFramework.NodeAction.IRepeatNode.repeat">
+            <summary>
+            循环次数
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.ISequenceNode">
+            <summary>
+            顺序节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.ISpawnNode">
+            <summary>
+            并行节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.ITimeSpanNode">
+            <summary>
+            时间节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IUntilNode">
+            <summary>
+            等待条件成立节点
+            </summary>
+        </member>
+        <member name="T:IFramework.NodeAction.IWhileNode">
+            <summary>
+            当条件不成立节点
+            </summary>
+        </member>
         <member name="T:IFramework.ActivatorCreatePool`1">
             <summary>
             Activator 创建实例 对现池
@@ -5895,6 +7390,330 @@
             <param name="assembly"></param>
             <returns></returns>
         </member>
+        <member name="T:IFramework.Serialization.DataTable.DataColumn">
+            <summary>
+            每一个格子
+            </summary>
+        </member>
+        <member name="F:IFramework.Serialization.DataTable.DataColumn.headLineName">
+            <summary>
+            标题名称
+            </summary>
+        </member>
+        <member name="F:IFramework.Serialization.DataTable.DataColumn.strValue">
+            <summary>
+            string 数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataColumnIndexAttribute">
+            <summary>
+            数据列
+            </summary>
+        </member>
+        <member name="P:IFramework.Serialization.DataTable.DataColumnIndexAttribute.index">
+            <summary>
+            所在列
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataColumnIndexAttribute.#ctor(System.Int32)">
+            <summary>
+            ctor
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataColumnNameAttribute">
+            <summary>
+            设置数据表标题
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataColumnNameAttribute.#ctor(System.String)">
+            <summary>
+            ctor
+            </summary>
+            <param name="name">名称</param>
+        </member>
+        <member name="P:IFramework.Serialization.DataTable.DataColumnNameAttribute.name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataIgnoreAttribute">
+            <summary>
+            数据表忽略的成员
+            </summary>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataTableTool">
+            <summary>
+            DataTable
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataTableTool.CreateReader(System.IO.TextReader,IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            创建数据读取器
+            </summary>
+            <param name="streamReader"></param>
+            <param name="rowReader"></param>
+            <param name="explainer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataTableTool.CreateReader(System.String,IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            创建数据读取器
+            </summary>
+            <param name="text"></param>
+            <param name="rowReader"></param>
+            <param name="explainer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataTableTool.CreateWriter(System.IO.TextWriter,IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            创建数据写入器
+            </summary>
+            <param name="streamWriter"></param>
+            <param name="rowWriter"></param>
+            <param name="explainer"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataExplainer">
+            <summary>
+            string 解释器
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataExplainer.#ctor(System.String,System.String)">
+            <summary>
+            ctor
+            </summary>
+            <param name="dot">替换逗号的字符</param>
+            <param name="quotes">替换双引号的字符</param>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataExplainer.CreatInstance``1">
+            <summary>
+            创建实例
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataExplainer.CreatInstance``1(System.Collections.Generic.List{IFramework.Serialization.DataTable.DataColumn},System.Collections.Generic.Dictionary{System.Reflection.MemberInfo,System.String})">
+            <summary>
+            根据格子反序列化一个实例
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="cols"></param>
+            <param name="membersDic">需要反序列化的成员</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataExplainer.GetColumns``1(``0,System.Collections.Generic.Dictionary{System.Reflection.MemberInfo,System.String})">
+            <summary>
+            根据 具体类型 获取单个数据格子数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t"></param>
+            <param name="membersDic">需要序列化的成员</param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataReader">
+            <summary>
+            数据表读者
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataReader.#ctor(System.IO.TextReader,IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="streamReader">流读者</param>
+            <param name="rowReader">行读者</param>
+            <param name="explainer">数据解释器</param>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataReader.#ctor(System.String,IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="text">数据表字符串</param>
+            <param name="rowReader">行读者</param>
+            <param name="explainer">数据解释器</param>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataReader.Dispose">
+            <summary>
+            释放
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataReader.Get``1">
+            <summary>
+            获取一张表数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataRow">
+            <summary>
+            数据行
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataRow.ReadLine(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            读取一行
+            </summary>
+            <param name="val">行String</param>
+            <param name="headNames">标题行</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataRow.SpilitRow(System.String)">
+            <summary>
+            切割一行
+            </summary>
+            <param name="val"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataRow.ReadHeadLine(System.String)">
+            <summary>
+            读取标题行
+            </summary>
+            <param name="val">行String</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataRow.WriteLine(System.Collections.Generic.List{IFramework.Serialization.DataTable.DataColumn})">
+            <summary>
+            写入一行
+            </summary>
+            <param name="cols">写入的信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataRow.WriteHeadLine(System.Collections.Generic.List{System.String})">
+            <summary>
+            写入标题行
+            </summary>
+            <param name="headNames">写入的标题</param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.DataWriter">
+            <summary>
+            数据写入者
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataWriter.#ctor(System.IO.TextWriter,IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="streamWriter">流写者</param>
+            <param name="rowWriter">行写者</param>
+            <param name="explainer">数据解释器</param>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataWriter.#ctor(IFramework.Serialization.DataTable.IDataRow,IFramework.Serialization.DataTable.IDataExplainer)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="rowWriter">行写者</param>
+            <param name="explainer">数据解释器</param>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataWriter.Dispose">
+            <summary>
+            释放
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataWriter.WriteString``1(System.Collections.Generic.List{``0})">
+            <summary>
+            写入到string
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source">数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.DataWriter.Write``1(System.Collections.Generic.List{``0})">
+            <summary>
+            写入一个表
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.IDataExplainer">
+            <summary>
+            string 解释器
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataExplainer.CreatInstance``1(System.Collections.Generic.List{IFramework.Serialization.DataTable.DataColumn},System.Collections.Generic.Dictionary{System.Reflection.MemberInfo,System.String})">
+            <summary>
+            根据格子反序列化一个实例
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="cols"></param>
+            <param name="membersDic">需要反序列化的成员</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataExplainer.GetColumns``1(``0,System.Collections.Generic.Dictionary{System.Reflection.MemberInfo,System.String})">
+            <summary>
+            根据 具体类型 获取单个数据格子数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t"></param>
+            <param name="membersDic">需要序列化的成员</param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.IDataReader">
+            <summary>
+            数据读取器
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataReader.Get``1">
+            <summary>
+            获取
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.IDataRow">
+            <summary>
+            数据行
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataRow.ReadLine(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            读取一行
+            </summary>
+            <param name="val">行String</param>
+            <param name="headNames">标题行</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataRow.ReadHeadLine(System.String)">
+            <summary>
+            读取标题行
+            </summary>
+            <param name="val">行String</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataRow.WriteLine(System.Collections.Generic.List{IFramework.Serialization.DataTable.DataColumn})">
+            <summary>
+            写入一行
+            </summary>
+            <param name="cols">写入的信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataRow.WriteHeadLine(System.Collections.Generic.List{System.String})">
+            <summary>
+            写入标题行
+            </summary>
+            <param name="headNames">写入的标题</param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Serialization.DataTable.IDataWriter">
+            <summary>
+            数据写入器
+            </summary>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataWriter.Write``1(System.Collections.Generic.List{``0})">
+            <summary>
+            写入
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+        </member>
+        <member name="M:IFramework.Serialization.DataTable.IDataWriter.WriteString``1(System.Collections.Generic.List{``0})">
+            <summary>
+            写入
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
         <member name="T:IFramework.Singleton.ISingleton">
             <summary>
             单例
@@ -5994,6 +7813,497 @@
         <member name="M:IFramework.Singleton.SingletonPropertyClass`1.Dispose">
             <summary>
             注销
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarMap2X">
+            <summary>
+            二维A* 地图
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap2X.Item(IFramework.Point2)">
+            <summary>
+            便于调用点位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap2X.walkSideways">
+            <summary>
+            是否可以斜着走
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.#ctor">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.GetHCost(IFramework.Utility.Astar.AStarNode2X,IFramework.Utility.Astar.AStarNode2X)">
+            <summary>
+            计算地图上两点距离
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.GetNeighborNodes(IFramework.Utility.Astar.AStarNode2X)">
+            <summary>
+            获取邻居节点
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.ReadMap``1(System.Func{``0,IFramework.Utility.Astar.AStarNodeType},``0[0:,0:],System.Boolean)">
+            <summary>
+            加载地图
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="func">更具输入数据转化为NodeType</param>
+            <param name="arr">二维数组</param>
+            <param name="walkSideways">是否可以斜着走</param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.Reset">
+            <summary>
+            重置地图数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarMap3X">
+            <summary>
+            三维A* 地图
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap3X.walkSideways">
+            <summary>
+            是否可以斜着走
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.#ctor">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap3X.Item(IFramework.Point3)">
+            <summary>
+            便于调用点位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.ReadMap``1(System.Func{``0,IFramework.Utility.Astar.AStarNodeType},``0[0:,0:,0:],System.Boolean)">
+            <summary>
+            加载地图
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="func">更具输入数据转化为NodeType</param>
+            <param name="arr">二维数组</param>
+            <param name="walkSideways">是否可以斜着走</param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.GetHCost(IFramework.Utility.Astar.AStarNode3X,IFramework.Utility.Astar.AStarNode3X)">
+            <summary>
+            计算地图上两点距离
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.GetNeighborNodes(IFramework.Utility.Astar.AStarNode3X)">
+            <summary>
+            获取邻居节点
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.Reset">
+            <summary>
+            重置地图数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarNode2X">
+            <summary>
+            二维 A* 地图节点
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode2X.nodeType">
+            <summary>
+            节点类型（是否可以行走）
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode2X.parentNode">
+            <summary>
+            父节点，用于返回路径
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode2X.mapPos">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.#ctor(IFramework.Point2,IFramework.Utility.Astar.AStarNodeType)">
+            <summary>
+            ctor
+            </summary>
+            <param name="mapPos"></param>
+            <param name="nodeType"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            设置默认父节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            尝试更新最短距离
+            </summary>
+            <param name="g"></param>
+            <param name="h"></param>
+            <param name="trySetNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.Reset">
+            <summary>
+            重置节点数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarNode3X">
+            <summary>
+            三维 A* 地图节点
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode3X.nodeType">
+            <summary>
+            节点类型（是否可以行走）
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode3X.parentNode">
+            <summary>
+            父节点，用于返回路径
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode3X.mapPos">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.#ctor(IFramework.Point3,IFramework.Utility.Astar.AStarNodeType)">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            设置默认父节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            尝试更新最短距离
+            </summary>
+            <param name="g"></param>
+            <param name="h"></param>
+            <param name="trySetNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.Reset">
+            <summary>
+            重置节点数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarNodeType">
+            <summary>
+            节点类型
+            </summary>
+        </member>
+        <member name="F:IFramework.Utility.Astar.AStarNodeType.Wall">
+            <summary>
+            不可行走
+            </summary>
+        </member>
+        <member name="F:IFramework.Utility.Astar.AStarNodeType.Walkable">
+            <summary>
+            可行走
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.IAstarMap`1">
+            <summary>
+            地图
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:IFramework.Utility.Astar.IAstarMap`1.walkSideways">
+            <summary>
+            是否可以斜着走
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAstarMap`1.GetNeighborNodes(`0)">
+            <summary>
+            获取邻居节点
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAstarMap`1.GetHCost(`0,`0)">
+            <summary>
+            获取两点之间距离
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAstarMap`1.Reset">
+            <summary>
+            重置数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.IAStarNode">
+            <summary>
+            A*节点
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.IAStarNode.nodeType">
+            <summary>
+            节点类型
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.IAStarNode.parentNode">
+            <summary>
+            父节点，用于寻路递归
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarNode.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            设置默认父节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarNode.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            尝试刷新数据
+            </summary>
+            <param name="g"></param>
+            <param name="h"></param>
+            <param name="trySetNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarNode.Reset">
+            <summary>
+            重置数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.IAStarSearcher`2">
+            <summary>
+            A* 路径搜寻者
+            </summary>
+            <typeparam name="Node">A* 节点类型</typeparam>
+            <typeparam name="Map">A* 地图leix</typeparam>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarSearcher`2.Search(`0,`0)">
+            <summary>
+            寻路
+            </summary>
+            <param name="start">起点</param>
+            <param name="end">终点</param>
+            <returns>节点路径</returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarSearcher`2.LoadMap(`1)">
+            <summary>
+            加载 A* 地图
+            </summary>
+            <param name="map"></param>
+        </member>
+        <member name="T:IFramework.Utility.DeepCopy">
+            <summary>
+            深拷贝
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.ReflectionDeepCopy``1(``0)">
+            <summary>
+            0.9281 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.ReflectionDeepCopy(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.XmlDeepCopy``1(``0)">
+            <summary>
+            1.6543 public
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.BinaryDeepCopy``1(``0)">
+            <summary>
+            1.7278 [Serializable]
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Encryption.HashEncode.GetSecurity">
+            得到随机哈希加密字符串
+        </member>
+        <member name="M:IFramework.Utility.Encryption.HashEncode.GetRandomValue">
+            得到一个随机数值
+        </member>
+        <member name="M:IFramework.Utility.Encryption.HashEncode.HashEncoding(System.String)">
+            哈希加密一个字符串
+        </member>
+        <member name="M:IFramework.Utility.Encryption.RsaEncryption.RSAKey(System.String@,System.String@)">
+            <summary>
+            RSA 的密钥产生 产生私钥 和公钥 
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Encryption.XorEncryption">
+            <summary>
+            加密解密相关的实用函数。
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Encryption.XorEncryption.GetXorBytes(System.Byte[],System.Byte[],System.Int32)">
+            <param name="bytes">原始二进制流。</param>
+            <param name="code">异或二进制流。</param>
+            <param name="length">异或计算长度，若小于 0，则计算整个二进制流。</param>
+            <returns>异或后的二进制流。</returns>
+        </member>
+        <member name="M:IFramework.Utility.Encryption.XorEncryption.GetSelfXorBytes(System.Byte[],System.Byte[])">
+            此方法将复用并改写传入的 bytes 作为返回值，而不额外分配内存空间。
+        </member>
+        <member name="T:IFramework.Utility.Verifier">
+            校验相关的实用函数。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetCrc32(System.Byte[])">
+            计算二进制流的 CRC32。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetCrc32(System.String)">
+            计算指定文件的 CRC32。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetMD5(System.Byte[])">
+            计算二进制流的 MD5。
+        </member>
+        <member name="T:IFramework.Utility.Verifier.Crc32">
+            <summary>
+            CRC32 算法。
+            </summary>
+        </member>
+        <member name="F:IFramework.Utility.Verifier.Crc32.DefaultPolynomial">
+            默认多项式。
+        </member>
+        <member name="F:IFramework.Utility.Verifier.Crc32.DefaultSeed">
+            默认种子数。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.#ctor">
+            初始化 CRC32 类的新实例。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.#ctor(System.UInt32,System.UInt32)">
+            初始化 CRC32 类的新实例。
+            <param name="polynomial">指定的多项式。</param>
+            <param name="seed">指定的种子数。</param>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.Initialize">
+            初始化 Crc32 类的实现。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.HashCore(System.Byte[],System.Int32,System.Int32)">
+            将写入对象的数据路由到哈希算法以计算哈希值。
+            <param name="array">要计算其哈希代码的输入。</param>
+            <param name="ibStart">字节数组中的偏移量，从该位置开始使用数据。</param>
+            <param name="cbSize">字节数组中用作数据的字节数。</param>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.HashFinal">
+            在加密流对象处理完最后的数据后完成哈希计算。
+        </member>
+        <member name="T:IFramework.ValueCurve">
+            <summary>
+            用于取值的曲线
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.count">
+            <summary>
+            点的总个数
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.step">
+            <summary>
+            步长
+            </summary>
+        </member>
+        <member name="M:IFramework.ValueCurve.#ctor(System.Collections.Generic.List{IFramework.Point2},System.Single)">
+            <summary>
+            ctor
+            </summary>
+            <param name="points"></param>
+            <param name="step"></param>
+        </member>
+        <member name="M:IFramework.ValueCurve.AddPoint(IFramework.Point2)">
+            <summary>
+            添加点
+            </summary>
+            <param name="point"></param>
+        </member>
+        <member name="M:IFramework.ValueCurve.RemovePoint(IFramework.Point2)">
+            <summary>
+            移除点
+            </summary>
+            <param name="point"></param>
+        </member>
+        <member name="M:IFramework.ValueCurve.GetStep(System.Int32)">
+            <summary>
+            获取一步
+            </summary>
+            <param name="step"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ValueCurve.GetPercent(System.Single)">
+            <summary>
+            按照百分比获取步
+            </summary>
+            <param name="mul"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ValueCurve.GetYWithX(System.Single)">
+            <summary>
+            通过x获取y
+            </summary>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ValueCurve.ClacSteps">
+            <summary>
+            计算每一步
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.ccurve">
+            <summary>
+            0，0 -- 1，1 对称往上拱起
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.scurve">
+            <summary>
+             0，0 -- 1，1 s形状
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.linecurve">
+            <summary>
+             0，0 -- 1，1 直线
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.ccurve_rough">
+            <summary>
+            0，0 -- 1，1 对称往上拱起(粗糙)
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.scurve_rough">
+            <summary>
+             0，0 -- 1，1 s形状(粗糙)
+            </summary>
+        </member>
+        <member name="P:IFramework.ValueCurve.linecurve_rough">
+            <summary>
+             0，0 -- 1，1 直线(粗糙)
             </summary>
         </member>
         <member name="T:IFramework.ValueMap">

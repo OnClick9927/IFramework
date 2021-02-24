@@ -138,7 +138,18 @@ namespace IFramework
                 public const string getpkgurl = host + "/Pkg/DownLoadPkg";
                 public const string deletepackage = host + "/Pkg/DeletePkg";
             }
+            [System.Serializable]
+            public class LocalPkgVersions
+            {
+                [System.Serializable]
 
+                public class PkgVersion
+                {
+                    public string name;
+                    public string version;
+                }
+                public List<PkgVersion> versions=new List<PkgVersion>();
+            }
             static class WebRequest
             {
                 private abstract class Request
@@ -455,6 +466,42 @@ namespace IFramework
 
             public static event Action onFreshpkgs;
 
+            private static LocalPkgVersions _versions;
+            private static LocalPkgVersions localversion { get {
+
+                    if (_versions==null)
+                    {
+                        if (!File.Exists(localVersionsPath))
+                        {
+                            File.WriteAllText(localVersionsPath, JsonUtility.ToJson(new LocalPkgVersions(), true));
+                        }
+                        _versions = JsonUtility.FromJson<LocalPkgVersions>(File.ReadAllText(localVersionsPath));
+                    }
+                    return _versions;
+                } }
+            private static void UpdateLocalVersion(string name,string version)
+            {
+                var versions = localversion;
+                var tmp = versions.versions.Find((o) => { return o.name == name; });
+                if (tmp==null)
+                {
+                    versions.versions.Add(new LocalPkgVersions.PkgVersion() { name = name, version = version });
+                }
+                else
+                {
+                    tmp.version = version;
+                }
+                File.WriteAllText(localVersionsPath, JsonUtility.ToJson(versions, true));
+            }
+            public static string GetLocalVersion(string name)
+            {
+                var versions = localversion;
+                var tmp = versions.versions.Find((o) => { return o.name == name; });
+                if (tmp == null) return string.Empty;
+                return tmp.version;
+            }
+
+
             public static PkgkitInfo.UserJson userjson { get { return _window._windowInfo.userJson; } set { _window._windowInfo.userJson = value; } }
             public static List<PkgKitTool.Constant.PackageInfosModel> pkgs { get { return _window._windowInfo.pkgInfos; } }
             public static bool login { get { return _window._windowInfo.login; } }
@@ -473,6 +520,8 @@ namespace IFramework
             }
 
             private static string userjsonPath { get { return rootPath + "/user.json"; } }
+            private static string localVersionsPath { get { return rootPath + "/localVersions.json"; } }
+
             private static string pkgjsonPath { get { return rootPath + "/pkgs.json"; } }
             private static string pkgversionjsonPath
             {
@@ -551,10 +600,8 @@ namespace IFramework
                     userjson = JsonUtility.FromJson<PkgkitInfo.UserJson>(File.ReadAllText(userjsonPath));
                     LoginWithToken();
                 }
-                else
-                {
-                    FreshWebPackages();
-                }
+                FreshWebPackages();
+
             }
 
 
@@ -727,13 +774,18 @@ namespace IFramework
             {
                 WebRequest.DownLoadPkg(name, version, (req) =>
                 {
-
                     string path = Path.Combine(pkgPath, string.Format("{0}_{1}.unitypackage", name, version));
                     File.WriteAllBytes(path, req.downloadHandler.data);
                     AssetDatabase.ImportPackage(path, true);
                     AssetDatabase.Refresh();
+                    UpdateLocalVersion(name, version);
                 });
             }
+
+
+     
+
+
             public static void DeletePkg(string name, string version)
             {
                 if (!login) return;
@@ -745,13 +797,13 @@ namespace IFramework
                     FreshWebPackages();
                 });
             }
-            internal static void RemoveDir(string assetPath)
+            public static void RemoveLocalPkg(string name,string assetPath)
             {
                 Directory.Delete(assetPath, true);
                 AssetDatabase.Refresh();
+                UpdateLocalVersion(name, "");
             }
-
-
+           
         }
 
         class UserOptionWindow
@@ -1211,7 +1263,7 @@ namespace IFramework
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button(Contents.newest, GUILayout.Width(Contents.gap * 6)))
                     {
-                        PkgKitTool.DownLoadPkg(name, "");
+                        PkgKitTool.DownLoadPkg(name, p.versions.Last().version);
                     }
                     if (GUILayout.Button(Contents.install, GUILayout.Width(Contents.gap * 6)))
                     {
@@ -1222,13 +1274,15 @@ namespace IFramework
                     {
                         if (GUILayout.Button(Contents.remove, GUILayout.Width(Contents.gap * 6)))
                         {
-                            PkgKitTool.RemoveDir(version.assetPath);
+                            PkgKitTool.RemoveLocalPkg(p.name,version.assetPath);
                         }
                     }
                     GUILayout.EndHorizontal();
                 }
 
                 GUILayout.Label("Author: " + p.author, Styles.boldLabel);
+                GUILayout.Label("Local Version: " +PkgKitTool.GetLocalVersion(p.name));
+
                 GUILayout.Space(Contents.gap / 2);
                 GUILayout.Label("Dependences", Styles.boldLabel);
                 var strs = version.dependences.Split('@');
