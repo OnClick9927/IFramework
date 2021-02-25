@@ -10,6 +10,9 @@ using IFramework.Modules.MVVM;
 
 namespace IFramework.UI
 {
+    /// <summary>
+    /// VM 基类
+    /// </summary>
     public abstract class UIViewModel : ViewModel { }
     public abstract class UIViewModel<M> : UIViewModel where M : IDataModel
     {

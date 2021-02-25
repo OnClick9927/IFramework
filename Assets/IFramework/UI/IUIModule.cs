@@ -10,42 +10,37 @@ namespace IFramework.UI
         RectTransform background { get; }
         RectTransform belowAnimation { get; }
         RectTransform belowBackground { get; }
-        RectTransform common { get; }
-        RectTransform guide { get; }
-        RectTransform pop { get; }
-        RectTransform toast { get; }
-        RectTransform top { get; }
         RectTransform camera { get; }
-
         Canvas canvas { get; }
+        RectTransform common { get; }
         UIPanel current { get; }
+        RectTransform guide { get; }
         int loaderCount { get; }
         int memoryCount { get; }
+        RectTransform pop { get; }
+        int priority { get; }
         int stackCount { get; }
+        RectTransform toast { get; }
+        RectTransform top { get; }
 
         void AddLoader(IPanelLoader loader);
-        void SetGroups(IGroups groups);
-        void SetCanvas(Canvas canvas);
+        void ClearMemory();
         void CreateCanvas();
-
-
+        bool Exist(UIPanel panel);
+        bool ExistInMemory(UIPanel panel);
+        bool ExistInStack(UIPanel panel);
+        UIPanel FindPanel(string name);
         UIPanel Get(Type type, string name, UILayer layer = UILayer.Common);
         T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel;
         void GoBack();
         void GoForWard();
-
-
-        void ClearCache();
-
-        bool Exist(UIPanel panel);
-        bool ExistInMemory(UIPanel panel);
-        bool ExistInStack(UIPanel panel);
-        bool HaveLoad(string panelName);
         UIPanel Load(Type type, string name, UILayer layer = UILayer.Common);
         T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel;
         UIPanel MemoryPeek();
         void Push(UIPanel ui);
-        void SetCamera(Camera ca, bool isLast = true, int index = -1);
-        void SetLayer(UIPanel ui, bool isLast = true, int index = -1);
+        void PutCamera(Camera camera);
+        void PutPanel(UIPanel panel,UILayer layer);
+        void SetCanvas(Canvas canvas);
+        void SetGroups(IGroups groups);
     }
 }

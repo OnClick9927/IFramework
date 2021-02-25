@@ -2,18 +2,25 @@
  *Author:         OnClick
  *Version:        0.0.1
  *UnityVersion:   2017.2.3p3
- *Date:           2019-08-19
+ *Date:           2019-07-02
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
-using UnityEngine;
+using System;
+
 namespace IFramework.UI
 {
     /// <summary>
-    /// ui 基类
+    /// ui加载器
     /// </summary>
-    public abstract class UIPanel : MonoBehaviour
+    public interface IPanelLoader
     {
-     
+        /// <summary>
+        /// 加载
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        UIPanel Load(Type type, string name);
     }
 }

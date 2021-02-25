@@ -9,11 +9,18 @@
 using IFramework.Modules.MVVM;
 using System;
 using UnityEngine.UI;
+using static IFramework.UI.MvvmGroups;
 
 namespace IFramework.UI
 {
+    /// <summary>
+    /// UIView 基类
+    /// </summary>
     public abstract class UIView : View, IViewStateEventHandler
     {
+        /// <summary>
+        /// ui 状态
+        /// </summary>
         public enum ViewState
         {
            None, Load, Top, Press, Pop, Clear

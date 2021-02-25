@@ -37,16 +37,7 @@ namespace IFramework
                 }
             }
         }
-        public static void SetChildWithIndex(this Transform transform,Transform child,int index=-1,bool worldPositionStays=true)
-        {
-            child.SetParent(transform, worldPositionStays);
-            if (index <= 0)
-                child.SetAsFirstSibling();
-            else if (transform.childCount < index)
-                child.SetAsLastSibling();
-            else
-                child.SetSiblingIndex(index);
-        }
+      
 
     }
 }

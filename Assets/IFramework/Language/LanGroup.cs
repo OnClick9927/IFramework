@@ -6,7 +6,6 @@
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
-using IFramework.GUITool.Inspector;
 using System.Collections.Generic;
 using UnityEngine;
 namespace IFramework.Language
@@ -17,8 +16,8 @@ namespace IFramework.Language
 #if UNITY_EDITOR
         public const string assetPath = "Language/Editor/LanGroup.asset";
 #endif
-        [ReadOnly] public List<LanPair> pairs = new List<LanPair>();
-        [ReadOnly] public List<string> keys = new List<string>();
+        public List<LanPair> pairs = new List<LanPair>();
+        public List<string> keys = new List<string>();
 
         public void DeletePairsByLan(SystemLanguage lan)
         {

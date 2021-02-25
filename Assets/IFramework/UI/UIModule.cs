@@ -12,42 +12,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//ui 模块存储示意图                                 push/get
+//                                                  |
+//    |--------------------------------------       |                     --------------------------------------|
+//    |    stack                               <----|                                                    memory |
+//    |                                        <----------- ui ---------- go forward                            |
+//    |                                        go back ---- ui ----------------->                               |
+//    |--------------------------------------                             --------------------------------------|
 namespace IFramework.UI
 {
-    public class UIEventArgs : RecyclableObject
+    /// <summary>
+    /// 字段
+    /// </summary>
+    partial class UIModule 
     {
-        public enum Code
-        {
-            GoBack, GoForward, Push
-        }
-        public Code code;
-        public UIPanel popPanel;
-        public UIPanel curPanel;
-        public UIPanel pressPanel;
-        protected override void OnDataReset()
-        {
-            popPanel = null;
-            curPanel = null;
-            pressPanel = null;
-        }
-    }
-
-    public interface IGroups : IDisposable
-    {
-        void Update();
-        UIPanel FindPanel(string name);
-        void InvokeViewState(UIEventArgs arg);
-        void Subscribe(UIPanel panel);
-        void UnSubscribe(UIPanel panel);
-    }
-    public interface IPanelLoader
-    {
-        UIPanel Load(Type type, string name);
-    }
-    public partial class UIModule : IUIModule
-    {
+        #region ui层级
         public Canvas canvas { get; private set; }
-        private RectTransform root;
         public RectTransform belowBackground { get; private set; }
         public RectTransform background { get; private set; }
         public RectTransform belowAnimation { get; private set; }
@@ -59,7 +39,43 @@ namespace IFramework.UI
         public RectTransform top { get; private set; }
         public RectTransform aboveTop { get; private set; }
         public RectTransform camera { get; private set; }
-        private RectTransform InitTransform(string name)
+        #endregion
+        private IGroups _groups;
+        private List<IPanelLoader> _loaders;
+        private Stack<UIPanel> stack;
+        private Stack<UIPanel> memory;
+        /// <summary>
+        /// 加载器个数
+        /// </summary>
+        public int loaderCount { get { return _loaders.Count; } }
+        /// <summary>
+        /// stack 数量
+        /// </summary>
+        public int stackCount { get { return stack.Count; } }
+        /// <summary>
+        /// memory 数量
+        /// </summary>
+        public int memoryCount { get { return memory.Count; } }
+        /// <summary>
+        /// stack top
+        /// </summary>
+        public UIPanel current
+        {
+            get
+            {
+                if (stack.Count == 0)
+                    return null;
+                return stack.Peek();
+            }
+        }
+
+    }
+    /// <summary>
+    /// 常用
+    /// </summary>
+    partial class UIModule 
+    {
+        private RectTransform CreateLayer(string name)
         {
             GameObject go = new GameObject(name);
             RectTransform rect = go.AddComponent<RectTransform>();
@@ -70,120 +86,282 @@ namespace IFramework.UI
             rect.sizeDelta = Vector3.zero;
             return rect;
         }
-
-
-
-
+        private void CreateLayers()
+        {
+            belowBackground = CreateLayer("belowBackground");
+            background = CreateLayer("background");
+            belowAnimation = CreateLayer("belowAnimation");
+            common = CreateLayer("common");
+            aboveAnimation = CreateLayer("aboveAnimation");
+            pop = CreateLayer("pop");
+            guide = CreateLayer("Guide");
+            toast = CreateLayer("Toast");
+            top = CreateLayer("Top");
+            aboveTop = CreateLayer("aboveTop");
+            camera = CreateLayer("UICamera");
+        }
+        /// <summary>
+        /// 创建 画布
+        /// </summary>
         public void CreateCanvas()
         {
-            root = new GameObject(name).AddComponent<RectTransform>();
-            canvas = root.gameObject.AddComponent<Canvas>();
-            root.gameObject.AddComponent<CanvasScaler>();
-            root.gameObject.AddComponent<GraphicRaycaster>();
+            var root = new GameObject(name);
+            root.AddComponent<RectTransform>();
+            canvas = root.AddComponent<Canvas>();
+            root.AddComponent<CanvasScaler>();
+            root.AddComponent<GraphicRaycaster>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            belowBackground = InitTransform("belowBackground");
-            background = InitTransform("background");
-            belowAnimation = InitTransform("belowAnimation");
-            common = InitTransform("common");
-            aboveAnimation = InitTransform("aboveAnimation");
-            pop = InitTransform("pop");
-            guide = InitTransform("Guide");
-            toast = InitTransform("Toast");
-            top = InitTransform("Top");
-            aboveTop = InitTransform("aboveTop");
-            camera = InitTransform("UICamera");
+            CreateLayers();
         }
+        /// <summary>
+        /// 设置画布
+        /// </summary>
+        /// <param name="canvas"></param>
         public void SetCanvas(Canvas canvas)
         {
-            root = canvas.GetComponent<RectTransform>();
             this.canvas = canvas;
-            belowBackground = InitTransform("BGBG");
-            background = InitTransform("Background");
-            belowAnimation = InitTransform("AnimationUnderPage");
-            common = InitTransform("Common");
-            aboveAnimation = InitTransform("AnimationOnPage");
-            pop = InitTransform("PopUp");
-            guide = InitTransform("Guide");
-            toast = InitTransform("Toast");
-            top = InitTransform("Top");
-            aboveTop = InitTransform("TopTop");
-            camera = InitTransform("UICamera");
+            CreateLayers();
         }
-        public void SetCamera(Camera ca, bool isLast = true, int index = -1)
+
+
+        /// <summary>
+        /// 设置加载器
+        /// </summary>
+        /// <param name="loader"></param>
+        public void AddLoader(IPanelLoader loader)
         {
-            camera.SetChildWithIndex(ca.transform, !isLast ? index : camera.childCount);
+            _loaders.Add(loader);
         }
-        public void SetLayer(UIPanel ui, bool isLast = true, int index = -1)
+        /// <summary>
+        /// 设置ui组管理器
+        /// </summary>
+        /// <param name="groups"></param>
+        public void SetGroups(IGroups groups)
         {
-            switch (ui.layer)
+            this._groups = groups;
+        }
+
+        /// <summary>
+        /// 获取 ui
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public UIPanel Get(Type type, string name, UILayer layer = UILayer.Common)
+        {
+            //if (UICache.Count > 0) ClearCache(arg);
+            if (current != null && current.name == name && current.GetType() == type)
+                return current;
+            var panel = _groups.FindPanel(name);
+            if (panel == null)
+                panel = Load(type, name, layer);
+            Push(panel);
+            return panel;
+        }
+        /// <summary>
+        /// 获取ui
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
+        {
+            return (T)Get(typeof(T), name, layer);
+        }
+        /// <summary>
+        /// 前进
+        /// </summary>
+        public void GoForWard()
+        {
+            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
+            arg.code = UIEventArgs.Code.GoForward;
+            if (memoryCount <= 0) return;
+            if (stackCount > 0)
+                arg.pressPanel = current;
+            var ui = memory.Pop();
+            arg.curPanel = ui;
+            stack.Push(ui);
+            InvokeViewState(arg);
+            arg.Recyle();
+        }
+        /// <summary>
+        /// 后退
+        /// </summary>
+        public void GoBack()
+        {
+            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
+            arg.code = UIEventArgs.Code.GoBack;
+            if (stackCount <= 0) return;
+            var ui = stack.Pop();
+            arg.popPanel = ui;
+            memory.Push(ui);
+            if (stackCount > 0)
+                arg.curPanel = current;
+            InvokeViewState(arg);
+            arg.Recyle();
+        }
+        /// <summary>
+        /// 清理缓存
+        /// </summary>
+        public void ClearMemory()
+        {
+            while (memory.Count != 0)
             {
-                case UILayer.BelowBackground:
-                    belowBackground.SetChildWithIndex(ui.transform, !isLast ? index : belowBackground.childCount);
-                    break;
-                case UILayer.Background:
-                    background.SetChildWithIndex(ui.transform, !isLast ? index : background.childCount);
-                    break;
-                case UILayer.BelowAnimation:
-                    belowAnimation.SetChildWithIndex(ui.transform, !isLast ? index : belowAnimation.childCount);
-                    break;
-                case UILayer.Common:
-                    common.SetChildWithIndex(ui.transform, !isLast ? index : common.childCount);
-                    break;
-                case UILayer.AboveAnimation:
-                    aboveAnimation.SetChildWithIndex(ui.transform, !isLast ? index : aboveAnimation.childCount);
-                    break;
-                case UILayer.Pop:
-                    pop.SetChildWithIndex(ui.transform, !isLast ? index : pop.childCount);
-                    break;
-                case UILayer.Guide:
-                    guide.SetChildWithIndex(ui.transform, !isLast ? index : guide.childCount);
-                    break;
-                case UILayer.Toast:
-                    toast.SetChildWithIndex(ui.transform, !isLast ? index : toast.childCount);
-                    break;
-                case UILayer.Top:
-                    top.SetChildWithIndex(ui.transform, !isLast ? index : top.childCount);
-                    break;
-                case UILayer.AboveTop:
-                    aboveTop.SetChildWithIndex(ui.transform, !isLast ? index : aboveTop.childCount);
-                    break;
-                default:
-                    break;
+                UIPanel p = memory.Pop();
+                if (p != null && !ExistInStack(p))
+                {
+                    _groups.UnSubscribe(p);
+                }
             }
-            ui.transform.LocalIdentity();
         }
     }
-    public partial class UIModule
+    /// <summary>
+    /// 额外
+    /// </summary>
+    partial class UIModule
     {
-        private List<IPanelLoader> _loaders;
-        public int loaderCount { get { return _loaders.Count; } }
-
-        public Stack<UIPanel> stack;
-        public Stack<UIPanel> memory;
-        public int stackCount { get { return stack.Count; } }
-        public int memoryCount { get { return memory.Count; } }
-        public bool ExistInStack(UIPanel panel) { return stack.Contains(panel); }
-        public bool ExistInMemory(UIPanel panel) { return memory.Contains(panel); }
-        public bool Exist(UIPanel panel) { return ExistInMemory(panel) || ExistInStack(panel); }
-        public UIPanel current
+        /// <summary>
+        /// 放置相机到 ui模块的 camera 层级
+        /// </summary>
+        /// <param name="camera"></param>
+        public void PutCamera(Camera camera)
         {
-            get
-            {
-                if (stack.Count == 0)
-                    return null;
-                return stack.Peek();
-            }
+            camera.transform.SetParent(this.camera);
         }
+        /// <summary>
+        /// 放置ui 到对应的层级
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <param name="layer"></param>
+        public void PutPanel(UIPanel panel,UILayer layer)
+        {
+            RectTransform tmp = null;
+            switch (layer)
+            {
+                case UILayer.BelowBackground: tmp = belowBackground; break;
+                case UILayer.Background: tmp = background; break;
+                case UILayer.BelowAnimation: tmp = belowAnimation; break;
+                case UILayer.Common: tmp = common; break;
+                case UILayer.AboveAnimation: tmp = aboveAnimation; break;
+                case UILayer.Pop: tmp = pop; break;
+                case UILayer.Guide: tmp = guide; break;
+                case UILayer.Toast: tmp = toast; break;
+                case UILayer.Top: tmp = top; break;
+                case UILayer.AboveTop: tmp = aboveTop; break;
+                default: break;
+            }
+            panel.transform.SetParent(tmp);
+            panel.transform.LocalIdentity();
+        }
+        /// <summary>
+        /// stack 中是否存在 ui
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <returns></returns>
+        public bool ExistInStack(UIPanel panel) { return stack.Contains(panel); }
+        /// <summary>
+        /// memory 中是否存在 ui
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <returns></returns>
+        public bool ExistInMemory(UIPanel panel) { return memory.Contains(panel); }
+        /// <summary>
+        /// 是否 存在 ui
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <returns></returns>
+        public bool Exist(UIPanel panel) { return ExistInMemory(panel) || ExistInStack(panel); }
+        /// <summary>
+        /// 获取 memory 的第一个 ui
+        /// </summary>
+        /// <returns></returns>
         public UIPanel MemoryPeek()
         {
             if (memory.Count == 0)
                 return null;
             return memory.Peek();
         }
+
+        /// <summary>
+        /// 加载 ui 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public UIPanel Load(Type type, string name, UILayer layer = UILayer.Common)
+        {
+            if (_groups == null)
+                throw new Exception("Please Set ModuleType First");
+            UIPanel ui = default(UIPanel);
+            if (_loaders == null || loaderCount == 0)
+            {
+                Log.E("NO UILoader");
+                return ui;
+            }
+            for (int i = 0; i < _loaders.Count; i++)
+            {
+                var result = _loaders[i].Load(type, name);
+                if (result == null) continue;
+                ui = result;
+                ui = GameObject.Instantiate(ui);
+                PutPanel(ui, layer);
+                ui.name = name;
+                ui.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+                _groups.Subscribe(ui);
+                return ui;
+            }
+            Log.E(string.Format("NO ui Type: {0}    Layer: {1}  Name: {2}", type, layer, name));
+            return ui;
+        }
+        /// <summary>
+        /// 加载 ui
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="layer"></param>
+        /// <returns></returns>
+        public T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
+        {
+            return (T)Load(typeof(T), name, layer);
+        }
+        /// <summary>
+        /// 查找 ui
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public UIPanel FindPanel(string name)
+        {
+            return _groups.FindPanel(name);
+        }
+        /// <summary>
+        /// 推 ui 入 stack
+        /// </summary>
+        /// <param name="ui"></param>
+        public void Push(UIPanel ui)
+        {
+            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
+            arg.code = UIEventArgs.Code.Push;
+            if (stackCount > 0)
+                arg.pressPanel = current;
+            arg.curPanel = ui;
+            stack.Push(ui);
+            InvokeViewState(arg);
+            arg.Recyle();
+            if (memory.Count > 0) ClearMemory();
+        }
+        private void InvokeViewState(UIEventArgs arg)
+        {
+            _groups.InvokeViewState(arg);
+        }
     }
-    public partial class UIModule : UpdateFrameworkModule
+    /// <summary>
+    /// 基础内容
+    /// </summary>
+    public partial class UIModule : UpdateFrameworkModule, IUIModule
     {
-        private IGroups _groups;
         public override int priority { get { return 80; } }
 
         protected override void Awake()
@@ -208,120 +386,6 @@ namespace IFramework.UI
             {
                  _groups.Update();
             }
-        }
-
-        public void AddLoader(IPanelLoader loader)
-        {
-            _loaders.Add(loader);
-        }
-        public void SetGroups(IGroups groups)
-        {
-            this._groups = groups;
-        }
-
-        public UIPanel Load(Type type, string name, UILayer layer = UILayer.Common)
-        {
-            if (_groups == null)
-                throw new Exception("Please Set ModuleType First");
-            UIPanel ui = default(UIPanel);
-            if (_loaders == null || loaderCount == 0)
-            {
-                Log.E("NO UILoader");
-                return ui;
-            }
-            for (int i = 0; i < _loaders.Count; i++)
-            {
-                var result = _loaders[i].Load(type, name);
-                if (result == null) continue;
-                ui = result;
-                ui = GameObject.Instantiate(ui);
-                ui.layer = layer;
-                SetLayer(ui);
-                ui.name = name;
-                ui.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
-                _groups.Subscribe(ui);
-                return ui;
-            }
-            Log.E(string.Format("NO ui Type: {0}    Layer: {1}  Name: {2}", type, layer, name));
-            return ui;
-        }
-        public T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
-        {
-            return (T)Load(typeof(T), name, layer);
-        }
-        public bool HaveLoad(string panelName)
-        {
-            return _groups.FindPanel(panelName) != null;
-        }
-
-        public void Push(UIPanel ui)
-        {
-            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
-            arg.code = UIEventArgs.Code.Push;
-            if (stackCount > 0)
-                arg.pressPanel = current;
-            arg.curPanel = ui;
-            stack.Push(ui);
-            InvokeViewState(arg);
-            arg.Recyle();
-            if (memory.Count > 0) ClearCache();
-        }
-        public void GoForWard()
-        {
-            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
-            arg.code = UIEventArgs.Code.GoForward;
-            if (memoryCount <= 0) return;
-            if (stackCount > 0)
-                arg.pressPanel = current;
-            var ui = memory.Pop();
-            arg.curPanel = ui;
-            stack.Push(ui);
-            InvokeViewState(arg);
-            arg.Recyle();
-        }
-        public void GoBack()
-        {
-            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
-            arg.code = UIEventArgs.Code.GoBack;
-            if (stackCount <= 0) return;
-            var ui = stack.Pop();
-            arg.popPanel = ui;
-            memory.Push(ui);
-            if (stackCount > 0)
-                arg.curPanel = current;
-            InvokeViewState(arg);
-            arg.Recyle();
-        }
-        public void ClearCache()
-        {
-            while (memory.Count != 0)
-            {
-                UIPanel p = memory.Pop();
-                if (p != null && !ExistInStack(p))
-                {
-                    _groups.UnSubscribe(p);
-                }
-            }
-        }
-        private void InvokeViewState(UIEventArgs arg)
-        {
-            _groups.InvokeViewState(arg);
-        }
-
-        public UIPanel Get(Type type, string name, UILayer layer = UILayer.Common)
-        {
-            //if (UICache.Count > 0) ClearCache(arg);
-            if (current != null && current.name == name && current.GetType() == type)
-                return current;
-            var panel = _groups.FindPanel(name);
-            if (panel == null)
-                panel = Load(type, name, layer);
-            Push(panel);
-            return panel;
-        }
-        public T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
-        {
-            return (T)Get(typeof(T), name, layer);
         }
     }
 }
