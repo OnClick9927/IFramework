@@ -51,10 +51,6 @@ namespace IFramework_Demo
             }
         }
 
-        public override void CreateModules()
-        {
-
-        }
 
         public override void Startup()
         {
@@ -68,6 +64,11 @@ namespace IFramework_Demo
             //    StartCoroutine(Load());
             //});
 
+        }
+
+        public override void Init()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

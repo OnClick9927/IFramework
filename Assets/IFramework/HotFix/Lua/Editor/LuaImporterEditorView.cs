@@ -9,21 +9,22 @@
 using IFramework.GUITool;
 using UnityEditor;
 using UnityEditor.Experimental.AssetImporters;
+using UnityEngine;
 #if UNITY_2018_1_OR_NEWER
 
 namespace IFramework.Hotfix.Lua
 {
     [CustomEditor(typeof(LuaImporter))]
-    public class LuaImporterEditorView: ScriptedImporterEditor,ILayoutGUI
+    public class LuaImporterEditorView: ScriptedImporterEditor
     {
         LuaImporter im { get { return this.target as LuaImporter; } }
         public override void OnInspectorGUI()
         {
-            this.Button(() =>
+            if (GUILayout.Button("Edit"))
             {
                 UnityEditorInternal.InternalEditorUtility.OpenFileAtLineExternal(im.assetPath, 0);
 
-            }, "Edit");
+            }
         }
     }
 }

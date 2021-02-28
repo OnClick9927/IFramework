@@ -60,9 +60,7 @@ namespace IFramework_Demo
 
 
 
-        public override void CreateModules()
-        {
-        }
+
         public GameObject pc,pr;
 
         public override void Startup()
@@ -107,6 +105,11 @@ namespace IFramework_Demo
 
             }
 
+        }
+
+        public override void Init()
+        {
+           
         }
     }
 }

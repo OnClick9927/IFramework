@@ -20,7 +20,7 @@ namespace IFramework
 
        
 
-        public abstract void CreateModules();
+        public abstract void Init();
         public abstract void Startup();
 	}
 }

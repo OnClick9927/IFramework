@@ -47,16 +47,18 @@ namespace IFramework.UI
             public override void OnGUI()
             {
 
-                this.Space(5)
-                    .DrawHorizontal(() =>
-                    {
-                        this.Label("Check UIMap Script Name", Styles.toolbar);
-                        this.TextField(ref UIMapName);
-                    });
-                this.DrawHorizontal(() =>
+                GUILayout.Space(5); ;
+                GUILayout.BeginHorizontal();
                 {
-                    this.Label("UIMap Gen Directory", Styles.toolbar);
-                    this.Label(UIMapDir);
+                    GUILayout.Label("Check UIMap Script Name", Styles.toolbar);
+                    UIMapName = GUILayout.TextField(UIMapName);
+
+                    GUILayout.EndHorizontal();
+                }
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.Label("UIMap Gen Directory", Styles.toolbar);
+                    GUILayout.Label(UIMapDir);
                     Rect rect = GUILayoutUtility.GetLastRect();
                     if (string.IsNullOrEmpty(UIMapDir))
                         rect.DrawOutLine(10, Color.red);
@@ -80,16 +82,17 @@ namespace IFramework.UI
 
                         }
                     }
+                    GUILayout.EndHorizontal();
+                }
 
-                })
-                .Space(30);
 
-                this.ETextField("Panel Name", ref panelName);
+                GUILayout.Space(30);
 
-                this.DrawHorizontal(() =>
+                panelName = EditorGUILayout.TextField("Panel Name", panelName);
+                GUILayout.BeginHorizontal();
                 {
-                    this.Label("Drag Panel Gen Directory", Styles.toolbar);
-                    this.Label(PanelGenDir);
+                    GUILayout.Label("Drag Panel Gen Directory", Styles.toolbar);
+                    GUILayout.Label(PanelGenDir);
                     Rect rect = GUILayoutUtility.GetLastRect();
                     if (string.IsNullOrEmpty(PanelGenDir))
                         rect.DrawOutLine(10, Color.red);
@@ -117,54 +120,58 @@ namespace IFramework.UI
                             {
                                 EditorWindow.focusedWindow.ShowNotification(new GUIContent("Choose UI Map Directory First"));
                             }
-                          
+
                         }
                     }
+                    GUILayout.EndHorizontal();
+                }
 
-                })
-                 .Space(10)
-                 .DrawHorizontal(() =>
-                 {
-                     this
-                     .Button(() =>
-                     {
-                         if (File.Exists(uimapPath))
-                         {
-                             EditorWindow.focusedWindow.ShowNotification(new GUIContent("UI Map Have Exist "));
-                             return;
-                         }
-                         CreateUIMap(uimapPath);
-                         AssetDatabase.Refresh();
+                GUILayout.Space(10);
+                GUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Create UIMap"))
+                    {
+                        if (File.Exists(uimapPath))
+                        {
+                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("UI Map Have Exist "));
+                            return;
+                        }
+                        CreateUIMap(uimapPath);
+                        AssetDatabase.Refresh();
+                    }
+                    GUILayout.Space(20);
 
-                     }, "Create UIMap")
-                     .Space(20)
-                     .Button(() =>
-                     {
-                         if (!File.Exists(uimapPath))
-                         {
-                             EditorWindow.focusedWindow.ShowNotification(new GUIContent("Create UI Map"));
-                             return;
-                         }
-                         if (string.IsNullOrEmpty(panelName))
-                         {
-                             EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Panel Name "));
-                             return;
-                         }
-                         if (string.IsNullOrEmpty(PanelGenDir))
-                         {
-                             EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Panel Gen Dir "));
-                             return;
-                         }
+                    if (GUILayout.Button("Gen"))
+                    {
+                        if (!File.Exists(uimapPath))
+                        {
+                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Create UI Map"));
+                            return;
+                        }
+                        if (string.IsNullOrEmpty(panelName))
+                        {
+                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Panel Name "));
+                            return;
+                        }
+                        if (string.IsNullOrEmpty(PanelGenDir))
+                        {
+                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Panel Gen Dir "));
+                            return;
+                        }
 
-                     //                            string paneltype = panelType.Split('.').Last();
+                        //                            string paneltype = panelType.Split('.').Last();
 
 
-                     CreateView(PanelGenDir.CombinePath(ViewName).Append(".lua"));
-                         CreateVM(PanelGenDir.CombinePath(VMName).Append(".lua"));
-                         WriteMap(uimapPath, panelName);
-                         AssetDatabase.Refresh();
-                     }, "Gen");
-                 });
+                        CreateView(PanelGenDir.CombinePath(ViewName).Append(".lua"));
+                        CreateVM(PanelGenDir.CombinePath(VMName).Append(".lua"));
+                        WriteMap(uimapPath, panelName);
+                        AssetDatabase.Refresh();
+                    }
+
+
+                    GUILayout.EndHorizontal();
+                }
+
 
             }
             private void WriteMap(string Path, string panelName)
@@ -197,11 +204,11 @@ namespace IFramework.UI
                     {
                         fs.Lock(0, fs.Length);
                         sw.WriteLine("--*********************************************************************************");
-                        sw.WriteLine(" --Author:         " + ProjectConfig.NameSpace);
-                        sw.WriteLine(" --Version:        " + ProjectConfig.Version);
+                        sw.WriteLine(" --Author:         " + EditorTools.ProjectConfig.NameSpace);
+                        sw.WriteLine(" --Version:        " + EditorTools.ProjectConfig.Version);
                         sw.WriteLine(" --UnityVersion:   " + Application.unityVersion);
                         sw.WriteLine(" --Date:           " + DateTime.Now.ToString("yyyy-MM-dd"));
-                        sw.WriteLine(" --Description:    " + ProjectConfig.Description);
+                        sw.WriteLine(" --Description:    " + EditorTools.ProjectConfig.Description);
                         sw.WriteLine(" --History:        " + DateTime.Now.ToString("yyyy-MM-dd") + "--");
                         sw.WriteLine("--*********************************************************************************/");
 
@@ -258,11 +265,11 @@ namespace IFramework.UI
                     {
                         fs.Lock(0, fs.Length);
                         sw.WriteLine("--*********************************************************************************");
-                        sw.WriteLine(" --Author:         " + ProjectConfig.NameSpace);
-                        sw.WriteLine(" --Version:        " + ProjectConfig.Version);
+                        sw.WriteLine(" --Author:         " + EditorTools.ProjectConfig.NameSpace);
+                        sw.WriteLine(" --Version:        " + EditorTools.ProjectConfig.Version);
                         sw.WriteLine(" --UnityVersion:   " + Application.unityVersion);
                         sw.WriteLine(" --Date:           " + DateTime.Now.ToString("yyyy-MM-dd"));
-                        sw.WriteLine(" --Description:    " + ProjectConfig.Description);
+                        sw.WriteLine(" --Description:    " + EditorTools.ProjectConfig.Description);
                         sw.WriteLine(" --History:        " + DateTime.Now.ToString("yyyy-MM-dd") + "--");
                         sw.WriteLine("--*********************************************************************************/");
                         sw.WriteLine("");
@@ -331,11 +338,11 @@ namespace IFramework.UI
                     {
                         fs.Lock(0, fs.Length);
                         sw.WriteLine("--*********************************************************************************");
-                        sw.WriteLine(" --Author:         " + ProjectConfig.NameSpace);
-                        sw.WriteLine(" --Version:        " + ProjectConfig.Version);
+                        sw.WriteLine(" --Author:         " + EditorTools.ProjectConfig.NameSpace);
+                        sw.WriteLine(" --Version:        " + EditorTools.ProjectConfig.Version);
                         sw.WriteLine(" --UnityVersion:   " + Application.unityVersion);
                         sw.WriteLine(" --Date:           " + DateTime.Now.ToString("yyyy-MM-dd"));
-                        sw.WriteLine(" --Description:    " + ProjectConfig.Description);
+                        sw.WriteLine(" --Description:    " + EditorTools.ProjectConfig.Description);
                         sw.WriteLine(" --History:        " + DateTime.Now.ToString("yyyy-MM-dd") + "--");
                         sw.WriteLine("--*********************************************************************************/");
 

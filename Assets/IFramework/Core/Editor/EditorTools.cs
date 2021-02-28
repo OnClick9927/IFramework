@@ -15,9 +15,46 @@ using Object = UnityEngine.Object;
 using System.Reflection;
 using System.IO;
 using UnityEditorInternal;
+using System.Text;
+using IFramework.GUITool;
+using UnityEditor.ProjectWindowCallback;
 
 namespace IFramework
 {
+    static class CopyAsset
+    {
+        class CreateAssetAction : EndNameEditAction
+        {
+            public override void Action(int instanceId, string pathName, string resourceFile)
+            {
+                Object obj = CreateAssetFormTemplate(pathName, resourceFile);
+                ProjectWindowUtil.ShowCreatedAsset(obj);
+            }
+
+            private static Object CreateAssetFormTemplate(string pathName, string resourceFile)
+            {
+                string fullName = Path.GetFullPath(pathName);
+                StreamReader reader = new StreamReader(resourceFile);
+                string content = reader.ReadToEnd();
+                reader.Close();
+                string fileName = Path.GetFileNameWithoutExtension(pathName);
+                content = content.Replace("#NAME", fileName);
+                StreamWriter writer = new StreamWriter(fullName, false, System.Text.Encoding.UTF8);
+                writer.Write(content);
+                writer.Close();
+                AssetDatabase.ImportAsset(pathName);
+                AssetDatabase.Refresh();
+                return AssetDatabase.LoadAssetAtPath(pathName, typeof(Object));
+            }
+        }
+        public static void Copy(string newFileName, string sourcePath)
+        {
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+            ScriptableObject.CreateInstance<CreateAssetAction>(),
+           /*Path.Combine(GetSelectedPath(), newFileName)*/ newFileName, null, sourcePath);
+        }
+    }
+
     static partial class EditorTools
     {
         [CustomEditor(typeof(Transform)), CanEditMultipleObjects]
@@ -339,6 +376,399 @@ namespace IFramework
             }
 
         }
+
+        class FormatIFrameworkScript
+        {
+            const string key = "FormatIFrameworkScript";
+
+            private class FormatIFrameWorkScriptProcessor : UnityEditor.AssetModificationProcessor
+            {
+                public static void OnWillCreateAsset(string metaPath)
+                {
+                    if (!EditorPrefs.GetBool(key, false)) return;
+                    string filePath = metaPath.Replace(".meta", "");
+                    if (!filePath.EndsWith(".cs")) return;
+                    string realPath = filePath.ToAbsPath();
+                    string txt = File.ReadAllText(realPath);
+                    if (!txt.Contains("#FAuthor#")) return;
+                    txt = txt.Replace("#FAuthor#", EditorEnv.author)
+                             .Replace("#FNameSpace#", EditorEnv.frameworkName)
+                             .Replace("#FDescription#", EditorEnv.description)
+                             .Replace("#FSCRIPTNAME#", Path.GetFileNameWithoutExtension(filePath))
+                             .Replace("#FVERSION#", EditorEnv.version)
+                             .Replace("#FUNITYVERSION#", Application.unityVersion)
+                             .Replace("#FDATE#", DateTime.Now.ToString("yyyy-MM-dd")).ToUnixLineEndings();
+                    File.WriteAllText(realPath, txt, Encoding.UTF8);
+                    EditorPrefs.SetBool(key, false);
+                }
+            }
+            private static string newScriptName = "newScript.cs";
+            private static string originScriptPath = EditorEnv.formatScriptsPath.CombinePath("AuthorCharpScript.txt");
+
+            [MenuItem("Assets/Create/IFramework/AuthorScript", priority = -1000)]
+            public static void Create()
+            {
+                CreateOriginIfNull();
+                CopyAsset.Copy(newScriptName, originScriptPath);
+                EditorPrefs.SetBool(key, true);
+            }
+
+            private static void CreateOriginIfNull()
+            {
+                if (File.Exists(originScriptPath)) return;
+                using (FileStream fs = new FileStream(originScriptPath, FileMode.Create, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        fs.Lock(0, fs.Length);
+                        sw.WriteLine("/*********************************************************************************");
+                        sw.WriteLine(" *Author:         #FAuthor#");
+                        sw.WriteLine(" *Version:        #FVERSION#");
+                        sw.WriteLine(" *UnityVersion:   #FUNITYVERSION#");
+                        sw.WriteLine(" *Date:           #FDATE#");
+                        sw.WriteLine(" *Description:    #FDescription#");
+                        sw.WriteLine(" *History:        2018.11--");
+                        sw.WriteLine("*********************************************************************************/");
+                        sw.WriteLine("namespace #FNameSpace#");
+                        sw.WriteLine("{");
+                        sw.WriteLine("\tpublic class #FSCRIPTNAME#");
+                        sw.WriteLine("\t{");
+                        sw.WriteLine("\t");
+                        sw.WriteLine("\t}");
+                        sw.WriteLine("}");
+                        fs.Unlock(0, fs.Length);
+                        sw.Flush();
+                        fs.Flush();
+                    }
+                }
+                AssetDatabase.Refresh();
+            }
+        }
+
+
+        [CustomEditor(typeof(ScriptCreater))]
+        class ScriptCreaterEditor : Editor
+        {
+            private ScriptCreater _creater { get { return this.target as ScriptCreater; } }
+            private string path { get { return _creater.createDirectory.CombinePath(_creater.scriptName + ".cs"); } }
+            private List<string> baseTypes;
+            private void OnEnable()
+            {
+                var list = typeof(MonoBehaviour).GetSubTypesInAssemblys().ToList();
+                list.Insert(0, typeof(MonoBehaviour));
+                baseTypes = list.ConvertAll((type) => { return type.FullName; });
+            }
+            private bool DropdownButton(int id, Rect position)
+            {
+                Event e = Event.current;
+                switch (e.type)
+                {
+                    case EventType.MouseDown:
+                        if (position.Contains(e.mousePosition) && e.button == 0)
+                        {
+                            Event.current.Use();
+                            return true;
+                        }
+                        break;
+                    case EventType.KeyDown:
+                        if (GUIUtility.keyboardControl == id && e.character == '\n')
+                        {
+                            Event.current.Use();
+                            return true;
+                        }
+                        break;
+                    case EventType.Repaint:
+                        //Styles.BoldLabel.Draw(position, content, id, false);
+                        break;
+                }
+                return false;
+            }
+
+            public override void OnInspectorGUI()
+            {
+                GUILayout.Space(10);
+                GUILayout.Label("Base Class : " + baseTypes[_creater.searchIndex]);
+                Rect pos = GUILayoutUtility.GetLastRect();
+                int ctrlId = GUIUtility.GetControlID(GetHashCode(), FocusType.Keyboard, pos);
+                {
+                    if (DropdownButton(ctrlId, pos))
+                    {
+
+                        SearchablePopup.Show(pos, baseTypes.ToArray(), _creater.searchIndex, (i, str) =>
+                        {
+                            _creater.searchIndex = i;
+                        });
+                        GUIUtility.ExitGUI();
+                    }
+                }
+
+                _creater.scriptName = EditorGUILayout.TextField("Script Name", _creater.scriptName);
+                if (!_creater.scriptName.IsLegalFieldName())
+                    _creater.scriptName = _creater.name.Replace(" ", "").Replace("(", "").Replace(")", "");
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("marks"), true);
+                GUILayout.Label("Description");
+                _creater.description = EditorGUILayout.TextArea(_creater.description, GUILayout.Height(40));
+                GUILayout.Space(10);
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.Label(new GUIContent("Create Path:", "Drag Floder To Box"));
+                    Rect rect = EditorGUILayout.GetControlRect();
+                    rect.DrawOutLine(2, Color.black);
+                    EditorGUI.LabelField(rect, _creater.createDirectory);
+                    if (!rect.Contains(Event.current.mousePosition)) return;
+                    var info = EditorTools.DragAndDropTool.Drag(Event.current, rect);
+                    if (info.paths.Length > 0 && info.compelete && info.enterArera && info.paths[0].IsDirectory())
+                        _creater.createDirectory = info.paths[0];
+                    GUILayout.EndHorizontal();
+                }
+                if (serializedObject != null)
+                {
+                    serializedObject.ApplyModifiedProperties();
+                    serializedObject.Update();
+                }
+
+                GUILayout.Space(10);
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.EndHorizontal();
+                    if (GUILayout.Button("Build", GUILayout.Height(25)))
+                    {
+                        BuildScript();
+                    }
+                    if (GUILayout.Button("Bind ", GUILayout.Height(25)))
+                    {
+                        if (EditorApplication.isCompiling)
+                        {
+                            EditorUtility.DisplayDialog("Warnning", "Please Wait  Editor Compiling", "ok");
+                            return;
+                        }
+                        SetFields();
+                    }
+                    if (GUILayout.Button("Remove", GUILayout.Height(25)))
+                    {
+                        _creater.GetComponentsInChildren<ScriptMark>(true).ToList().ForEach((sm) => {
+                            DestroyImmediate(sm);
+                        });
+                        DestroyImmediate(_creater);
+
+                    }
+                }
+
+            }
+
+            private void BuildScript()
+            {
+                if (EditorApplication.isCompiling) return;
+                if (_creater.marks == null || _creater.marks.Length == 0)
+                {
+                    _creater.marks = _creater.GetComponentsInChildren<ScriptMark>(true);
+
+                }
+
+                if (BuildCheck())
+                {
+                    string txt = formatScript;
+
+                    if (!txt.Contains("#SCAuthor#")) return;
+                    txt = txt.Replace("#SCAuthor#", ProjectConfig.UserName)
+                             .Replace("#SCVERSION#", ProjectConfig.Version)
+                             .Replace("#SCUNITYVERSION#", Application.unityVersion)
+                             .Replace("#SCDATE#", DateTime.Now.ToString("yyyy-MM-dd"))
+                             .Replace("#SCNameSpace#", ProjectConfig.NameSpace)
+                             .Replace("#SCSCRIPTNAME#", _creater.scriptName)
+                             .Replace("#BaseClass#", baseTypes[_creater.searchIndex])
+                             .Replace("#SCDescription#", DescriptionString())
+                             .Replace("#SCField#", FieldString());
+                    File.WriteAllText(path, txt, Encoding.UTF8);
+                    AssetDatabase.Refresh();
+                }
+            }
+            private string DescriptionString()
+            {
+                string res = string.IsNullOrEmpty(_creater.description) ? ProjectConfig.Description : _creater.description;
+                if (!res.Contains("\n"))
+                    return res;
+                else
+                {
+                    string s = string.Empty;
+                    var strs = res.Split('\n');
+                    for (int i = 0; i < strs.Length; i++)
+                    {
+                        string str = strs[i];
+                        if (i == 0)
+                        {
+                            s = s.Append(str);
+                            if (strs.Length > 1)
+                                s = s.Append("\n");
+                        }
+                        else
+                        {
+                            s = s.Append("                  " + str);
+                            if (i < strs.Length - 1)
+                                s = s.Append("\n");
+                        }
+                    }
+
+                    return s;
+                }
+
+            }
+            private string FieldString()
+            {
+                string result = string.Empty;
+                _creater.marks.ForEach((mark) => {
+                    if (!string.IsNullOrEmpty(mark.description))
+                    {
+                        if (mark.description.Contains("\n"))
+                        {
+                            mark.description.Split('\n').ToList().ForEach((str) =>
+                            {
+                                result = result.Append("\t\t//" + str + "\n");
+                            });
+                        }
+                        else
+                            result = result.Append("\t\t//" + mark.description + "\n");
+
+                    }
+                    var fieldType = mark.fieldType;
+                    if (mark.isPublic)
+                        result = result.Append("\t\tpublic " + fieldType + " " + mark.fieldName + ";\n");
+                    else
+                        result = result.Append("\t\t[UnityEngine.SerializeField] private " + fieldType + " " + mark.fieldName + ";\n");
+
+                });
+                return result;
+            }
+            private bool BuildCheck()
+            {
+                Assembly defaultAssembly =
+        AppDomain.CurrentDomain
+                 .GetAssemblies()
+                 .First(assembly => assembly.GetName().Name == "Assembly-CSharp");
+                Type type = defaultAssembly.GetType(ProjectConfig.NameSpace + "." + _creater.scriptName);
+                if (type != null)
+                {
+                    bool bo = true;
+                    if (File.Exists(path))
+                    {
+                        bo = EditorUtility.DisplayDialog("Warnning", "The File Exist \n" + path + "\n Overwrite the original file ?", "yes", "no");
+                    }
+                    if (bo)
+                    {
+                        bo = EditorUtility.DisplayDialog("Warnning", "The Tppe Exist\n" + type.FullName + "  Overwrite the original file ?", "yes", "no");
+                    }
+                    if (!bo) return false;
+                }
+                for (int i = 0; i < _creater.marks.Length; i++)
+                {
+                    var mark = _creater.marks[i];
+                    if (mark.fieldName == _creater.scriptName)
+                    {
+                        EditorUtility.DisplayDialog("Err", "Field Name Should be diferent With ScriptName", "ok");
+                        return false;
+                    }
+                    var sameFields = _creater.marks.ToList().FindAll((__sm) => { return mark.fieldName == __sm.fieldName; });
+                    if (sameFields.Count > 1)
+                    {
+                        EditorUtility.DisplayDialog("Err", "Can't Exist Same Name Field", "ok");
+                        return false;
+                    }
+
+                }
+
+                if (!Directory.Exists(_creater.createDirectory))
+                {
+                    EditorUtility.DisplayDialog("Err", "Directory Not Exist ", "ok");
+                    return false;
+                }
+                return true;
+            }
+
+            private void SetFields()
+            {
+                if (!File.Exists(path)) return;
+
+                Assembly defaultAssembly =
+                    AppDomain.CurrentDomain
+                             .GetAssemblies()
+                             .First(assembly => assembly.GetName().Name == "Assembly-CSharp");
+                Type type = defaultAssembly.GetType(ProjectConfig.NameSpace + "." + _creater.scriptName);
+
+                if (type == null) return;
+
+                ScriptMark[] marks = _creater.marks;
+                Component component = _creater.GetComponent(type);
+                if (component == null) component = _creater.gameObject.AddComponent(type);
+                SerializedObject serialiedScript = new SerializedObject(component);
+
+                foreach (var _mark in marks)
+                {
+                    var _type = _mark.fieldType;
+                    if (_type.StartsWith("UnityEngine.") && _type.LastIndexOf(".") == "UnityEngine".Length)
+                    {
+                        _type = _type.Replace("UnityEngine.", "");
+                    }
+                    serialiedScript.FindProperty(_mark.fieldName).objectReferenceValue = _mark.GetComponent(_type);
+                }
+                serialiedScript.ApplyModifiedPropertiesWithoutUndo();
+            }
+
+            private const string formatScript = "/*********************************************************************************\n" +
+                " *Author:         #SCAuthor#\n" +
+                " *Version:        #SCVERSION#\n" +
+                " *UnityVersion:   #SCUNITYVERSION#\n" +
+                " *Date:           #SCDATE#\n" +
+                " *Description:    #SCDescription#\n" +
+                " *History:        #SCDATE#--\n" +
+                "*********************************************************************************/\n" +
+                "\n" +
+                "namespace #SCNameSpace#\n" +
+                "{\n" +
+                "\tpublic class #SCSCRIPTNAME# : #BaseClass#\n" +
+                "\t{\n" +
+                "#SCField#\n" +
+                "\t}\n" +
+                "}";
+        }
+
+        [CanEditMultipleObjects, CustomEditor(typeof(ScriptMark))]
+        class ScriptMarkEditor : Editor
+        {
+            public ScriptMark SM { get { return this.target as ScriptMark; } }
+            public override void OnInspectorGUI()
+            {
+                //base.OnInspectorGUI();
+                Component[] cps = SM.GetComponents<Component>();
+                if (cps == null || cps.Length <= 0) return;
+                List<string> names = new List<string>();
+                cps.ToList().ForEach((c) =>
+                {
+                    if (c != null)
+                        names.Add(c.GetType().FullName);
+                    //else
+                    //    DestroyImmediate(c);
+                });
+                names = names.Distinct().ToList();
+                SM.isPublic = EditorGUILayout.Toggle("IsPublic", SM.isPublic);
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Type");
+                SM.index = EditorGUILayout.Popup(SM.index, names.ToArray());
+                SM.fieldType = names[SM.index];
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Name");
+                SM.fieldName = EditorGUILayout.TextField(SM.fieldName);
+                SM.fieldName = string.IsNullOrEmpty(SM.fieldName) ? SM.name : SM.fieldName;
+                if (!SM.fieldName.IsLegalFieldName()) SM.fieldName = SM.name;
+                SM.fieldName = SM.fieldName.Replace(" ", "").Replace("(", "").Replace(")", "");
+
+                EditorGUILayout.EndHorizontal();
+                GUILayout.Label("Description");
+                SM.description = EditorGUILayout.TextArea(SM.description, GUILayout.Height(40));
+                serializedObject.Update();
+            }
+        }
     }
     static partial class EditorTools
     {
@@ -622,7 +1052,7 @@ namespace IFramework
             {
                 public string DisplayName;
                 internal string PropertyName;
-                public float Width;
+                public float Width=10;
             }
 
         }
@@ -801,9 +1231,261 @@ namespace IFramework
                 return default(V);
             }
         }
+
+
+        [OnEnvironmentInit]
+        public static class ProjectConfig
+        {
+            public static string NameSpace { get { return Info.NameSpace; } }
+            public static string UserName { get { return Info.UserName; } }
+            public static string Version { get { return Info.Version; } }
+            public static string Description { get { return Info.Description; } }
+            public static bool enable { get { return Info.enable; } }
+            public static bool enable_L { get { return Info.enable_L; } }
+            public static bool enable_W { get { return Info.enable_W; } }
+            public static bool enable_E { get { return Info.enable_E; } }
+            public const string configName = "ProjectConfig";
+            [Serializable]
+            public class ProjectConfigInfo
+            {
+                public bool enable = true;
+                public bool enable_L = true;
+                public bool enable_W = true;
+                public bool enable_E = true;
+
+
+
+                public string NameSpace;
+                public string UserName;
+                public string Version;
+                public string Description;
+                public ProjectConfigInfo()
+                {
+                    UserName = "OnClick";
+                    NameSpace = "IFramework_Demo";
+                    Version = "0.0.1";
+                    Description = "Description";
+                }
+            }
+
+
+            private static ProjectConfigInfo __info;
+            private static ProjectConfigInfo Info
+            {
+                get
+                {
+                    if (__info == null)
+                    {
+                        __info = EditorTools.Prefs.GetObject<ProjectConfigInfo, ProjectConfigInfo>(key);
+                        if (__info == null)
+                        {
+                            EditorTools.Prefs.SetObject<ProjectConfigInfo, ProjectConfigInfo>(key, new ProjectConfigInfo());
+                            __info = EditorTools.Prefs.GetObject<ProjectConfigInfo, ProjectConfigInfo>(key);
+                        }
+                    }
+                    return __info;
+                }
+            }
+            private const string key = "ProjectConfig";
+            private static void Save()
+            {
+                EditorTools.Prefs.SetObject<ProjectConfigInfo, ProjectConfigInfo>(key, Info);
+            }
+
+
+
+            static ProjectConfig()
+            {
+                Log.loger = new UnityLoger();
+                Log.enable_L = ProjectConfig.enable_L;
+                Log.enable_W = ProjectConfig.enable_W;
+                Log.enable_E = ProjectConfig.enable_E;
+                Log.enable = ProjectConfig.enable;
+            }
+
+
+            [EditorWindowCache("ProjectConfig")]
+            class ProjectConfigWindow : EditorWindow
+            {
+
+                private void OnGUI()
+                {
+
+
+                    GUILayout.Space(10);
+                    Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
+                    Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
+
+                    EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));
+                    Info.NameSpace = EditorGUILayout.TextArea(Info.NameSpace);
+                    GUILayout.Label("Description of Scripts");
+                    Info.Description = EditorGUILayout.TextArea(Info.Description, GUILayout.Height(100));
+                    GUILayout.Space(10);
+
+                    GUILayout.Label("LogSetting in Editor mode", GUIStyles.Get("IN Title"));
+                    Info.enable = EditorGUILayout.Toggle("Enable", Info.enable);
+                    GUI.enabled = Info.enable;
+                    Info.enable_L = EditorGUILayout.Toggle("Log Enable", Info.enable_L);
+                    Info.enable_W = EditorGUILayout.Toggle("Warning Enable", Info.enable_W);
+                    Info.enable_E = EditorGUILayout.Toggle("Error Enable", Info.enable_E);
+
+                    GUI.enabled = true;
+
+                    GUILayout.FlexibleSpace();
+                    GUILayout.BeginHorizontal();
+                    {
+                        GUILayout.FlexibleSpace();
+                        if (GUILayout.Button("Save"))
+                        {
+                            Save();
+                        }
+
+                        GUILayout.EndHorizontal();
+                    }
+
+                }
+
+
+            }
+
+
+            class FormatProjectScript
+            {
+                const string key = "FormatUserScript";
+
+                private class FormatUserScriptProcessor : UnityEditor.AssetModificationProcessor
+                {
+                    public static void OnWillCreateAsset(string metaPath)
+                    {
+                        if (!EditorPrefs.GetBool(key, false)) return;
+
+                        string filePath = metaPath.Replace(".meta", "");
+                        if (!filePath.EndsWith(".cs")) return;
+                        string realPath = filePath.ToAbsPath();
+                        string txt = File.ReadAllText(realPath);
+
+                        if (!txt.Contains("#User#")) return;
+                        //这里实现自定义的一些规则
+                        txt = txt.Replace("#User#", ProjectConfig.UserName)
+                                 .Replace("#UserSCRIPTNAME#", Path.GetFileNameWithoutExtension(filePath))
+                                 .Replace("#UserNameSpace#", ProjectConfig.NameSpace)
+                                 .Replace("#UserVERSION#", ProjectConfig.Version)
+                                .Replace("#UserDescription#", ProjectConfig.Description)
+
+                                 .Replace("#UserUNITYVERSION#", Application.unityVersion)
+                                 .Replace("#UserDATE#", DateTime.Now.ToString("yyyy-MM-dd")).ToUnixLineEndings();
+
+                        File.WriteAllText(realPath, txt, Encoding.UTF8);
+                        EditorPrefs.SetBool(key, false);
+                    }
+                }
+                private class FormatUserCSScript
+                {
+
+                    private static string newScriptName = "newScript.cs";
+                    private static string originScriptPathWithNameSpace = EditorEnv.formatScriptsPath.CombinePath("UserCSharpScript.txt");
+
+                    [MenuItem("Assets/Create/IFramework/FormatProjectCSharpScript", priority = -1000)]
+                    public static void Create()
+                    {
+                        CreateOriginIfNull();
+                        CopyAsset.Copy(newScriptName, originScriptPathWithNameSpace);
+                        EditorPrefs.SetBool(key, true);
+                    }
+                    private static void CreateOriginIfNull()
+                    {
+                        if (File.Exists(originScriptPathWithNameSpace)) return;
+                        using (FileStream fs = new FileStream(originScriptPathWithNameSpace, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs))
+                            {
+                                fs.Lock(0, fs.Length);
+                                sw.WriteLine("/*********************************************************************************");
+                                sw.WriteLine(" *Author:         #User#");
+                                sw.WriteLine(" *Version:        #UserVERSION#");
+                                sw.WriteLine(" *UnityVersion:   #UserUNITYVERSION#");
+                                sw.WriteLine(" *Date:           #UserDATE#");
+                                sw.WriteLine(" *Description:    #UserDescription#");
+                                sw.WriteLine(" *History:        #UserDATE#--");
+                                sw.WriteLine("*********************************************************************************/");
+                                sw.WriteLine("using System;");
+                                sw.WriteLine("using System.Collections;");
+                                sw.WriteLine("using System.Collections.Generic;");
+                                sw.WriteLine("using IFramework;");
+
+                                sw.WriteLine("");
+                                sw.WriteLine("namespace #UserNameSpace#");
+                                sw.WriteLine("{");
+                                sw.WriteLine("\tpublic class #UserSCRIPTNAME#");
+                                sw.WriteLine("\t{");
+                                sw.WriteLine("\t");
+                                sw.WriteLine("\t}");
+                                sw.WriteLine("}");
+                                fs.Unlock(0, fs.Length);
+                                sw.Flush();
+                                fs.Flush();
+                            }
+                        }
+                        AssetDatabase.Refresh();
+                    }
+                }
+                private class FormatUserMonoScript
+                {
+                    private static string newScriptName = "newScript.cs";
+                    private static string originScriptPathWithNameSpace = EditorEnv.corePath.CombinePath("UserMonoScript.txt");
+
+                    [MenuItem("Assets/Create/IFramework/FormatProjectMonoScript", priority = -1000)]
+                    public static void Create()
+                    {
+                        CreateOriginIfNull();
+                        CopyAsset.Copy(newScriptName, originScriptPathWithNameSpace);
+                        EditorPrefs.SetBool(key, true);
+                    }
+
+                    private static void CreateOriginIfNull()
+                    {
+                        if (File.Exists(originScriptPathWithNameSpace)) return;
+                        using (FileStream fs = new FileStream(originScriptPathWithNameSpace, FileMode.Create, FileAccess.Write))
+                        {
+                            using (StreamWriter sw = new StreamWriter(fs))
+                            {
+                                fs.Lock(0, fs.Length);
+                                sw.WriteLine("/*********************************************************************************");
+                                sw.WriteLine(" *Author:         #User#");
+                                sw.WriteLine(" *Version:        #UserVERSION#");
+                                sw.WriteLine(" *UnityVersion:   #UserUNITYVERSION#");
+                                sw.WriteLine(" *Date:           #UserDATE#");
+                                sw.WriteLine(" *Description:    #UserDescription#");
+                                sw.WriteLine(" *History:        #UserDATE#--");
+                                sw.WriteLine("*********************************************************************************/");
+                                sw.WriteLine("using System;");
+                                sw.WriteLine("using System.Collections;");
+                                sw.WriteLine("using System.Collections.Generic;");
+                                sw.WriteLine("using UnityEngine;");
+                                sw.WriteLine("using IFramework;");
+
+                                sw.WriteLine("");
+                                sw.WriteLine("namespace #UserNameSpace#");
+                                sw.WriteLine("{");
+                                sw.WriteLine("\tpublic class #UserSCRIPTNAME# : MonoBehaviour");
+                                sw.WriteLine("\t{");
+                                sw.WriteLine("\t");
+                                sw.WriteLine("\t}");
+                                sw.WriteLine("}");
+                                fs.Unlock(0, fs.Length);
+                                sw.Flush();
+                                fs.Flush();
+                            }
+                        }
+                        AssetDatabase.Refresh();
+                    }
+                }
+            }
+
+        }
     }
     static partial class EditorTools
-    { 
+    {
         private const string hierarchyOverridePath = "IFramework/Tool/HierarchyExtension";
         private const string copyAssetPathPath = "IFramework/Tools/Copy Path";
         private const string quitPath = "IFramework/Tools/Editor Quit";
@@ -943,5 +1625,31 @@ namespace IFramework
             return prefab;
         }
     }
+    static partial class EditorTools
+    {
+        public static void DrawOutLine(this Rect rect, float width, Color color)
+        {
+            Handles.color = color;
 
+            Handles.DrawAAPolyLine(2, new Vector3(rect.x,
+                                         rect.y,
+                                         0),
+                          new Vector3(rect.x,
+                                         rect.yMax,
+                                         0),
+                          new Vector3(rect.xMax,
+                                         rect.yMax,
+                                         0),
+                          new Vector3(rect.xMax,
+                                         rect.y,
+                                         0),
+                          new Vector3(rect.x,
+                                         rect.y,
+                                         0)
+                            );
+
+            Handles.color = Color.white;
+        }
+
+    }
 }

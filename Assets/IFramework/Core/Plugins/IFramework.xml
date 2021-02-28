@@ -278,9 +278,25 @@
             <param name="name"></param>
             <returns></returns>
         </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.GetModule(System.Type,System.String)">
+            <summary>
+            获取模块
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.GetModule``1(System.String)">
+            <summary>
+            获取模块
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
         <member name="M:IFramework.Modules.IFrameworkModuleContainer.FindModule(System.Type,System.String)">
             <summary>
-            查询模块
+            查找模块
             </summary>
             <param name="type"></param>
             <param name="name"></param>
@@ -1449,9 +1465,25 @@
             <param name="name">模块名称</param>
             <returns></returns>
         </member>
+        <member name="M:IFramework.Modules.FrameworkModuleContainer.GetModule(System.Type,System.String)">
+            <summary>
+            获取模块
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
         <member name="M:IFramework.Modules.FrameworkModuleContainer.FindModule``1(System.String)">
             <summary>
             查找模块
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.FrameworkModuleContainer.GetModule``1(System.String)">
+            <summary>
+            获取模块
             </summary>
             <typeparam name="T"></typeparam>
             <param name="name"></param>
@@ -3277,9 +3309,6 @@
             <summary>
             是否释放
             </summary>
-        </member>
-        <member name="T:IFramework.Injection.FrameworkContainer.Tuple`2">
-            http://stackoverflow.com/questions/1171812/multi-key-dictionary-in-c
         </member>
         <member name="T:IFramework.Injection.InjectAttribute">
             <summary>

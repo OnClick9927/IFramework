@@ -1323,7 +1323,7 @@ namespace IFramework
             }
         }
 
-        class WindowCollection : IRectGUI, ILayoutGUI
+        class WindowCollection 
         {
             public const string name = "Name";
             public const string dock = "Dock";
@@ -1374,9 +1374,9 @@ namespace IFramework
                         }
                     }
                     if (!string.IsNullOrEmpty(window.type.Namespace) && window.type.Namespace.Contains("UnityEditor"))
-                        this.Label(_table.rows[index][name].position, new GUIContent(window.searchName, tx));
+                        GUI.Label(_table.rows[index][name].position, new GUIContent(window.searchName, tx));
                     else
-                        this.Label(_table.rows[index][name].position, window.searchName);
+                        GUI.Label(_table.rows[index][name].position, window.searchName);
                 }
                 GUI.EndScrollView();
                 string windowName = "";
@@ -1390,38 +1390,43 @@ namespace IFramework
                 }
                 using (new EditorGUI.DisabledGroupScope(_table.selectedRows.Count < 0))
                 {
-                    this.BeginArea(rs[1])
-                            .FlexibleSpace()
-                            .BeginHorizontal()
-                                .FlexibleSpace()
-                                    .Button(() =>
-                                    {
-                                        var w = EditorWindowTool.FindOrCreate(windowName);
-                                        if (w != null)
-                                        {
-                                            w.Focus();
-                                        }
-                                    }, get)
-                                    .Button(() =>
-                                    {
-                                        var w = EditorWindowTool.FindOrCreate(windowName);
-                                        if (w != null)
-                                        {
-                                            _window.Dock(w, EditorWindowTool.DockType.Right);
-                                            w.Focus();
-                                        }
-                                    }, dock)
-                                    .Button(() =>
-                                    {
+                    GUILayout.BeginArea(rs[1]);
+                    {
+                        GUILayout.FlexibleSpace();
+                        GUILayout.BeginHorizontal();
+                        {
+                            GUILayout.FlexibleSpace();
+                            if (GUILayout.Button(get))
+                            {
+                                var w = EditorWindowTool.FindOrCreate(windowName);
+                                if (w != null)
+                                {
+                                    w.Focus();
+                                }
+                            }
+                            if (GUILayout.Button(dock))
+                            {
+                                var w = EditorWindowTool.FindOrCreate(windowName);
+                                if (w != null)
+                                {
+                                    _window.Dock(w, EditorWindowTool.DockType.Right);
+                                    w.Focus();
+                                }
+                            }
+                            if (GUILayout.Button(close))
+                            {
 
-                                        EditorWindowTool.FindAll(windowName).ToList().ForEach((w) =>
-                                        {
-                                            w.Close();
-                                        });
-                                    }, close)
-                             .EndHorizontal()
-                        .FlexibleSpace()
-                    .EndArea();
+                                EditorWindowTool.FindAll(windowName).ToList().ForEach((w) =>
+                                {
+                                    w.Close();
+                                });
+                            }
+
+                            GUILayout.EndHorizontal();
+                        }
+                        GUILayout.EndArea();
+                    }
+      
                 }
                 GUI.EndClip();
 

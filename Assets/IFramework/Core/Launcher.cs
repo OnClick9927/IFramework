@@ -12,6 +12,7 @@ using UnityEngine;
 
 namespace IFramework
 {
+    [AddComponentMenu("IFramework/Launcher")]
 	public class Launcher:MonoBehaviour
 	{
         public static Launcher instance;
@@ -36,7 +37,7 @@ namespace IFramework
                 game = GetComponent<Game>();
             instance = this;
             Framework.CreateEnv("Game_RT", envType).InitWithAttribute();
-            game.CreateModules();
+            game.Init();
             game.Startup();
         }
         private void OnDisable()

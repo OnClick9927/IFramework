@@ -19,7 +19,7 @@ using System.Linq;
 namespace IFramework.Hotfix.AB
 {
     [EditorWindowCache("IFramework.AssetBundle")]
-    public partial class AssetBundleWindow : EditorWindow,ILayoutGUI
+    public partial class AssetBundleWindow : EditorWindow
     {
         public class WindowMemory
         {
@@ -349,76 +349,95 @@ namespace IFramework.Hotfix.AB
             public BuiidCollection build = new BuiidCollection();
         }
 
-        private class ToolGUI : GUIBase,ILayoutGUI
+        private class ToolGUI : GUIBase
         {
             private WindowMemory.BuiidCollection buildCollection { get { return _window.Info.build; } }
 
             public override void OnGUI(Rect position)
             {
                 base.OnGUI(position);
-                this.BeginArea(position)
-                        .Label("BuildSetting",GUIStyles.Get("LargeBoldLabel"))
-                        .Label("", GUIStyles.Get("IN Title"), GUILayout.Height(5))
-                        .LabelField("Build Target:",EditorUserBuildSettings.activeBuildTarget.ToString())
-                        .LabelField("Output Path:", ABTool.assetsOutPutPath.ToAbsPath())
-                        .LabelField("Manifest Path:", ABTool.configPath)
-                        .LabelField("Version Path:", ABTool.versionPath)
-                        .Pan(()=> {
-                            ABTool.testmode = EditorGUILayout.Toggle(new GUIContent("Test Mode"), ABTool.testmode);
-                        })
-                        .Label("", GUIStyles.Get("IN Title"), GUILayout.Height(5))
-                        .Space(10)
-                        .Button(() => {
-                            Build.DeleteBundleFiles();
-                        }, "Clear Bundle Files")
-                        .Button(() => {
-                            Build.BuildManifest(ABTool.configPath, buildCollection.GetAssetBundleBuilds());
-                        }, "Build Manifest")
-                        .Button(() => {
-                            Build.BuildManifest(ABTool.configPath, buildCollection.GetAssetBundleBuilds());
-                            Build.BuildAssetBundles(buildCollection.GetAssetBundleBuilds(), EditorUserBuildSettings.activeBuildTarget);
-                            EditorTools.OpenFloder(ABTool.assetsDir);
-                        }, "Build AssetBundle")
-                        .Button(() => {
-                            Build.ClearVersions();
-                        }, "Clear Versions")
-                        .Button(() => {
-                            Build.CopyBundleFilesTo(Application.streamingAssetsPath);
-                        }, "Copy Bundles to streamingAssetsPath")
-                        .Space(10)
-                    .EndArea();
+                GUILayout.BeginArea(position);
+                {
+
+                    GUILayout.Label("BuildSetting", GUIStyles.Get("LargeBoldLabel"));
+                    GUILayout.Label("", GUIStyles.Get("IN Title"), GUILayout.Height(5));
+                    EditorGUILayout.LabelField("Build Target:", EditorUserBuildSettings.activeBuildTarget.ToString());
+                    EditorGUILayout.LabelField("Output Path:", ABTool.assetsOutPutPath.ToAbsPath());
+                    EditorGUILayout.LabelField("Manifest Path:", ABTool.configPath);
+                    EditorGUILayout.LabelField("Version Path:", ABTool.versionPath);
+                    ABTool.testmode = EditorGUILayout.Toggle(new GUIContent("Test Mode"), ABTool.testmode);
+
+
+                    GUILayout.Label("", GUIStyles.Get("IN Title"), GUILayout.Height(5));
+                    GUILayout.Space(10);
+                    if (GUILayout.Button("Clear Bundle Files"))
+                    {
+                        Build.DeleteBundleFiles();
+
+                    }
+                    if (GUILayout.Button("Build Manifest"))
+                    {
+                        Build.BuildManifest(ABTool.configPath, buildCollection.GetAssetBundleBuilds());
+                    }
+                    if (GUILayout.Button("Build AssetBundle"))
+                    {
+                        Build.BuildManifest(ABTool.configPath, buildCollection.GetAssetBundleBuilds());
+                        Build.BuildAssetBundles(buildCollection.GetAssetBundleBuilds(), EditorUserBuildSettings.activeBuildTarget);
+                        EditorTools.OpenFloder(ABTool.assetsDir);
+
+                    }
+                    if (GUILayout.Button("Clear Versions"))
+                    {
+                        Build.ClearVersions();
+                    }
+                    if (GUILayout.Button("Copy Bundles to streamingAssetsPath"))
+                    {
+                        Build.CopyBundleFilesTo(Application.streamingAssetsPath);
+                    }
+                    GUILayout.Space(10);
+                    GUILayout.EndArea();
+                }
+
             }
         }
-        private class DirCollectGUI : GUIBase, ILayoutGUI, IRectGUI
+        private class DirCollectGUI : GUIBase
         {
-            public class AssetChooseWindow : PopupWindowContent, IRectGUI, ILayoutGUI
+            public class AssetChooseWindow : PopupWindowContent
             {
                 public WindowMemory.Collections.Collection.SubFile assetinfo;
                 public override void OnGUI(Rect rect)
                 {
                     if (assetinfo == null) return;
-                    this.DrawScrollView(() => {
+                    scroll = GUILayout.BeginScrollView(scroll);
+                    {
+
                         Draw(assetinfo, 0);
-                    }, ref scroll);
+
+                        GUILayout.EndHorizontal();
+                    }
+
                 }
                 private Vector2 scroll;
 
                 private void Draw(WindowMemory.Collections.Collection.SubFile assetinfo, float offset)
                 {
-                    this.DrawHorizontal(() =>
+                    GUILayout.BeginHorizontal();
                     {
-                        this.Space(offset);
+                        GUILayout.Space(offset);
                         if (assetinfo.fileType == WindowMemory.Collections.Collection.SubFile.FileType.InValidFile)
                             GUI.enabled = false;
                         bool s = assetinfo.Selected;
-                        this.Toggle(ref s, new GUIContent(assetinfo.ThumbNail), GUILayout.Height(16), GUILayout.Width(40));
+                        s = GUILayout.Toggle(s, new GUIContent(assetinfo.ThumbNail), GUILayout.Height(16), GUILayout.Width(40));
                         assetinfo.Selected = s;
+
                         if (assetinfo.SubFiles.Count > 0)
-                            this.Foldout(ref assetinfo.isOpen, assetinfo.name);
+                            assetinfo.isOpen = EditorGUILayout.Foldout(assetinfo.isOpen, assetinfo.name);
                         else
-                            this.Label(assetinfo.name);
+                            GUILayout.Label(assetinfo.name);
                         GUI.enabled = true;
-                    });
+                        GUILayout.EndHorizontal();
+                    }
+
 
                     if (assetinfo.isOpen)
                         for (int i = 0; i < assetinfo.SubFiles.Count; i++)
@@ -436,8 +455,8 @@ namespace IFramework.Hotfix.AB
             private const float lineHeight = 20;
 
             private Vector2 ScrollPos;
-            private AssetChooseWindow chosseWindow=new AssetChooseWindow();
-            private TableViewCalculator tableViewCalc=new TableViewCalculator();
+            private AssetChooseWindow chosseWindow = new AssetChooseWindow();
+            private TableViewCalculator tableViewCalc = new TableViewCalculator();
             private WindowMemory.Collections DirCollect { get { return _window.Info.colect; } }
             private ListViewCalculator.ColumnSetting[] Setting
             {
@@ -487,11 +506,12 @@ namespace IFramework.Hotfix.AB
                     GUIStyles.Get(EntryBackodd).Draw(tableViewCalc.position, false, false, false, false);
 
                 bool tog = true;
-                this.Toggle(tableViewCalc.titleRow.position, ref tog, GUIStyles.Get(TitleStyle))
-                    .LabelField(tableViewCalc.titleRow[CollectType].position, CollectType)
-                    .LabelField(tableViewCalc.titleRow[BundleName].position, BundleName)
-                    .LabelField(tableViewCalc.titleRow[SearchPath].position, SearchPath);
-                this.DrawScrollView(() =>
+                tog = EditorGUI.Toggle(tableViewCalc.titleRow.position, tog, GUIStyles.Get(TitleStyle));
+                EditorGUI.LabelField(tableViewCalc.titleRow[CollectType].position, CollectType);
+                EditorGUI.LabelField(tableViewCalc.titleRow[BundleName].position, BundleName);
+                EditorGUI.LabelField(tableViewCalc.titleRow[SearchPath].position, SearchPath);
+
+                ScrollPos = GUI.BeginScrollView(tableViewCalc.view, ScrollPos, tableViewCalc.content, false, false);
                 {
                     for (int i = tableViewCalc.firstVisibleRow; i < tableViewCalc.lastVisibleRow + 1; i++)
                     {
@@ -520,22 +540,26 @@ namespace IFramework.Hotfix.AB
                         var item = DirCollect.collection[i];
 
                         int index = (int)item.type;
-                        this.Popup(tableViewCalc.rows[i][CollectType].position,
-                                    ref index,
+                        index = EditorGUI.Popup(tableViewCalc.rows[i][CollectType].position,
+                                     index,
                                     Enum.GetNames(typeof(WindowMemory.Collections.Collection.CollectType)));
                         item.type = (WindowMemory.Collections.Collection.CollectType)index;
-                        this.Button(() =>
+                        if (GUI.Button(tableViewCalc.rows[i][SelectButton].position, SelectButton))
                         {
                             chosseWindow.assetinfo = item.subAsset;
                             PopupWindow.Show(tableViewCalc.rows[i][SelectButton].position, chosseWindow);
                         }
-                        , tableViewCalc.rows[i][SelectButton].position, SelectButton);
 
-                        this.Label(tableViewCalc.rows[i][SearchPath].position, item.path);
-                        if (item.type ==  WindowMemory.Collections.Collection.CollectType.ABName)
-                            this.TextField(tableViewCalc.rows[i][BundleName].position, ref item.bundle);
+
+                        GUI.Label(tableViewCalc.rows[i][SearchPath].position, item.path);
+                        if (item.type == WindowMemory.Collections.Collection.CollectType.ABName)
+                            item.bundle = EditorGUI.TextField(tableViewCalc.rows[i][BundleName].position, item.bundle);
                     }
-                }, tableViewCalc.view,ref ScrollPos,tableViewCalc.content, false, false);
+
+                    GUI.EndScrollView();
+                }
+
+
 
                 Handles.color = Color.black;
                 for (int i = 0; i < tableViewCalc.titleRow.columns.Count; i++)
@@ -556,7 +580,7 @@ namespace IFramework.Hotfix.AB
             }
             private void Eve(Event e)
             {
-                if (e.button == 0 && e.clickCount == 1 && e.type== EventType.MouseUp &&
+                if (e.button == 0 && e.clickCount == 1 && e.type == EventType.MouseUp &&
                         (!tableViewCalc.view.Contains(e.mousePosition) ||
                             (tableViewCalc.view.Contains(e.mousePosition) &&
                              !tableViewCalc.content.Contains(e.mousePosition))))
@@ -600,7 +624,7 @@ namespace IFramework.Hotfix.AB
                 _window.UpdateInfo();
             }
         }
-        private class AssetBundleBulidGUI : GUIBase, IRectGUI, ILayoutGUI
+        private class AssetBundleBulidGUI : GUIBase
         {
             private const string ABBWin = "AssetBundleBuild";
             private const string ABBItemWin = "ABBItemWin";
@@ -685,7 +709,7 @@ namespace IFramework.Hotfix.AB
             }
 
             private SplitView big = new SplitView();
-            private SplitView left = new SplitView() {splitType= SplitType.Horizontal };
+            private SplitView left = new SplitView() { splitType = SplitType.Horizontal };
             private SplitView right = new SplitView() { splitType = SplitType.Horizontal };
 
             private ListViewCalculator.ColumnSetting[] ABBContentItemSetting
@@ -715,7 +739,7 @@ namespace IFramework.Hotfix.AB
                 big.fistPan += left.OnGUI;
                 big.secondPan += right.OnGUI;
                 left.fistPan += ABBWinGUI;
-                left.secondPan += ABBItemWinGUI ;
+                left.secondPan += ABBItemWinGUI;
                 right.fistPan += ABBContentWinGUI;
                 right.secondPan += ABBContentItemWinGUI;
 
@@ -727,11 +751,13 @@ namespace IFramework.Hotfix.AB
                 rect.DrawOutLine(2, Color.black);
                 Event e = Event.current;
                 ABBListViewCalc.Calc(rect, rect.position, ABBScrollPos, LineHeight, AssetbundleBuilds.Count, ABBSetting);
-                this.DrawScrollView(() =>
+                ABBScrollPos = GUI.BeginScrollView(ABBListViewCalc.view,
+                 ABBScrollPos,
+                ABBListViewCalc.content, false, false);
                 {
                     for (int i = ABBListViewCalc.firstVisibleRow; i < ABBListViewCalc.lastVisibleRow + 1; i++)
                     {
-                        if (e.button == 0 && e.clickCount == 1 && e.type== EventType.MouseUp && ABBListViewCalc.rows[i].position.Contains(e.mousePosition))
+                        if (e.button == 0 && e.clickCount == 1 && e.type == EventType.MouseUp && ABBListViewCalc.rows[i].position.Contains(e.mousePosition))
                         {
                             switch (e.modifiers)
                             {
@@ -763,17 +789,18 @@ namespace IFramework.Hotfix.AB
                         GUIStyle style = i % 2 == 0 ? EntryBackEven : EntryBackodd;
                         if (e.type == EventType.Repaint)
                             style.Draw(ABBListViewCalc.rows[i].position, false, false, ABBListViewCalc.rows[i].selected, false);
-                        this.Label(ABBListViewCalc.rows[i][ABName].position, AssetbundleBuilds[i].assetBundleName);
+                        GUI.Label(ABBListViewCalc.rows[i][ABName].position, AssetbundleBuilds[i].assetBundleName);
                         if (AssetbundleBuilds[i].CrossRefence)
-                            this.Label(ABBListViewCalc.rows[i][RefCount].position, EditorGUIUtility.IconContent("console.warnicon.sml"));
+                            GUI.Label(ABBListViewCalc.rows[i][RefCount].position, EditorGUIUtility.IconContent("console.warnicon.sml"));
                         else
-                            this.Label(ABBListViewCalc.rows[i][RefCount].position, EditorGUIUtility.IconContent("Collab"));
+                            GUI.Label(ABBListViewCalc.rows[i][RefCount].position, EditorGUIUtility.IconContent("Collab"));
 
                     }
-                }, ABBListViewCalc.view,
-                ref ABBScrollPos,
-                ABBListViewCalc.content, false, false);
-                if (e.button == 0 && e.clickCount == 1 && e.type== EventType.MouseUp &&
+
+                    GUI.EndScrollView();
+                }
+
+                if (e.button == 0 && e.clickCount == 1 && e.type == EventType.MouseUp &&
                             (ABBListViewCalc.view.Contains(e.mousePosition) &&
                              !ABBListViewCalc.content.Contains(e.mousePosition)))
                 {
@@ -812,16 +839,19 @@ namespace IFramework.Hotfix.AB
             {
                 rect.DrawOutLine(2, Color.black);
                 if (ChossedABB == null) return;
-                this.BeginArea(rect)
-                        .Label(ChossedABB.assetBundleName)
-                        .Label(ChossedABB.Size)
-                        .Pan(() => {
-                            if (ChossedABB.CrossRefence)
-                                this.Label(EditorGUIUtility.IconContent("console.warnicon.sml"));
-                            else
-                                this.Label(EditorGUIUtility.IconContent("Collab"));
-                        })
-                    .EndArea();
+                GUILayout.BeginArea(rect);
+                {
+                    GUILayout.Label(ChossedABB.assetBundleName);
+                    GUILayout.Label(ChossedABB.Size);
+                    if (ChossedABB.CrossRefence)
+                        GUILayout.Label(EditorGUIUtility.IconContent("console.warnicon.sml"));
+                    else
+                        GUILayout.Label(EditorGUIUtility.IconContent("Collab"));
+                    GUILayout.EndArea();
+
+
+                }
+
             }
 
 
@@ -841,13 +871,14 @@ namespace IFramework.Hotfix.AB
                 rect.DrawOutLine(2, Color.black);
                 int lineCount = ChossedABB == null ? 0 : ChossedABB.assetNames.Count;
                 ABBContentTable.Calc(rect, new Vector2(rect.x, rect.y + LineHeight), ABBContentScrollPos, LineHeight, lineCount, ABBContentSetting);
-                    this.Label(ABBContentTable.titleRow.position, "", TitleStyle)
-                        .Label(ABBContentTable.titleRow[AssetName].position, AssetName)
-                        .Label(ABBContentTable.titleRow[Bundle].position, Bundle)
-                        .Label(ABBContentTable.titleRow[Size].position, Size);
+                GUI.Label(ABBContentTable.titleRow.position, "", TitleStyle);
+                GUI.Label(ABBContentTable.titleRow[AssetName].position, AssetName);
+                GUI.Label(ABBContentTable.titleRow[Bundle].position, Bundle);
+                GUI.Label(ABBContentTable.titleRow[Size].position, Size);
                 Event e = Event.current;
-                this.DrawScrollView(() =>
+                ABBContentScrollPos = GUI.BeginScrollView(ABBContentTable.view, ABBContentScrollPos, ABBContentTable.content, false, false);
                 {
+
                     for (int i = ABBContentTable.firstVisibleRow; i < ABBContentTable.lastVisibleRow + 1; i++)
                     {
                         var asset = GetDpByName(ChossedABB.assetNames[i]);
@@ -856,17 +887,15 @@ namespace IFramework.Hotfix.AB
                         if (e.type == EventType.Repaint)
                             style.Draw(ABBContentTable.rows[i].position, false, false, ABBContentTable.rows[i].selected, false);
 
-                        this.Label(ABBContentTable.rows[i][Size].position, asset.size)
-                            .Label(ABBContentTable.rows[i][AssetName].position, asset.assetName)
-                            .Label(ABBContentTable.rows[i][Preview].position, asset.thumbnail)
-                            .Label(ABBContentTable.rows[i][Bundle].position, asset.bundleName)
-                            .Pan(() => {
-                                if (asset.bundles.Count == 1)
-                                    this.Label(ABBContentTable.rows[i][CrossRef].position, EditorGUIUtility.IconContent("Collab"));
-                                else
-                                    this.Label(ABBContentTable.rows[i][CrossRef].position, asset.bundles.Count.ToString(), GUIStyles.Get("CN CountBadge"));
-                            });
-                        if (e.button == 0 && e.clickCount == 1 && e.type== EventType.MouseUp &&
+                        GUI.Label(ABBContentTable.rows[i][Size].position, asset.size);
+                        GUI.Label(ABBContentTable.rows[i][AssetName].position, asset.assetName);
+                        GUI.Label(ABBContentTable.rows[i][Preview].position, asset.thumbnail);
+                        GUI.Label(ABBContentTable.rows[i][Bundle].position, asset.bundleName);
+                        if (asset.bundles.Count == 1)
+                            GUI.Label(ABBContentTable.rows[i][CrossRef].position, EditorGUIUtility.IconContent("Collab"));
+                        else
+                            GUI.Label(ABBContentTable.rows[i][CrossRef].position, asset.bundles.Count.ToString(), GUIStyles.Get("CN CountBadge"));
+                        if (e.button == 0 && e.clickCount == 1 && e.type == EventType.MouseUp &&
                                 ABBContentTable.rows[i].position.Contains(e.mousePosition))
                         {
                             switch (e.modifiers)
@@ -897,7 +926,10 @@ namespace IFramework.Hotfix.AB
                         }
                     }
 
-                }, ABBContentTable.view,ref ABBContentScrollPos,ABBContentTable.content, false, false);
+
+                    GUI.EndScrollView();
+                }
+
 
                 Handles.color = Color.black;
 
@@ -918,7 +950,7 @@ namespace IFramework.Hotfix.AB
 
                 Handles.color = Color.white;
 
-                if (e.button == 0 && e.clickCount == 1 && e.type== EventType.MouseUp &&
+                if (e.button == 0 && e.clickCount == 1 && e.type == EventType.MouseUp &&
                      (ABBContentTable.view.Contains(e.mousePosition) &&
                       !ABBContentTable.content.Contains(e.mousePosition)))
                 {
@@ -934,7 +966,7 @@ namespace IFramework.Hotfix.AB
                         {
                             _window.RemoveAsset(ChossedABB.assetNames[row.rowID], ChossedABB.assetBundleName);
                         });
-                       _window.UpdateInfo();
+                        _window.UpdateInfo();
                         ChoosedAsset = null;
                     });
 
@@ -949,20 +981,22 @@ namespace IFramework.Hotfix.AB
                 rect.DrawOutLine(2, Color.black);
                 if (ChoosedAsset == null) return;
                 ABBContentItemTableCalc.Calc(rect, new Vector2(rect.x, rect.y + LineHeight), ABBContentItemScrollPos, LineHeight, ChoosedAsset.bundles.Count, ABBContentItemSetting);
-                this.Label(ABBContentItemTableCalc.titleRow[AssetName].position, ChoosedAsset.assetPath)
-                    .Label(ABBContentItemTableCalc.titleRow[Preview].position, ChoosedAsset.thumbnail);
-
-                this.DrawScrollView(() =>
+                GUI.Label(ABBContentItemTableCalc.titleRow[AssetName].position, ChoosedAsset.assetPath);
+                GUI.Label(ABBContentItemTableCalc.titleRow[Preview].position, ChoosedAsset.thumbnail);
+                ABBContentItemScrollPos = GUI.BeginScrollView(ABBContentItemTableCalc.view, ABBContentItemScrollPos, ABBContentItemTableCalc.content, false, false);
                 {
                     for (int i = 0; i < ABBContentItemTableCalc.rows.Count; i++)
                     {
                         GUIStyle style = i % 2 == 0 ? EntryBackEven : EntryBackodd;
                         if (Event.current.type == EventType.Repaint)
                             style.Draw(ABBContentItemTableCalc.rows[i].position, false, false, ABBContentItemTableCalc.rows[i].selected, false);
-                        this.Label(ABBContentItemTableCalc.rows[i][AssetName].position, ChoosedAsset.bundles[i]);
+                        GUI.Label(ABBContentItemTableCalc.rows[i][AssetName].position, ChoosedAsset.bundles[i]);
                         //this.Label(table.Rows[i][Preview].Position, choo.ThumbNail);
                     }
-                }, ABBContentItemTableCalc.view,ref ABBContentItemScrollPos,ABBContentItemTableCalc.content, false, false);
+
+                    GUI.EndScrollView();
+                }
+
             }
 
 
@@ -984,7 +1018,7 @@ namespace IFramework.Hotfix.AB
         private Rect localPosition { get { return new Rect(Vector2.zero, position.size); } }
         private ToolBarTree ToolBarTree;
         private WindowType _windowType;
-      
+
 
         public WindowMemory Info;
         private string EditorInfoPath;
@@ -1087,7 +1121,7 @@ namespace IFramework.Hotfix.AB
                                 var abbs = Collect.GetCollection(ABTool.configPath);
                                 Info.build.ReadAssetbundleBuild(abbs);
                                 UpdateInfo();
-                            },20,()=> { return _windowType == WindowType.AssetBundleBuild; })
+                            }, 20, () => { return _windowType == WindowType.AssetBundleBuild; })
                             //.Button(new GUIContent(), (rect) =>
                             //{
                             //    File.WriteAllText(tmpLayout_ABBuildInfoPath, abBulidWindow.abBuildInfoTree.Serialize());
@@ -1099,7 +1133,7 @@ namespace IFramework.Hotfix.AB
             UpdateInfo();
         }
 
-       
+
         private void OnGUI()
         {
             var rs = localPosition.Zoom(AnchorType.MiddleCenter, -2).HorizontalSplit(ToolBarHeight, 4);

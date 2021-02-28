@@ -144,7 +144,7 @@ namespace IFramework.Language
         private ToolBarTree ToolBarTree;
 
 
-        private abstract class LanwindowItem : ILayoutGUI, IRectGUI
+        private abstract class LanwindowItem
         {
             public static LanWindow window;
             public Rect position;
@@ -157,12 +157,14 @@ namespace IFramework.Language
             {
                 this.position = position;
                 position.DrawOutLine(2, Color.black);
-                this.DrawClip(() => {
+                GUI.BeginClip(position);
+                {
                     Rect[] rs = position.HorizontalSplit(TitleHeight);
-                    this.Box(rs[0]);
-                    this.Box(rs[0], titleContent, Styles.Title);
+                    GUI.Box(rs[0], "");
+                    GUI.Box(rs[0], titleContent, Styles.Title);
                     DrawContent(rs[1]);
-                }, position);
+                    GUI.EndClip();
+                }
 
             }
             protected abstract void DrawContent(Rect rect);
@@ -207,7 +209,8 @@ namespace IFramework.Language
             for (int i = 0; i < sunwin.allLeafCount; i++)
             {
                 SubWinTree.TreeLeaf leaf = sunwin.allLeafs[i];
-                menu.AddItem(leaf.titleContent, !sunwin.closedLeafs.Contains(leaf), () => {
+                menu.AddItem(leaf.titleContent, !sunwin.closedLeafs.Contains(leaf), () =>
+                {
                     if (sunwin.closedLeafs.Contains(leaf))
                         sunwin.DockLeaf(leaf, SubWinTree.DockType.Left);
                     else
@@ -439,7 +442,8 @@ namespace IFramework.Language
             {
                 searchField = new SearchField("", null, 0);
 
-                searchField.onValueChange += (str) => {
+                searchField.onValueChange += (str) =>
+                {
                     keySearchStr = str;
                 };
             }
@@ -447,92 +451,124 @@ namespace IFramework.Language
             [SerializeField] private bool toolFoldon;
             private void Tool()
             {
-                Rect rect;
-                this.EBeginHorizontal(out rect, Styles.Fold)
-                    .Foldout(ref toolFoldon, "Tool", true);
-                this.EEndHorizontal()
-                    .Pan(() => {
-                        if (!toolFoldon) return;
-                        this.BeginHorizontal()
-                                      .Button(() => {
-                                          window.LoadLanGroup();
-                                      }, "Fresh")
-                                      .Button(() => {
-                                          window.UpdateLanGroup();
-                                      }, "Save")
-                                      .Button(() => {
-                                          window.CleanData();
-                                      }, "Clear")
-                                 .EndHorizontal()
-                                 .BeginHorizontal()
-                                     .Button(() => {
-                                         string path = EditorUtility.OpenFilePanel("xml (End with  xml)", Application.dataPath, "xml");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".xml")) return;
-                                         window.ReadXml(path);
-                                     }, "Read Xml")
-                                     .Button(() => {
-                                         string path = EditorUtility.SaveFilePanel("xml (End with  xml)", Application.dataPath,"LanGroup", "xml");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".xml")) return;
-                                         window.WriteXml(path);
-                                     }, "Write Xml")
-                                 .EndHorizontal()
-                                 .BeginHorizontal()
-                                     .Button(() => {
-                                         string path = EditorUtility.OpenFilePanel("json (End With json)", Application.dataPath, "json");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".json")) return;
-                                         window.ReadJson(path);
-                                     }, "Read Json")
-                                     .Button(() => {
-                                         string path = EditorUtility.SaveFilePanel("json (End With json)", Application.dataPath, "LanGroup", "json");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".json")) return;
-                                         window.WriteJson(path);
-                                     }, "Write Json")
-                                 .EndHorizontal()
-                                 .BeginHorizontal()
-                                     .Button(() => {
-                                         string path = EditorUtility.OpenFilePanel("csv (End With csv)", Application.dataPath, "csv");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".csv")) return;
-                                         window.ReadCsv(path);
-                                     }, "Read Csv")
-                                     .Button(() => {
-                                         string path = EditorUtility.SaveFilePanel("csv (End With csv)", Application.dataPath, "LanGroup", "csv");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".csv")) return;
-                                         window.WriteCsv(path);
-                                     }, "Write Csv")
-                                 .EndHorizontal()
-                                 .BeginHorizontal()
-                                     .Button(() => {
-                                         string path = EditorUtility.OpenFilePanel("ScriptableObject (End With asset)", Application.dataPath, "asset");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".asset")) return;
-                                         window.ReadScriptableObject(path);
-                                     }, "Read ScriptableObject")
-                                     .Button(() => {
-                                         string path = EditorUtility.SaveFilePanel("ScriptableObject (End With asset)", Application.dataPath, "LanGroup", "asset");
-                                         if (string.IsNullOrEmpty(path) || !path.EndsWith(".asset")) return;
-                                         window.WriteScriptableObject(path);
-                                     }, "Write ScriptableObject")
-                                 .EndHorizontal();
-                    });
+                Rect rect = EditorGUILayout.BeginHorizontal(Styles.toolbar);
+                {
+                    toolFoldon = EditorGUILayout.Foldout(toolFoldon, "Tool", true);
+                    EditorGUILayout.EndHorizontal();
+                }
+                if (!toolFoldon) return;
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Fresh"))
+                    {
+                        window.LoadLanGroup();
+
+                    }
+                    if (GUILayout.Button("Save"))
+                    {
+                        window.UpdateLanGroup();
+
+                    }
+                    if (GUILayout.Button("Clear"))
+                    {
+                        window.CleanData();
+
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Read Xml"))
+                    {
+                        window.LoadLanGroup();
+                        string path = EditorUtility.OpenFilePanel("xml (End with  xml)", Application.dataPath, "xml");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".xml")) return;
+                        window.ReadXml(path);
+                    }
+                    if (GUILayout.Button("Write Xml"))
+                    {
+                        window.UpdateLanGroup();
+                        string path = EditorUtility.SaveFilePanel("xml (End with  xml)", Application.dataPath, "LanGroup", "xml");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".xml")) return;
+                        window.WriteXml(path);
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Read Json"))
+                    {
+                        string path = EditorUtility.OpenFilePanel("json (End With json)", Application.dataPath, "json");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".json")) return;
+                        window.ReadJson(path);
+                    }
+                    if (GUILayout.Button("Write Json"))
+                    {
+                        string path = EditorUtility.SaveFilePanel("json (End With json)", Application.dataPath, "LanGroup", "json");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".json")) return;
+                        window.WriteJson(path);
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Read Csv"))
+                    {
+                        string path = EditorUtility.OpenFilePanel("csv (End With csv)", Application.dataPath, "csv");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".csv")) return;
+                        window.ReadCsv(path);
+                    }
+                    if (GUILayout.Button("Write Csv"))
+                    {
+                        string path = EditorUtility.SaveFilePanel("csv (End With csv)", Application.dataPath, "LanGroup", "csv");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".csv")) return;
+                        window.WriteCsv(path);
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Read ScriptableObject"))
+                    {
+                        string path = EditorUtility.OpenFilePanel("ScriptableObject (End With asset)", Application.dataPath, "asset");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".asset")) return;
+                        window.ReadScriptableObject(path);
+                    }
+                    if (GUILayout.Button("Write ScriptableObject"))
+                    {
+                        string path = EditorUtility.SaveFilePanel("ScriptableObject (End With asset)", Application.dataPath, "LanGroup", "asset");
+                        if (string.IsNullOrEmpty(path) || !path.EndsWith(".asset")) return;
+                        window.WriteScriptableObject(path);
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
             }
             [SerializeField] private bool creatingKeyFoldon;
             [SerializeField] private string tmpKey;
             private void CreateLanKey()
             {
-                Rect rect;
-                this.EBeginHorizontal(out rect, Styles.Fold)
-                    .Foldout(ref creatingKeyFoldon, "Create Key", true)
-                    .EEndHorizontal()
-                    .Pan(() => {
-                        if (!creatingKeyFoldon) return;
-                        this.EBeginHorizontal(out rect, Styles.BG)
-                                   .ETextField(ref tmpKey)
-                                   .Button(() =>
-                                   {
-                                       window.AddLanGroupKey(tmpKey);
-                                       tmpKey = string.Empty;
-                                   }, Contents.OK, GUILayout.Width(describeWidth))
-                                  .EEndHorizontal();
-                    });
+                Rect rect = EditorGUILayout.BeginHorizontal(Styles.toolbar);
+                {
+                    creatingKeyFoldon = EditorGUILayout.Foldout(creatingKeyFoldon, "Create Key", true);
+
+                    EditorGUILayout.EndHorizontal();
+                }
+                if (!creatingKeyFoldon) return;
+                rect = EditorGUILayout.BeginHorizontal();
+                {
+                    tmpKey = EditorGUILayout.TextField(tmpKey);
+                    if (GUILayout.Button(Contents.OK, GUILayout.Width(describeWidth)))
+                    {
+                        window.AddLanGroupKey(tmpKey);
+                        tmpKey = string.Empty;
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
+
             }
 
             [SerializeField] private bool createLanPairFlodon;
@@ -542,64 +578,64 @@ namespace IFramework.Language
             {
 
                 if (window._keys.Count == 0) return;
-                Rect rect;
+                Rect rect = EditorGUILayout.BeginHorizontal(Styles.toolbar);
+                {
+                    createLanPairFlodon = EditorGUILayout.Foldout(createLanPairFlodon, "Create LanPair", true);
 
-                this.EBeginHorizontal(out rect, Styles.Fold)
-                    .Foldout(ref createLanPairFlodon, "Create LanPair", true)
-                    .EEndHorizontal()
-                    .Pan(() =>
+                    EditorGUILayout.EndHorizontal();
+                }
+                if (!createLanPairFlodon) return;
+                if (tmpLanPair == null) tmpLanPair = new LanPair() { key = window._keys[0] };
+                if (hashID == 0) hashID = "CreateView".GetHashCode();
+
+                GUILayout.BeginVertical();
+                {
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Lan", GUILayout.Width(describeWidth));
+                    tmpLanPair.lan = (SystemLanguage)EditorGUILayout.EnumPopup(tmpLanPair.lan);
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Key", GUILayout.Width(describeWidth));
+                    GUILayout.Label(tmpLanPair.key);
+                    GUILayout.Label(EditorGUIUtility.IconContent("editicon.sml"), GUILayout.Width(smallBtnSize));
+                    GUILayout.EndHorizontal();
+                    Rect pos = GUILayoutUtility.GetLastRect();
+                    int ctrlId = GUIUtility.GetControlID(hashID, FocusType.Keyboard, pos);
                     {
-                        if (!createLanPairFlodon) return;
-                        if (tmpLanPair == null) tmpLanPair = new LanPair() { key = window._keys[0] };
-                        if (hashID == 0) hashID = "CreateView".GetHashCode();
-                        this.DrawVertical(() =>
+                        if (DropdownButton(ctrlId, pos, new GUIContent(string.Format("Key: {0}", tmpLanPair.key))))
                         {
-                            this.BeginHorizontal()
-                                    .Label("Lan", GUILayout.Width(describeWidth))
-                                    .Pan(() => { tmpLanPair.lan = (SystemLanguage)EditorGUILayout.EnumPopup(tmpLanPair.lan); })
-                                .EndHorizontal()
-                                .BeginHorizontal()
-                                    .Label("Key", GUILayout.Width(describeWidth))
-                                    .Label(tmpLanPair.key)
-                                    .Label(EditorGUIUtility.IconContent("editicon.sml"), GUILayout.Width(smallBtnSize))
-                                .EndHorizontal()
-                                .Pan(() =>
+                            int index = -1;
+                            for (int i = 0; i < window._keys.Count; i++)
+                            {
+                                if (window._keys[i] == tmpLanPair.key)
                                 {
-                                    Rect pos = GUILayoutUtility.GetLastRect();
-                                    int ctrlId = GUIUtility.GetControlID(hashID, FocusType.Keyboard, pos);
-                                    {
-                                        if (DropdownButton(ctrlId, pos, new GUIContent(string.Format("Key: {0}", tmpLanPair.key))))
-                                        {
-                                            int index = -1;
-                                            for (int i = 0; i < window._keys.Count; i++)
-                                            {
-                                                if (window._keys[i] == tmpLanPair.key)
-                                                {
-                                                    index = i; break;
-                                                }
-                                            }
-                                            SearchablePopup.Show(pos, window._keys.ToArray(), index, (i, str) =>
-                                            {
-                                                tmpLanPair.key = str;
-                                                //window.Repaint();
-                                            });
-                                        }
-                                    }
-                                })
-                               .BeginHorizontal()
-                                    .Label("Val", GUILayout.Width(describeWidth))
-                                    .ETextField(ref tmpLanPair.value)
-                                    .EndHorizontal()
-                                .BeginHorizontal()
-                                    .FlexibleSpace()
-                                    .Button(() => {
-                                        //createLanPairFlodon = false;
-                                        window.AddLanPair(tmpLanPair);
-                                        //tmpLanPair = null;
-                                    }, Contents.OK)
-                                .EndHorizontal();
-                        }, Styles.BG);
-                    });
+                                    index = i; break;
+                                }
+                            }
+                            SearchablePopup.Show(pos, window._keys.ToArray(), index, (i, str) =>
+                            {
+                                tmpLanPair.key = str;
+                                window.Repaint();
+                            });
+                        }
+                    }
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Val", GUILayout.Width(describeWidth));
+                    tmpLanPair.value = EditorGUILayout.TextField(tmpLanPair.value);
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button(Contents.OK))
+                    {
+                        window.AddLanPair(tmpLanPair);
+
+                    }
+
+                    GUILayout.EndHorizontal();
+                    GUILayout.EndVertical();
+                }
+
             }
             private bool DropdownButton(int id, Rect position, GUIContent content)
             {
@@ -621,7 +657,7 @@ namespace IFramework.Language
                         }
                         break;
                     case EventType.Repaint:
-                        //Styles.BoldLabel.Draw(position, content, id, false);
+                        Styles.BoldLabel.Draw(position, content, id, false);
                         break;
                 }
                 return false;
@@ -633,46 +669,52 @@ namespace IFramework.Language
             private SearchField searchField;
             private void LanGroupKeysView()
             {
-                this.DrawHorizontal(() => {
-                    this.Foldout(ref keyFoldon, string.Format("Keys  Count: {0}", window._keys.Count), true);
-                    this.Label("");
+                GUILayout.BeginHorizontal(Styles.toolbar);
+                {
+                    keyFoldon = EditorGUILayout.Foldout(keyFoldon, string.Format("Keys  Count: {0}", window._keys.Count), true);
+                    GUILayout.Label("");
                     searchField.OnGUI(GUILayoutUtility.GetLastRect());
-                }, Styles.Fold);
+                    GUILayout.EndHorizontal();
+                }
+
                 if (keyFoldon)
                 {
-                    this.DrawScrollView(() => {
-                        window._keys.ForEach((index, key) => {
+                    scroll = GUILayout.BeginScrollView(scroll);
+                    {
+                        window._keys.ForEach((index, key) =>
+                        {
                             if (key.ToLower().Contains(keySearchStr.ToLower()))
                             {
-                                this.BeginHorizontal(Styles.BG)
-                                    .SelectableLabel(key, GUILayout.Height(20))
-                                    .Label(window.IsKeyInUse(key) ? GUIContent.none : Contents.Warnning, GUILayout.Width(smallBtnSize))
-                                    .Button(() => {
-                                        if (EditorUtility.DisplayDialog("Make sure", "You Will Delete All Pairs with this key", "ok", "no"))
-                                            window.DeleteLanKey(key);
-                                    }, string.Empty, Styles.CloseBtn, GUILayout.Width(smallBtnSize), GUILayout.Height(smallBtnSize))
-                                    .EndHorizontal();
+                                GUILayout.BeginHorizontal(Styles.BG);
+                                EditorGUILayout.SelectableLabel(key, GUILayout.Height(20));
+                                GUILayout.Label(window.IsKeyInUse(key) ? GUIContent.none : Contents.Warnning, GUILayout.Width(smallBtnSize));
+                                if (GUILayout.Button(string.Empty, Styles.CloseBtn, GUILayout.Width(smallBtnSize), GUILayout.Height(smallBtnSize)))
+                                {
+                                    if (EditorUtility.DisplayDialog("Make sure", "You Will Delete All Pairs with this key", "ok", "no"))
+                                        window.DeleteLanKey(key);
+                                }
+
+                                GUILayout.EndHorizontal();
                             }
                         });
-                    }, ref scroll);
+
+                        GUILayout.EndScrollView();
+                    }
+
                 }
             }
 
             protected override void DrawContent(Rect rect)
             {
-                this
-                    .Pan(() =>
-                    {
-                        this.BeginArea(rect.Zoom(AnchorType.MiddleCenter, -10))
-                            .Pan(Tool)
-                            .Space(5)
-                            .Pan(AddLanPairFunc)
-                            .Space(5)
-                            .Pan(CreateLanKey)
-                            .Space(5)
-                            .Pan(LanGroupKeysView)
-                            .EndArea();
-                    });
+                GUILayout.BeginArea(rect.Zoom(AnchorType.MiddleCenter, -10));
+                Tool();
+                GUILayout.Space(5);
+                AddLanPairFunc();
+                GUILayout.Space(5);
+                CreateLanKey();
+                GUILayout.Space(5);
+                LanGroupKeysView();
+                GUILayout.EndArea();
             }
 
         }
@@ -738,7 +780,8 @@ namespace IFramework.Language
             {
                 var rs = rect.Zoom(AnchorType.MiddleCenter, -10).Split(SplitType.Horizontal, 30, 4);
                 search.OnGUI(rs[0]);
-                var ws = window._pairs.FindAll((w) => {
+                var ws = window._pairs.FindAll((w) =>
+                {
                     if (string.IsNullOrEmpty(_search))
                         return true;
                     switch (_searchType)
@@ -753,23 +796,23 @@ namespace IFramework.Language
                     return true;
                 }).ToArray();
                 _table.Calc(rs[1], new Vector2(rs[1].x, rs[1].y + lineHeight), _scroll, lineHeight, ws.Length, setting);
-                this.LabelField(_table.titleRow.position, "", Styles.Title)
-                    .LabelField(_table.titleRow[key].position, key)
-                    .LabelField(_table.titleRow[lan].position, lan)
-                    .LabelField(_table.titleRow[value].position, value);
+                EditorGUI.LabelField(_table.titleRow.position, "", Styles.Title);
+                EditorGUI.LabelField(_table.titleRow[key].position, key);
+                EditorGUI.LabelField(_table.titleRow[lan].position, lan);
+                EditorGUI.LabelField(_table.titleRow[value].position, value);
                 Event e = Event.current;
-                this.DrawScrollView(() => {
-
+                _scroll = GUI.BeginScrollView(_table.view, _scroll, _table.content, false, false);
+                {
                     for (int i = _table.firstVisibleRow; i < _table.lastVisibleRow + 1; i++)
                     {
 
 
-                        if (e.button==0 && e.clickCount==1 && e.type==  EventType.MouseUp && _table.rows[i].position.Contains(e.mousePosition))
+                        if (e.button == 0 && e.clickCount == 1 && e.type == EventType.MouseUp && _table.rows[i].position.Contains(e.mousePosition))
                         {
                             switch (e.modifiers)
                             {
                                 case EventModifiers.None:
-                                     _table.SelectRow(i);
+                                    _table.SelectRow(i);
                                     e.Use();
                                     break;
                                 case EventModifiers.Shift:
@@ -783,9 +826,9 @@ namespace IFramework.Language
                             }
                         }
                         if (e.button == 0 && e.clickCount == 1 &&
-              (!_table.view.Contains(e.mousePosition) ||
-                  (_table.view.Contains(e.mousePosition) &&
-                   !_table.content.Contains(e.mousePosition))))
+                              (!_table.view.Contains(e.mousePosition) ||
+                                  (_table.view.Contains(e.mousePosition) &&
+                                   !_table.content.Contains(e.mousePosition))))
                         {
                             _table.SelectNone();
                             if (Event.current.type != EventType.Layout)
@@ -794,11 +837,12 @@ namespace IFramework.Language
                             }
                         }
 
-                        if (e.button == 1 && e.clickCount == 1 && e.type== EventType.MouseUp &&
+                        if (e.button == 1 && e.clickCount == 1 && e.type == EventType.MouseUp &&
                         _table.content.Contains(e.mousePosition))
                         {
                             GenericMenu menu = new GenericMenu();
-                            menu.AddItem(new GUIContent("Delete"), false, () => {
+                            menu.AddItem(new GUIContent("Delete"), false, () =>
+                            {
                                 if (EditorUtility.DisplayDialog("Make Sure", string.Format("Really want delete {0} pairs", _table.selectedRows.Count), "yes", "no"))
                                 {
                                     for (int j = _table.rows.Count - 1; j >= 0; j--)
@@ -820,24 +864,31 @@ namespace IFramework.Language
                         if (Event.current.type == EventType.Repaint)
                             style.Draw(_table.rows[i].position, false, false, _table.rows[i].selected, false);
 
-                        this.Pan(() => {
-                            EditorGUI.EnumPopup(_table.rows[i][lan].position, ws[i].lan);
-                        })
-                        .Button(() => {
+                        EditorGUI.EnumPopup(_table.rows[i][lan].position, ws[i].lan);
+
+                        if (GUI.Button(_table.rows[i][minnus].position, "", Styles.minus))
+                        {
                             if (EditorUtility.DisplayDialog("Make Sure", string.Format("Really want delete\n" +
-                                "Key :{0}\n" +
-                                "Language :{1}\n" +
-                                "Value : {2}", ws[i].key, ws[i].lan, ws[i].value), "yes", "no"))
+                               "Key :{0}\n" +
+                               "Language :{1}\n" +
+                               "Value : {2}", ws[i].key, ws[i].lan, ws[i].value), "yes", "no"))
                             {
                                 window.DeleteLanPair(ws[i]);
                                 window.UpdateLanGroup();
                             }
 
-                        }, _table.rows[i][minnus].position, "", Styles.minus)
-                             .SelectableLabel(_table.rows[i][key].position, ws[i].key)
-                             .SelectableLabel(_table.rows[i][value].position, ws[i].value);
+                        }
+
+                        EditorGUI.SelectableLabel(_table.rows[i][key].position, ws[i].key);
+                        EditorGUI.SelectableLabel(_table.rows[i][value].position, ws[i].value);
                     }
-                }, _table.view, ref _scroll, _table.content, false, false);
+
+
+                    GUI.EndScrollView();
+                }
+
+
+
                 Handles.color = Color.black;
                 for (int i = 0; i < _table.titleRow.columns.Count; i++)
                 {
