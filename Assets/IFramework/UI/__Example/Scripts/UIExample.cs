@@ -15,17 +15,9 @@ using IFramework.UI;
 
 namespace IFramework_Demo
 {
-	public class UIExample : MonoBehaviour, IPanelLoader
+    public class UIExample : Game, IPanelLoader
     {
-        UIModule module;
-        private void Start()
-        {
-            Framework.CreateEnv("Game_RT",  EnvironmentType.Ev1).InitWithAttribute();
-            module = Framework.env1.modules.CreateModule<UIModule>();
-            module.AddLoader(this);
-            module.SetGroups(new MvvmGroups(UIMap_MVVM.map));
-            module.CreateCanvas();
-        }
+        IUIModule module;
 
         private void Update()
         {
@@ -37,13 +29,24 @@ namespace IFramework_Demo
             {
                 module.Get<Panel02>("Panel02");
             }
-            Framework.env1.Update();
         }
 
         public UIPanel Load(Type type, string name)
         {
             GameObject go = Resources.Load<GameObject>(name);
             return go.GetComponent<UIPanel>();
+        }
+
+        public override void Init()
+        {
+            module = modules.CreateModule<UIModule>();
+        }
+
+        public override void Startup()
+        {
+            module.AddLoader(this);
+            module.SetGroups(new MvvmGroups(UIMap_MVVM.map));
+            module.CreateCanvas();
         }
     }
 }

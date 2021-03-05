@@ -71,7 +71,7 @@ namespace IFramework.UI
             if (tuple == null) throw new Exception(string.Format("Could Not Find map with Type: {0}", panel.GetType()));
 
 
-            var model = Activator.CreateInstance(tuple.Item1) as IDataModel;
+            var model = Activator.CreateInstance(tuple.Item1) as IModel;
             var view = Activator.CreateInstance(tuple.Item2) as UIView;
             var vm = Activator.CreateInstance(tuple.Item3) as UIViewModel;
             view.panel = panel;

@@ -10,8 +10,6 @@ using System;
 
 namespace IFramework.Resource
 {
-
-
     public class AsyncResourcesLoader<T> : AsyncResourceLoader<T> where T : UnityEngine.Object
     {
         private UnityEngine.ResourceRequest _request;
@@ -33,7 +31,7 @@ namespace IFramework.Resource
                var _request = UnityEngine.Resources.LoadAsync<T>(path);
                 _request.completed += (ops) => {
                     isdone = true;
-                    Tresource.Tvalue = _request.asset as T;
+                    Tresource.value = _request.asset as T;
                 };
             }
             catch (Exception e)
@@ -44,10 +42,10 @@ namespace IFramework.Resource
         }
         protected override void OnUnLoad()
         {
-            if (Tresource.Tvalue != null)
+            if (Tresource.value != null)
             {
-                UnityEngine.Resources.UnloadAsset(Tresource.Tvalue);
-                Tresource.Tvalue = default(T);
+                UnityEngine.Resources.UnloadAsset(Tresource.value);
+                Tresource.value = default(T);
             }
             _request = null;
         }

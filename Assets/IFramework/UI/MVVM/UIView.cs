@@ -18,17 +18,11 @@ namespace IFramework.UI
     /// </summary>
     public abstract class UIView : View, IViewStateEventHandler
     {
-        /// <summary>
-        /// ui 状态
-        /// </summary>
-        public enum ViewState
-        {
-           None, Load, Top, Press, Pop, Clear
-        }
-        public UIPanel panel;
-        private ViewState _lastState= ViewState.None;
 
-        public ViewState lastState { get { return _lastState; } }
+        public UIPanel panel;
+        private ViewEventTpe _lastState= ViewEventTpe.None;
+
+        public ViewEventTpe lastState { get { return _lastState; } }
 
         protected void Show()
         {
@@ -75,27 +69,27 @@ namespace IFramework.UI
 
         void IViewStateEventHandler.OnLoad()
         {
-            _lastState = ViewState.Load;
+            _lastState = ViewEventTpe.OnLoad;
             OnLoad();
         }
         void IViewStateEventHandler.OnTop(UIEventArgs arg)
         {
-            _lastState = ViewState.Top;
+            _lastState = ViewEventTpe.OnTop;
             OnTop(arg);
         }
         void IViewStateEventHandler.OnPress(UIEventArgs arg)
         {
-            _lastState = ViewState.Press;
+            _lastState = ViewEventTpe.OnPress;
             OnPress(arg);
         }
         void IViewStateEventHandler.OnPop(UIEventArgs arg)
         {
-            _lastState = ViewState.Pop;
+            _lastState = ViewEventTpe.OnPop;
             OnPop(arg);
         }
         void IViewStateEventHandler.OnClear()
         {
-            _lastState = ViewState.Clear;
+            _lastState = ViewEventTpe.OnClear;
             OnClear();
         }
     }

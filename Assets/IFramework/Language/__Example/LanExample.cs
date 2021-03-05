@@ -12,13 +12,15 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace IFramework_Demo
 {
-    public class LanExample:MonoBehaviour
-	{
-        class TestLoader 
+    public class LanExample : Game
+    {
+        [LanguageKey]
+        public string key = "77";
+        IDelegateLanguageObserver observer;
+        ILanguageModule mou;
+        public List<LanPair> Load()
         {
-            public List<LanPair> Load()
-            {
-                return new List<LanPair>()
+            return new List<LanPair>()
                 {
                     new LanPair()
                     {
@@ -33,18 +35,19 @@ namespace IFramework_Demo
                         key="77"
                     }
                 };
-            }
         }
-        [LanguageKey]
-        public string key="77";
-        IDelegateLanguageObserver observer;
-        LanguageModule mou;
-        private void Start()
+
+        public override void Init()
         {
-            mou = Framework.env0.modules.CreateModule<LanguageModule>();
-            mou.Load(new TestLoader().Load());
-            observer= mou.CreateDelegateObserver(key, SystemLanguage.English)
-                .Listen(( val) => { Log.E(val); });
+            mou = modules.CreateModule<LanguageModule>();
+
+        }
+
+        public override void Startup()
+        {
+            mou.Load(Load());
+            observer = mou.CreateDelegateObserver(key, SystemLanguage.English)
+                .Listen((val) => { Log.E(val); });
         }
         int index;
         private void Update()
@@ -52,6 +55,6 @@ namespace IFramework_Demo
             index = ++index % 40;
             mou.language = (SystemLanguage)index;
         }
-        
+
     }
 }

@@ -29,5 +29,19 @@ namespace IFramework.GUITool
             }
             return style;
         }
-	}
+        public static GUIStyle Get(GUIStyle style)
+        {
+            GUIStyle _style;
+            if (styles == null)
+            {
+                styles = new Dictionary<string, GUIStyle>();
+            }
+            if (!styles.TryGetValue(style.name, out _style))
+            {
+                _style = new GUIStyle(style);
+                styles.Add(style.name, _style);
+            }
+            return _style;
+        }
+    }
 }

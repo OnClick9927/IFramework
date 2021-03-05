@@ -4,6 +4,31 @@
         <name>IFramework</name>
     </assembly>
     <members>
+        <member name="T:IFramework.IBelongToEnvironment">
+            <summary>
+            属于环境
+            </summary>
+        </member>
+        <member name="P:IFramework.IBelongToEnvironment.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="T:IFramework.IFrameworkObject">
+            <summary>
+            积累接口
+            </summary>
+        </member>
+        <member name="P:IFramework.IFrameworkObject.guid">
+            <summary>
+            唯一id
+            </summary>
+        </member>
+        <member name="P:IFramework.IFrameworkObject.disposed">
+            <summary>
+            是否释放
+            </summary>
+        </member>
         <member name="T:IFramework.IAwaitable`1">
             <summary>
             表示一个可等待对象，如果一个方法返回此类型的实例，则此方法可以使用 `await` 异步等待。
@@ -84,6 +109,22 @@
         <member name="P:IFramework.IDescription.description">
             <summary>
             描述内容
+            </summary>
+        </member>
+        <member name="T:IFramework.IModel">
+            <summary>
+            模型
+            </summary>
+        </member>
+        <member name="T:IFramework.IValueBox`1">
+            <summary>
+            数据容器
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:IFramework.IValueBox`1.value">
+            <summary>
+            数据
             </summary>
         </member>
         <member name="T:IFramework.IVersion">
@@ -410,16 +451,6 @@
             重置数据
             </summary>
         </member>
-        <member name="T:IFramework.Modules.Recorder.ICommand">
-            <summary>
-            命令
-            </summary>
-        </member>
-        <member name="M:IFramework.Modules.Recorder.ICommand.Excute">
-            <summary>
-            处理
-            </summary>
-        </member>
         <member name="T:IFramework.Modules.Recorder.IOperationRecorderModule">
             <summary>
             操作记录
@@ -515,7 +546,7 @@
             <param name="t"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.Modules.Recorder.OperationRecorderEx.SetCommand``1(``0,IFramework.Modules.Recorder.ICommand,IFramework.Modules.Recorder.ICommand)">
+        <member name="M:IFramework.Modules.Recorder.OperationRecorderEx.SetCommand``1(``0,IFramework.ICommand,IFramework.ICommand)">
             <summary>
             设置值
             </summary>
@@ -525,7 +556,7 @@
             <param name="undo"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.Modules.Recorder.OperationRecorderEx.SetGroupCommand``1(``0,IFramework.Modules.Recorder.ICommand,IFramework.Modules.Recorder.ICommand)">
+        <member name="M:IFramework.Modules.Recorder.OperationRecorderEx.SetGroupCommand``1(``0,IFramework.ICommand,IFramework.ICommand)">
             <summary>
             设置值
             </summary>
@@ -1352,6 +1383,11 @@
             模块
             </summary>
         </member>
+        <member name="M:IFramework.Modules.FrameworkModule.#ctor">
+            <summary>
+            阻止 New
+            </summary>
+        </member>
         <member name="M:IFramework.Modules.FrameworkModule.CreatInstance(System.Type,System.String,System.String)">
             <summary>
             创建实例
@@ -1974,16 +2010,9 @@
             线程反馈模块
             </summary>
         </member>
-        <member name="M:IFramework.Modules.LoomModule.RunOnMainThread(System.Action,System.Single)">
+        <member name="M:IFramework.Modules.LoomModule.RunDelay(System.Action)">
             <summary>
             在主线程跑一个方法
-            </summary>
-            <param name="action"></param>
-            <param name="time">延时</param>
-        </member>
-        <member name="M:IFramework.Modules.LoomModule.RunOnSubThread(System.Action)">
-            <summary>
-            在子线程跑一个方法
             </summary>
             <param name="action"></param>
         </member>
@@ -2004,6 +2033,11 @@
         <member name="T:IFramework.Modules.Message.IMessageModule">
             <summary>
             消息模块
+            </summary>
+        </member>
+        <member name="P:IFramework.Modules.Message.IMessageModule.fitSubType">
+            <summary>
+            适配子类型
             </summary>
         </member>
         <member name="P:IFramework.Modules.Message.IMessageModule.processesPerFrame">
@@ -2154,6 +2188,11 @@
         <member name="T:IFramework.Modules.Message.MessageModule">
             <summary>
             消息模块
+            </summary>
+        </member>
+        <member name="P:IFramework.Modules.Message.MessageModule.fitSubType">
+            <summary>
+            适配子类型
             </summary>
         </member>
         <member name="P:IFramework.Modules.Message.MessageModule.processesPerFrame">
@@ -2366,11 +2405,6 @@
             空数据模型
             </summary>
         </member>
-        <member name="T:IFramework.Modules.MVVM.IDataModel">
-            <summary>
-            数据
-            </summary>
-        </member>
         <member name="T:IFramework.Modules.MVVM.IMVVMModule">
             <summary>
             MVVM 模块
@@ -2431,7 +2465,7 @@
             VM
             </summary>
         </member>
-        <member name="M:IFramework.Modules.MVVM.MVVMGroup.#ctor(System.String,IFramework.Modules.MVVM.View,IFramework.Modules.MVVM.ViewModel,IFramework.Modules.MVVM.IDataModel)">
+        <member name="M:IFramework.Modules.MVVM.MVVMGroup.#ctor(System.String,IFramework.Modules.MVVM.View,IFramework.Modules.MVVM.ViewModel,IFramework.IModel)">
             <summary>
             Ctor
             </summary>
@@ -2623,14 +2657,19 @@
             刷新
             </summary>
         </member>
+        <member name="T:IFramework.ICommand">
+            <summary>
+            命令
+            </summary>
+        </member>
+        <member name="M:IFramework.ICommand.Excute">
+            <summary>
+            处理
+            </summary>
+        </member>
         <member name="T:IFramework.IRecyclable">
             <summary>
             可回收
-            </summary>
-        </member>
-        <member name="P:IFramework.IRecyclable.env">
-            <summary>
-            环境
             </summary>
         </member>
         <member name="P:IFramework.IRecyclable.recyled">
@@ -3234,12 +3273,6 @@
             刷新环境
             </summary>
         </member>
-        <member name="M:IFramework.FrameworkEnvironment.RunsOnSubThread(System.Action)">
-            <summary>
-            在子线程跑方法
-            </summary>
-            <param name="action"></param>
-        </member>
         <member name="M:IFramework.FrameworkEnvironment.WaitEnvironmentFrame(System.Action)">
             <summary>
             等待 环境的 update，即等到该环境的线程来临
@@ -3293,21 +3326,6 @@
         <member name="M:IFramework.FrameworkObject.Dispose">
             <summary>
             释放
-            </summary>
-        </member>
-        <member name="T:IFramework.IFrameworkObject">
-            <summary>
-            积累接口
-            </summary>
-        </member>
-        <member name="P:IFramework.IFrameworkObject.guid">
-            <summary>
-            唯一id
-            </summary>
-        </member>
-        <member name="P:IFramework.IFrameworkObject.disposed">
-            <summary>
-            是否释放
             </summary>
         </member>
         <member name="T:IFramework.Injection.InjectAttribute">
@@ -5708,7 +5726,7 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="P:IFramework.Resource.Resource`1.Tvalue">
+        <member name="P:IFramework.Resource.Resource`1.value">
             <summary>
             资源值
             </summary>
@@ -6672,54 +6690,6 @@
             <param name="begin">开始下表</param>
             <param name="end">结束下标</param>
         </member>
-        <member name="M:IFramework.IEnumerableExtension.Dequeue``1(System.Collections.Generic.List{``0})">
-            <summary>
-            移除集合第一个
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.Enqueue``1(System.Collections.Generic.List{``0},``0)">
-            <summary>
-            Add
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="t"></param>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.Push``1(System.Collections.Generic.List{``0},``0)">
-            <summary>
-            Add
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="t"></param>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.Pop``1(System.Collections.Generic.List{``0})">
-            <summary>
-            移除最后一个
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.QueuePeek``1(System.Collections.Generic.List{``0})">
-            <summary>
-            查看第一个
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="list"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.StackPeek``1(System.Collections.Generic.List{``0})">
-            <summary>
-            查看最后一个
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="list"></param>
-            <returns></returns>
-        </member>
         <member name="M:IFramework.IEnumerableExtension.Merge``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1}[])">
             <summary>
             混合字典
@@ -6998,15 +6968,6 @@
             <param name="name"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.ObjectExtension.GetPropertyName``1(System.Object,System.Linq.Expressions.Expression{System.Func{``0}})">
-            <summary>
-            获取属性名称
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <param name="property">属性表达式</param>
-            <returns></returns>
-        </member>
         <member name="M:IFramework.ObjectExtension.As``1(System.Object)">
             <summary>
             强转
@@ -7028,26 +6989,6 @@
             基础对象池
             </summary>
             <typeparam name="T"></typeparam>
-        </member>
-        <member name="E:IFramework.ObjectPool`1.onClearObject">
-            <summary>
-            清理数据时
-            </summary>
-        </member>
-        <member name="E:IFramework.ObjectPool`1.onGetObject">
-            <summary>
-            获取数据时
-            </summary>
-        </member>
-        <member name="E:IFramework.ObjectPool`1.onSetObject">
-            <summary>
-            当回收数据时
-            </summary>
-        </member>
-        <member name="E:IFramework.ObjectPool`1.onCreateObject">
-            <summary>
-            当清理创建数据时
-            </summary>
         </member>
         <member name="P:IFramework.ObjectPool`1.pool">
             <summary>
@@ -7388,7 +7329,7 @@
             <param name="self"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.TypeExtension.IsSubClassOfInterface(System.Type,System.Type)">
+        <member name="M:IFramework.TypeExtension.IsExtendInterface(System.Type,System.Type)">
             <summary>
             是否继承接口
             </summary>
@@ -8202,17 +8143,72 @@
         <member name="M:IFramework.Utility.Encryption.XorEncryption.GetSelfXorBytes(System.Byte[],System.Byte[])">
             此方法将复用并改写传入的 bytes 作为返回值，而不额外分配内存空间。
         </member>
+        <member name="T:IFramework.Utility.ProcessUtil">
+            <summary>
+            进程工具
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.ProcessUtil.CreateProcess(System.String,System.String,System.String)">
+            <summary>
+            创建进程
+            </summary>
+            <param name="cmd"></param>
+            <param name="args"></param>
+            <param name="workingDir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.ProcessUtil.OuputLog(System.Diagnostics.Process,System.Boolean)">
+            <summary>
+            进程输出Log
+            </summary>
+            <param name="p"></param>
+            <param name="isThrowExcpetion"></param>
+        </member>
+        <member name="M:IFramework.Utility.ProcessUtil.OpenFloder(System.String)">
+            <summary>
+            打开文件夹
+            </summary>
+            <param name="path"></param>
+        </member>
         <member name="T:IFramework.Utility.Verifier">
-            校验相关的实用函数。
+            <summary>
+            校验相关的实用函数
+            </summary>
         </member>
         <member name="M:IFramework.Utility.Verifier.GetCrc32(System.Byte[])">
-            计算二进制流的 CRC32。
+            <summary>
+             计算二进制流的 CRC32。
+            </summary>
+            <param name="bytes"></param>
+            <returns></returns>
         </member>
         <member name="M:IFramework.Utility.Verifier.GetCrc32(System.String)">
-            计算指定文件的 CRC32。
+            <summary>
+             计算指定文件的 CRC32。
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
         </member>
         <member name="M:IFramework.Utility.Verifier.GetMD5(System.Byte[])">
+            <summary>
             计算二进制流的 MD5。
+            </summary>
+            <param name="bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetFileMD5(System.String)">
+            <summary>
+             计算指定文件的 CRC32。
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetStringMD5(System.String)">
+            <summary>
+            获取字符串 MD5
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
         </member>
         <member name="T:IFramework.Utility.Verifier.Crc32">
             <summary>

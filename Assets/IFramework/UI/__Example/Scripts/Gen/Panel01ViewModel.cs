@@ -14,17 +14,18 @@ using IFramework.UI;
 
 namespace IFramework_Demo
 {
-	public class Panel01ViewModel : UIViewModel<Panel01Model>
-	{
- 		private Int32 _count;
-		public Int32 count
-		{
-			get { return GetProperty(ref _count); }
-			private set			{
-				Tmodel.count = value;
-				SetProperty(ref _count, value);
-			}
-		}
+    public class Panel01ViewModel : UIViewModel<Panel01Model>
+    {
+        private Int32 _count;
+        public Int32 count
+        {
+            get { return GetProperty(ref _count); }
+            private set
+            {
+                Tmodel.count = value;
+                SetProperty(ref _count, value);
+            }
+        }
         protected override void SubscribeMessage()
         {
             base.SubscribeMessage();
@@ -37,21 +38,29 @@ namespace IFramework_Demo
         }
         private void Listen(Type publishType, int code, IEventArgs args, object[] param)
         {
-            if ((args as SubArg)!=null)
+            if (args.Is<MathEvent>())
             {
-                count--;
+                var eve = args.As<MathEvent>();
+                switch (eve.type)
+                {
+                    case MathType.Sub:
+                        count--;
+                        break;
+                    case MathType.Add:
+                        count++;
+                        break;
+                    default:
+                        break;
+                }
             }
-            if ((args as AddArg) != null)
-            {
-                count++;
-            }
+
         }
 
         protected override void SyncModelValue()
-		{
- 			this.count = Tmodel.count;
+        {
+            this.count = Tmodel.count;
 
-		}
+        }
 
-	}
+    }
 }

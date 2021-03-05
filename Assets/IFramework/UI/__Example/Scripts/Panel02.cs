@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace IFramework_Demo
 {
-    public class Panel02Model: IDataModel
+    public class Panel02Model: IModel
     { 
         //public int count;
     }

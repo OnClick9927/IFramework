@@ -13,8 +13,6 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using IFramework.Modules.MVVM;
-using IFramework.Serialization;
 
 namespace IFramework.UI
 {
@@ -293,7 +291,7 @@ namespace IFramework.UI
                         {
                             return type.FullName;
                         }).ToList();
-                        modelTypes = typeof(IDataModel).GetSubTypesInAssemblys().Select((type) =>
+                        modelTypes = typeof(IModel).GetSubTypesInAssemblys().Select((type) =>
                         {
                             return type.FullName;
                         }).ToList();

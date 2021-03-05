@@ -16,7 +16,7 @@ using IFramework.UI;
 
 namespace IFramework_Demo
 {
-    public class Panel01Model:IDataModel
+    public class Panel01Model:IModel
     {
         public int count=100;
     }

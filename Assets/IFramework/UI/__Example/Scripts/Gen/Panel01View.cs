@@ -14,9 +14,23 @@ using IFramework.UI;
 
 namespace IFramework_Demo
 {
-    public class SubArg : IEventArgs { }
-    public class AddArg : IEventArgs { }
 
+    public enum MathType
+    {
+        Sub,Add
+    }
+    public struct MathEvent : IUIEvent<MathType, MathEvent>
+    {
+        private MathType _type;
+
+        public MathType type => _type;
+
+        public MathEvent SetType(MathType type)
+        {
+            _type = type;
+            return this;
+        }
+    }
     public class Panel01View : UIView<Panel01ViewModel, Panel01>
 	{
 		protected override void BindProperty()
@@ -38,11 +52,11 @@ namespace IFramework_Demo
 		{
             this.Tpanel.BTn_ADD.onClick.AddListener(() =>
             {
-                this.message.Publish(this, 0, new AddArg());
+                this.message.Publish(this, 0, new MathEvent().SetType(MathType.Add));
             });
             this.Tpanel.BTn_SUB.onClick.AddListener(() =>
             {
-                this.message.Publish(this, 0, new SubArg());
+                this.message.Publish(this, 0, new MathEvent().SetType(MathType.Sub));
 
             });
         }

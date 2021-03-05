@@ -16,7 +16,7 @@ namespace IFramework.Resource
         {
             try
             {
-                Tresource.Tvalue = UnityEngine.Resources.Load<T>(path);
+                Tresource.value = UnityEngine.Resources.Load<T>(path);
             }
             catch (Exception e)
             {
@@ -30,10 +30,10 @@ namespace IFramework.Resource
         }
         protected override void OnUnLoad()
         {
-            if (Tresource.Tvalue != null)
+            if (Tresource.value != null)
             {
-                UnityEngine.Resources.UnloadAsset(Tresource.Tvalue);
-                Tresource.Tvalue = default(T);
+                UnityEngine.Resources.UnloadAsset(Tresource.value);
+                Tresource.value = default(T);
             }
         }
     }
