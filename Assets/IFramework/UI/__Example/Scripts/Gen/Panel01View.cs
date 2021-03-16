@@ -52,11 +52,11 @@ namespace IFramework_Demo
 		{
             this.Tpanel.BTn_ADD.onClick.AddListener(() =>
             {
-                this.message.Publish(this, 0, new MathEvent().SetType(MathType.Add));
+                this.message.Publish(this, new MathEvent().SetType(MathType.Add));
             });
             this.Tpanel.BTn_SUB.onClick.AddListener(() =>
             {
-                this.message.Publish(this, 0, new MathEvent().SetType(MathType.Sub));
+                this.message.Publish(this,new MathEvent().SetType(MathType.Sub));
 
             });
         }

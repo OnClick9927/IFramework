@@ -12,7 +12,7 @@ namespace IFramework.Tweens
 {
     public interface ITween
     {
-        FrameworkEnvironment env { get; }
+        IEnvironment env { get; }
         bool recyled { get; }
         IPercentConverter converter { get; set; }
         TweenDirection direction { get; }

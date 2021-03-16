@@ -15,7 +15,7 @@ namespace IFramework
 	public abstract class Game:MonoBehaviour
 	{
         public EnvironmentType envType { get { return Launcher.envType; } }
-        public FrameworkEnvironment env { get { return Launcher.env; } }
+        public IEnvironment env { get { return Launcher.env; } }
         public IFrameworkModules modules { get { return Launcher.modules; } }
 
        

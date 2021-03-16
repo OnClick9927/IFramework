@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using IFramework;
+using IFramework.Modules.Message;
 using IFramework.UI;
 
 namespace IFramework_Demo
@@ -36,11 +37,11 @@ namespace IFramework_Demo
             base.UnSubscribeMessage();
             this.message.UnSubscribe<Panel01View>(Listen);
         }
-        private void Listen(Type publishType, int code, IEventArgs args, object[] param)
+        private void Listen(IMessage message)
         {
-            if (args.Is<MathEvent>())
+            if (message.args.Is<MathEvent>())
             {
-                var eve = args.As<MathEvent>();
+                var eve = message. args.As<MathEvent>();
                 switch (eve.type)
                 {
                     case MathType.Sub:

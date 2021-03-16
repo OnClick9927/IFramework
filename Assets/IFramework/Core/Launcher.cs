@@ -19,7 +19,7 @@ namespace IFramework
         [Header("Can't be Null")]
         public Game game;
         public const EnvironmentType envType = EnvironmentType.Ev1;
-        public static FrameworkEnvironment env { get { return Framework.GetEnv(envType); } }
+        public static IEnvironment env { get { return Framework.GetEnv(envType); } }
         public static IFrameworkModules modules { get { return env.modules; } }
 
         private static event Action onFixUpdate;

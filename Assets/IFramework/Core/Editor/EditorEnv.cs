@@ -89,7 +89,7 @@ namespace IFramework
 
 
         public const EnvironmentType envType = EnvironmentType.Ev0;
-        public static FrameworkEnvironment env { get { return Framework.env0; } }
+        public static IEnvironment env { get { return Framework.env0; } }
         public static IFrameworkModules moudules { get { return env.modules; } }
 
 
