@@ -36,7 +36,7 @@ namespace IFramework
             if (game == null)
                 game = GetComponent<Game>();
             instance = this;
-            Framework.CreateEnv("Game_RT", envType).InitWithAttribute();
+            Framework.CreateEnv(envType).InitWithAttribute();
             game.Init();
             game.Startup();
         }

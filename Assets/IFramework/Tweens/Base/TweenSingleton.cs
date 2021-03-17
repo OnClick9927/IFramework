@@ -26,7 +26,7 @@ namespace IFramework.Tweens
 
         protected override void OnSingletonInit()
         {
-            Framework.CreateEnv("IFramework.Tweens", envType).InitWithAttribute();
+            Framework.CreateEnv(envType).InitWithAttribute();
         }
         private void Update()
         {

@@ -20,6 +20,26 @@
             描述
             </summary>
         </member>
+        <member name="T:IFramework.DisposableObject">
+            <summary>
+            基类
+            </summary>
+        </member>
+        <member name="P:IFramework.DisposableObject.disposed">
+            <summary>
+            是否已经释放
+            </summary>
+        </member>
+        <member name="M:IFramework.DisposableObject.OnDispose">
+            <summary>
+            释放时
+            </summary>
+        </member>
+        <member name="M:IFramework.DisposableObject.Dispose">
+            <summary>
+            释放
+            </summary>
+        </member>
         <member name="T:IFramework.IEnvironment">
             <summary>
             环境
@@ -48,11 +68,6 @@
         <member name="P:IFramework.IEnvironment.modules">
             <summary>
             模块容器
-            </summary>
-        </member>
-        <member name="P:IFramework.IEnvironment.name">
-            <summary>
-            名字
             </summary>
         </member>
         <member name="P:IFramework.IEnvironment.timeSinceInit">
@@ -692,16 +707,6 @@
             模块容器
             </summary>
         </member>
-        <member name="P:IFramework.Modules.IFrameworkModuleContainer.binded">
-            <summary>
-            是否绑定
-            </summary>
-        </member>
-        <member name="P:IFramework.Modules.IFrameworkModuleContainer.chunck">
-            <summary>
-            组
-            </summary>
-        </member>
         <member name="M:IFramework.Modules.IFrameworkModuleContainer.CreateModule(System.Type,System.String)">
             <summary>
             创建模块
@@ -755,12 +760,12 @@
             回调组
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.ActionGroupState.Redo">
+        <member name="M:IFramework.Modules.Recorder.ActionGroupState.OnRedo">
             <summary>
             执行
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.ActionGroupState.Undo">
+        <member name="M:IFramework.Modules.Recorder.ActionGroupState.OnUndo">
             <summary>
             撤回
             </summary>
@@ -775,12 +780,12 @@
             回调状态
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.ActionState.Redo">
+        <member name="M:IFramework.Modules.Recorder.ActionState.OnRedo">
             <summary>
             执行
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.ActionState.Undo">
+        <member name="M:IFramework.Modules.Recorder.ActionState.OnUndo">
             <summary>
             撤回
             </summary>
@@ -795,12 +800,12 @@
             状态基类
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.BaseState.Redo">
+        <member name="M:IFramework.Modules.Recorder.BaseState.OnRedo">
             <summary>
             执行
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.BaseState.Undo">
+        <member name="M:IFramework.Modules.Recorder.BaseState.OnUndo">
             <summary>
             撤回
             </summary>
@@ -815,12 +820,12 @@
             命令组
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.CommandGroupState.Redo">
+        <member name="M:IFramework.Modules.Recorder.CommandGroupState.OnRedo">
             <summary>
             执行
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.CommandGroupState.Undo">
+        <member name="M:IFramework.Modules.Recorder.CommandGroupState.OnUndo">
             <summary>
             撤回
             </summary>
@@ -835,12 +840,12 @@
             命令状态
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.CommandState.Redo">
+        <member name="M:IFramework.Modules.Recorder.CommandState.OnRedo">
             <summary>
             执行
             </summary>
         </member>
-        <member name="M:IFramework.Modules.Recorder.CommandState.Undo">
+        <member name="M:IFramework.Modules.Recorder.CommandState.OnUndo">
             <summary>
             撤回
             </summary>
@@ -1767,11 +1772,6 @@
             处理系统
             </summary>
         </member>
-        <member name="M:IFramework.Modules.ECS.IExcuteSystem.Excute">
-            <summary>
-            处理
-            </summary>
-        </member>
         <member name="M:IFramework.Modules.ECS.IExcuteSystem.OnModuleDispose">
             <summary>
             模块释放时
@@ -1787,20 +1787,18 @@
             阻止 New
             </summary>
         </member>
-        <member name="M:IFramework.Modules.FrameworkModule.CreatInstance(System.Type,System.String,System.String)">
+        <member name="M:IFramework.Modules.FrameworkModule.CreatInstance(System.Type,System.String)">
             <summary>
             创建实例
             </summary>
             <param name="type">模块类型</param>
-            <param name="chunck">代码块</param>
             <param name="name">模块名称</param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.Modules.FrameworkModule.CreatInstance``1(System.String,System.String)">
+        <member name="M:IFramework.Modules.FrameworkModule.CreatInstance``1(System.String)">
             <summary>
             创建实例
             </summary>
-            <param name="chunck">代码块</param>
             <param name="name">模块名称</param>
             <returns></returns>
         </member>
@@ -1819,16 +1817,6 @@
         <member name="P:IFramework.Modules.FrameworkModule.priority">
             <summary>
             优先级（越大释放越早释放）
-            </summary>
-        </member>
-        <member name="P:IFramework.Modules.FrameworkModule.moudeType">
-            <summary>
-            模块类型
-            </summary>
-        </member>
-        <member name="P:IFramework.Modules.FrameworkModule.chunck">
-            <summary>
-            代码块
             </summary>
         </member>
         <member name="P:IFramework.Modules.FrameworkModule.binded">
@@ -1861,19 +1849,9 @@
             模块容器
             </summary>
         </member>
-        <member name="P:IFramework.Modules.FrameworkModuleContainer.chunck">
-            <summary>
-            代码块
-            </summary>
-        </member>
         <member name="P:IFramework.Modules.FrameworkModuleContainer.env">
             <summary>
             环境
-            </summary>
-        </member>
-        <member name="P:IFramework.Modules.FrameworkModuleContainer.binded">
-            <summary>
-            是否绑定环境
             </summary>
         </member>
         <member name="M:IFramework.Modules.FrameworkModuleContainer.CreateModule(System.Type,System.String)">
@@ -1924,11 +1902,10 @@
             <param name="name"></param>
             <returns></returns>
         </member>
-        <member name="M:IFramework.Modules.FrameworkModuleContainer.#ctor(System.String,IFramework.FrameworkEnvironment,System.Boolean)">
+        <member name="M:IFramework.Modules.FrameworkModuleContainer.#ctor(IFramework.FrameworkEnvironment,System.Boolean)">
             <summary>
             Ctor
             </summary>
-            <param name="chunck"></param>
             <param name="env"></param>
             <param name="bind"></param>
         </member>
@@ -2682,21 +2659,6 @@
             容器
             </summary>
         </member>
-        <member name="T:IFramework.IFrameworkObject">
-            <summary>
-            积累接口
-            </summary>
-        </member>
-        <member name="P:IFramework.IFrameworkObject.guid">
-            <summary>
-            唯一id
-            </summary>
-        </member>
-        <member name="P:IFramework.IFrameworkObject.disposed">
-            <summary>
-            是否释放
-            </summary>
-        </member>
         <member name="T:IFramework.IAwaitable`1">
             <summary>
             表示一个可等待对象，如果一个方法返回此类型的实例，则此方法可以使用 `await` 异步等待。
@@ -2779,9 +2741,29 @@
             描述内容
             </summary>
         </member>
+        <member name="T:IFramework.IDisposableObject">
+            <summary>
+            积累接口
+            </summary>
+        </member>
+        <member name="P:IFramework.IDisposableObject.disposed">
+            <summary>
+            是否释放
+            </summary>
+        </member>
         <member name="T:IFramework.IModel">
             <summary>
             模型
+            </summary>
+        </member>
+        <member name="T:IFramework.IUniqueIDObject">
+            <summary>
+            唯一id
+            </summary>
+        </member>
+        <member name="P:IFramework.IUniqueIDObject.guid">
+            <summary>
+            唯一id
             </summary>
         </member>
         <member name="T:IFramework.IValueContainer`1">
@@ -3494,11 +3476,6 @@
             框架运行环境
             </summary>
         </member>
-        <member name="P:IFramework.FrameworkEnvironment.name">
-            <summary>
-            名字
-            </summary>
-        </member>
         <member name="P:IFramework.FrameworkEnvironment.inited">
             <summary>
             环境是否已经初始化
@@ -3539,11 +3516,10 @@
             当前环境
             </summary>
         </member>
-        <member name="M:IFramework.FrameworkEnvironment.#ctor(System.String,IFramework.EnvironmentType)">
+        <member name="M:IFramework.FrameworkEnvironment.#ctor(IFramework.EnvironmentType)">
             <summary>
             ctor
             </summary>
-            <param name="name"></param>
             <param name="envType"></param>
         </member>
         <member name="M:IFramework.FrameworkEnvironment.Init(System.Collections.Generic.IEnumerable{System.Type})">
@@ -3596,31 +3572,6 @@
             移除绑定dispose
             </summary>
             <param name="action"></param>
-        </member>
-        <member name="T:IFramework.FrameworkObject">
-            <summary>
-            基类
-            </summary>
-        </member>
-        <member name="P:IFramework.FrameworkObject.guid">
-            <summary>
-            唯一id
-            </summary>
-        </member>
-        <member name="P:IFramework.FrameworkObject.disposed">
-            <summary>
-            是否已经释放
-            </summary>
-        </member>
-        <member name="M:IFramework.FrameworkObject.OnDispose">
-            <summary>
-            释放时
-            </summary>
-        </member>
-        <member name="M:IFramework.FrameworkObject.Dispose">
-            <summary>
-            释放
-            </summary>
         </member>
         <member name="T:IFramework.Net.OnReceivedHandler">
             <summary>
@@ -6704,6 +6655,11 @@
             当前所处环境
             </summary>
         </member>
+        <member name="P:IFramework.RecyclableObject.guid">
+            <summary>
+            唯一 id
+            </summary>
+        </member>
         <member name="M:IFramework.RecyclableObject.Recyle">
             <summary>
             回收
@@ -6734,16 +6690,20 @@
             数据重置时
             </summary>
         </member>
+        <member name="M:IFramework.RecyclableObject.OnDispose">
+            <summary>
+            释放
+            </summary>
+        </member>
         <member name="T:IFramework.Framework">
             <summary>
             框架入口
             </summary>
         </member>
-        <member name="M:IFramework.Framework.CreateEnv(System.String,IFramework.EnvironmentType)">
+        <member name="M:IFramework.Framework.CreateEnv(IFramework.EnvironmentType)">
             <summary>
             实例化环境
             </summary>
-            <param name="envName">环境名</param>
             <param name=" envType">环境类型</param>
             <returns>环境</returns>
         </member>

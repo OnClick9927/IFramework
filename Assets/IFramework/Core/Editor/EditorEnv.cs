@@ -151,7 +151,7 @@ namespace IFramework
         static void EditorEnvInit()
         {
             UnityEngine.Debug.Log("IFramework: EditorEnv Init?   " + frameworkPath);
-            Framework.CreateEnv("IFramework_Editor", envType).InitWithAttribute();
+            Framework.CreateEnv(envType).InitWithAttribute();
             assemblyCompilationStarted += (str) => {
                 Framework.env0.Dispose();
                 UnityEngine.Debug.Log("IFramework: EditorEnv Dispose"); 
