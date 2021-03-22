@@ -306,7 +306,7 @@ namespace IFramework.Hotfix.AB
             _manifestXML = new Manifest();
             bundles = new Bundles();
             Framework.BindEnvUpdate(Update, EnvironmentType.Ev1);
-            Framework.BindEnvDispose(Dispose, EnvironmentType.Ev1);
+            Framework.BindEnvDispose(()=> { SingletonCollection.Dispose<Assets>(); }, EnvironmentType.Ev1);
         }
 
         private List<Asset> assets = new List<Asset>();
@@ -344,6 +344,11 @@ namespace IFramework.Hotfix.AB
             }
 
             bundles.ClearUnUseBundles();
+        }
+
+        protected override void OnDispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

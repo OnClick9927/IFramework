@@ -225,11 +225,6 @@
             注入名
             </summary>
         </member>
-        <member name="M:IFramework.Injection.InjectAttribute.#ctor">
-            <summary>
-            ctor
-            </summary>
-        </member>
         <member name="M:IFramework.Injection.InjectAttribute.#ctor(System.String)">
             <summary>
             ctor
@@ -3195,7 +3190,7 @@
             静态扩展
             </summary>
         </member>
-        <member name="M:IFramework.FloatExtension.Clamp(System.Single)">
+        <member name="M:IFramework.FloatExtension.Abs(System.Single)">
             <summary>
                     取绝对值
             </summary>
@@ -7091,22 +7086,6 @@
             object 静态扩展
             </summary>
         </member>
-        <member name="M:IFramework.ObjectExtension.ContainsInterface(System.Object,System.Type)">
-            <summary>
-            是否继承接口
-            </summary>
-            <param name="obj"></param>
-            <param name="type"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.ObjectExtension.ContainsInterface(System.Object,System.String)">
-            <summary>
-            是否继承接口
-            </summary>
-            <param name="obj"></param>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
         <member name="M:IFramework.ObjectExtension.As``1(System.Object)">
             <summary>
             强转
@@ -7854,7 +7833,12 @@
             初始化
             </summary>
         </member>
-        <member name="M:IFramework.Singleton.Singleton`1.Dispose">
+        <member name="M:IFramework.Singleton.Singleton`1.System#IDisposable#Dispose">
+            <summary>
+            注销
+            </summary>
+        </member>
+        <member name="M:IFramework.Singleton.Singleton`1.OnDispose">
             <summary>
             注销
             </summary>
@@ -7919,7 +7903,7 @@
             初始化
             </summary>
         </member>
-        <member name="M:IFramework.Singleton.SingletonPropertyClass`1.Dispose">
+        <member name="M:IFramework.Singleton.SingletonPropertyClass`1.OnDispose">
             <summary>
             注销
             </summary>

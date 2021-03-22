@@ -114,11 +114,11 @@ namespace IFramework.Hotfix.Lua
             _luaenv = new LuaEnv();
             _tables = new List<LuaTable>();
             Framework.BindEnvUpdate(Update, EnvironmentType.Ev1);
-            Framework.BindEnvDispose(Dispose, EnvironmentType.Ev1);
+            Framework.BindEnvDispose(()=> { SingletonCollection.Dispose<XLuaEnv>(); }, EnvironmentType.Ev1);
         }
-        public override void Dispose()
+        protected override void OnDispose()
         {
-           
+
             if (onDispose != null) onDispose();
 
             _tables.ForEach((table) =>
@@ -133,6 +133,7 @@ namespace IFramework.Hotfix.Lua
             _luaenv = null;
             disposed = true;
         }
+
         private void Update()
         {
             if (_luaenv == null) return;

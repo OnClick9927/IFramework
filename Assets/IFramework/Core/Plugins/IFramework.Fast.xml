@@ -1,0 +1,416 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IFramework.Fast</name>
+    </assembly>
+    <members>
+        <member name="T:IFramework.Fast.Entity">
+            <summary>
+            实例
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.Entity.flag">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="F:IFramework.Fast.Entity.rootFlag">
+            <summary>
+            根标记
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.Entity`1">
+            <summary>
+            实体
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.Entity`1.root">
+            <summary>
+            跟实例
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.Entity`1.container">
+            <summary>
+            数据容器
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IBelongToEntity`1">
+            <summary>
+            属于实例
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.IBelongToEntity`1.entity">
+            <summary>
+            实例
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IEntity">
+            <summary>
+            实例
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.IEntity.flag">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IModelProcessor">
+            <summary>
+            数据逻辑处理
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IProcessor">
+            <summary>
+            处理器
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.IProcessor.env">
+            <summary>
+            所属环境
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.IProcessor.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IRootEntity">
+            <summary>
+            总实例
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ISubEntity">
+            <summary>
+            子实例
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.ISubEntity.SubscribeMessage``1(IFramework.Modules.Message.IMessageListener)">
+            <summary>
+            注册消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISubEntity.UnSubscribeMessage``1(IFramework.Modules.Message.IMessageListener)">
+            <summary>
+            取消监听
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISubEntity.PublishMessage``1(IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISubEntity.SendCommand(IFramework.ICommand)">
+            <summary>
+            发送命令
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="T:IFramework.Fast.IUtility">
+            <summary>
+            工具
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IViewProcessor">
+            <summary>
+            界面逻辑处理
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ModelProcessor`1">
+            <summary>
+            数据处理
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.ModelProcessor`1.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.ModelProcessor`1.entity">
+            <summary>
+            实体
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.ModelProcessor`1.GetModel``1">
+            <summary>
+            获取数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ModelProcessor`1.GetRootModel``1">
+            <summary>
+            获取跟数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ModelProcessor`1.GetUtility``1">
+            <summary>
+            获取工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ModelProcessor`1.GetRootUtility``1">
+            <summary>
+            获取跟工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ModelProcessor`1.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.RootEntity`1">
+            <summary>
+            总实例
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.RootEntity`1.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.RootEntity`1.flag">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.RootEntity`1.container">
+            <summary>
+            数据容器
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.RootEntity`1.envType">
+            <summary>
+            环境类型
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.RootEntity`1.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.RootEntity`1.IFramework#Singleton#ISingleton#OnSingletonInit">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.RootEntity`1.Initialize">
+            <summary>
+            初始化
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.RootEntity`1.Update">
+            <summary>
+            刷新
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.RootEntity`1.Destory">
+            <summary>
+            消灭
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.SubEntity`1">
+            <summary>
+            子实体
+            </summary>
+            <typeparam name="TRootEntity"></typeparam>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.AfterAwake">
+            <summary>
+            初始化之后
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.SubscribeMessage``1(IFramework.Modules.Message.IMessageListener)">
+            <summary>
+            注册消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.UnSubscribeMessage``1(IFramework.Modules.Message.IMessageListener)">
+            <summary>
+            取消监听
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.PublishMessage``1(IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.SendCommand(IFramework.ICommand)">
+            <summary>
+            发送命令
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.SetModel``1(``0)">
+            <summary>
+            设置数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="model"></param>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.SetUtility``1(``0)">
+            <summary>
+            设置工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <param name="utility"></param>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.SetModelProcessor``1(``0)">
+            <summary>
+            设置数据处理
+            </summary>
+            <typeparam name="TModelProcessor"></typeparam>
+            <param name="processor"></param>
+        </member>
+        <member name="M:IFramework.Fast.SubEntity`1.SetViewProcessor``1(``0)">
+            <summary>
+            设置界面处理
+            </summary>
+            <typeparam name="TViewProcessor"></typeparam>
+            <param name="processor"></param>
+        </member>
+        <member name="T:IFramework.Fast.View`2">
+            <summary>
+            界面
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TRootEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.View`2.entity">
+            <summary>
+            实体
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.View`2.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.View`2.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.View`2.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.View`2.GetUtility``1">
+            <summary>
+            获取工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.View`2.GetRootUtility``1">
+            <summary>
+            获取跟工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.View`2.GetViewProcessor``1">
+            <summary>
+            获取界面处理
+            </summary>
+            <typeparam name="TViewProcessor"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.View`2.GetRootViewProcessor``1">
+            <summary>
+            获取跟界面处理
+            </summary>
+            <typeparam name="TViewProcessor"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Fast.ViewProcessor`1">
+            <summary>
+            界面处理
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.ViewProcessor`1.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.ViewProcessor`1.entity">
+            <summary>
+            实体
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.ViewProcessor`1.GetUtility``1">
+            <summary>
+            获取工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ViewProcessor`1.GetRootUtility``1">
+            <summary>
+            获取跟工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ViewProcessor`1.GetModelProcessor``1">
+            <summary>
+            获取数据处理
+            </summary>
+            <typeparam name="TModelProcessor"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ViewProcessor`1.GetRootModelProcessor``1">
+            <summary>
+            获取跟数据处理
+            </summary>
+            <typeparam name="TModelProcessor"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ViewProcessor`1.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+    </members>
+</doc>
