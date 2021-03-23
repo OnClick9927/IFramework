@@ -16,7 +16,7 @@ using UnityEngine;
 namespace IFramework_Demo
 {
     [EditorWindowCache]
-    public partial class SubWinExample: EditorWindow,ILayoutGUI
+    public partial class SubWinExample: EditorWindow
     {
         [SerializeField]
         private string tmpLayout;
@@ -84,9 +84,9 @@ namespace IFramework_Demo
                 WinTree[i.ToString()].titleContent = new GUIContent(i.ToString());
                 WinTree[i.ToString()].paintDelegate += (rect)=> {
                     rect.DrawOutLine(2, Color.black);
-                    this.BeginArea(rect)
-                            .Label("绘制区域")
-                        .EndArea();
+                    GUILayout.BeginArea(rect);
+                    GUILayout.Label("绘制区域");
+                       GUILayout.EndArea();
                 };
             }
             ToolBarTree = new ToolBarTree();

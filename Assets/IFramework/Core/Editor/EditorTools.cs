@@ -515,10 +515,12 @@ namespace IFramework
                     Rect rect = EditorGUILayout.GetControlRect();
                     rect.DrawOutLine(2, Color.black);
                     EditorGUI.LabelField(rect, _creater.createDirectory);
-                    if (!rect.Contains(Event.current.mousePosition)) return;
-                    var info = EditorTools.DragAndDropTool.Drag(Event.current, rect);
-                    if (info.paths.Length > 0 && info.compelete && info.enterArera && info.paths[0].IsDirectory())
-                        _creater.createDirectory = info.paths[0];
+                    if (rect.Contains(Event.current.mousePosition))
+                    {
+                        var info = EditorTools.DragAndDropTool.Drag(Event.current, rect);
+                        if (info.paths.Length > 0 && info.compelete && info.enterArera && info.paths[0].IsDirectory())
+                            _creater.createDirectory = info.paths[0];
+                    }
                     GUILayout.EndHorizontal();
                 }
                 if (serializedObject != null)
@@ -530,7 +532,6 @@ namespace IFramework
                 GUILayout.Space(10);
                 GUILayout.BeginHorizontal();
                 {
-                    GUILayout.EndHorizontal();
                     if (GUILayout.Button("Build", GUILayout.Height(25)))
                     {
                         BuildScript();
@@ -550,8 +551,8 @@ namespace IFramework
                             DestroyImmediate(sm);
                         });
                         DestroyImmediate(_creater);
-
                     }
+                    GUILayout.EndHorizontal();
                 }
 
             }
@@ -1432,7 +1433,7 @@ namespace IFramework
                 private class FormatUserMonoScript
                 {
                     private static string newScriptName = "newScript.cs";
-                    private static string originScriptPathWithNameSpace = EditorEnv.corePath.CombinePath("UserMonoScript.txt");
+                    private static string originScriptPathWithNameSpace = EditorEnv.formatScriptsPath.CombinePath("UserMonoScript.txt");
 
                     [MenuItem("Assets/Create/IFramework/FormatProjectMonoScript", priority = -1000)]
                     public static void Create()

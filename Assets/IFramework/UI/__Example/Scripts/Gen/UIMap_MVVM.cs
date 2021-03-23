@@ -1,26 +1,23 @@
 ﻿/*********************************************************************************
  *Author:         OnClick
  *Version:        0.0.1
- *UnityVersion:   2018.4.17f1
- *Date:           2020-02-28
+ *UnityVersion:   2018.4.24f1
+ *Date:           2021-03-23
  *Description:    Description
- *History:        2020-02-28--
+ *History:        2021-03-23--
 *********************************************************************************/
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using IFramework;
 
 namespace IFramework_Demo
 {
-	public class UIMap_MVVM 
+    public class UIMap_MVVM 
 	{
-		public static Dictionary<Type, Tuple<Type, Type, Type>> map =
-		new Dictionary<Type, Tuple<Type, Type, Type>>()
+		public static System.Collections.Generic.Dictionary<System.Type, System.Tuple<System.Type, System.Type, System.Type>> map = 
+		new System.Collections.Generic.Dictionary<System.Type, System.Tuple<System.Type, System.Type, System.Type>>()
 		{
-			{typeof(IFramework_Demo.Panel01),Tuple.Create(typeof(IFramework_Demo.Panel01Model),typeof(IFramework_Demo.Panel01View),typeof(IFramework_Demo.Panel01ViewModel))},
-			{typeof(IFramework_Demo.Panel02),Tuple.Create(typeof(IFramework_Demo.Panel02Model),typeof(IFramework_Demo.Panel02View),typeof(IFramework_Demo.Panel02ViewModel))},
+                        {typeof(IFramework_Demo.Panel02),System.Tuple.Create(typeof(IFramework_Demo.Panel02Model),typeof(IFramework_Demo.Panel02View),typeof(IFramework_Demo.Panel02ViewModel))},
+
+            {typeof(IFramework_Demo.Panel01),System.Tuple.Create(typeof(IFramework_Demo.Panel01Model),typeof(IFramework_Demo.Panel01View),typeof(IFramework_Demo.Panel01ViewModel))},
 //ToDo
-		};
-	}
+		}
+;	 }
 }

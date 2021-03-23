@@ -6,15 +6,10 @@
  *Description:    Description
  *History:        2020-02-28--
 *********************************************************************************/
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using IFramework;
-using IFramework.UI;
 
 namespace IFramework_Demo
 {
-	public class Panel02View : UIView<Panel02ViewModel, Panel02>
+    public class Panel02View : IFramework.UI.UIView<Panel02ViewModel, Panel02>
 	{
 		protected override void BindProperty()
 		{
@@ -30,17 +25,17 @@ namespace IFramework_Demo
 		{
 		}
 
-        protected override void OnPop(UIEventArgs arg)
+        protected override void OnPop(IFramework.UI.UIEventArgs arg)
         {
             Hide();
         }
 
-        protected override void OnPress(UIEventArgs arg)
+        protected override void OnPress(IFramework.UI.UIEventArgs arg)
         {
             Hide();
         }
 
-        protected override void OnTop(UIEventArgs arg)
+        protected override void OnTop(IFramework.UI.UIEventArgs arg)
         {
             Show();
         }

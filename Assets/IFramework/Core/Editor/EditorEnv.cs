@@ -13,6 +13,7 @@ using System.IO;
 using System.Collections.Generic;
 using IFramework.Modules;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace IFramework
 {
@@ -118,14 +119,16 @@ namespace IFramework
         {
             return path;
         }
-        public static string corePath { get { return frameworkPath.CombinePath(_relativeCorePath); } }
         public static string memoryPath
         {
             get
             {
-                string path = "Assets/../" + frameworkName+"EditorMemory";
+                string path = Path.Combine(Application.persistentDataPath + "/../", frameworkName + "Memory");
                 if (!Directory.Exists(path))
+                {
                     Directory.CreateDirectory(path);
+                    File.SetAttributes(path, FileAttributes.Hidden);
+                }
                 return path;
             }
         }
@@ -133,7 +136,7 @@ namespace IFramework
         {
             get
             {
-                string path = Path.Combine(memoryPath,"Scripts");
+                string path = Path.Combine(memoryPath,"FormatScripts");
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 return path;
@@ -142,22 +145,19 @@ namespace IFramework
 
 
 
-        public static event EditorApplication.CallbackFunction update { add { EditorApplication.update += value; } remove { EditorApplication.update -= value; } }
         public static event EditorApplication.CallbackFunction delayCall { add { EditorApplication.delayCall += value; } remove { EditorApplication.delayCall -= value; } }
-        public static event EditorApplication.HierarchyWindowItemCallback hierarchyWindowItemOnGUI { add { EditorApplication.hierarchyWindowItemOnGUI += value; } remove { EditorApplication.hierarchyWindowItemOnGUI -= value; } }
-        public static event Action<string> assemblyCompilationStarted { add { CompilationPipeline.assemblyCompilationStarted += value; } remove { CompilationPipeline.assemblyCompilationStarted -= value; } }
 
         [InitializeOnLoadMethod]
         static void EditorEnvInit()
         {
             UnityEngine.Debug.Log("IFramework: EditorEnv Init?   " + frameworkPath);
             Framework.CreateEnv(envType).InitWithAttribute();
-            assemblyCompilationStarted += (str) => {
+            CompilationPipeline.assemblyCompilationStarted += (str) => {
                 Framework.env0.Dispose();
                 UnityEngine.Debug.Log("IFramework: EditorEnv Dispose"); 
             };
 
-            update += Framework.env0.Update;
+            EditorApplication.update += Framework.env0.Update;
 #if UNITY_2018_1_OR_NEWER
             PlayerSettings.allowUnsafeCode = true;
 #else

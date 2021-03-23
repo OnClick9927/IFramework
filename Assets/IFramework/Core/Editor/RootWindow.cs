@@ -264,7 +264,7 @@ namespace IFramework
                     {
                         _waitRequests = new Queue<Request>();
                         _requests = new List<Request>();
-                        EditorEnv.update += Update;
+                        EditorEnv.env.BindUpdate( Update);
                     }
                     _waitRequests.Enqueue(request);
                 }
@@ -509,13 +509,7 @@ namespace IFramework
             {
                 get
                 {
-                    string path = Path.Combine(Application.persistentDataPath + "/../", EditorEnv.frameworkName + "Memory");
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                        File.SetAttributes(path, FileAttributes.Hidden);
-                    }
-                    return path;
+                    return EditorEnv.memoryPath;
                 }
             }
 
