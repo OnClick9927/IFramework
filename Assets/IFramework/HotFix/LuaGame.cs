@@ -6,7 +6,6 @@
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
-using IFramework.Hotfix.AB;
 using IFramework.Language;
 using IFramework.Hotfix.Lua;
 using IFramework.Modules;
@@ -34,8 +33,6 @@ namespace IFramework.Hotfix
         public override void Startup()
         {
             UpdateAssets();
-            Assets.Init();
-            XLuaEnv.AddLoader(new AssetBundleLoader());
             new XluaMain();
         }
 

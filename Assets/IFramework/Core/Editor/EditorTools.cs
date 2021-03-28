@@ -1271,7 +1271,7 @@ namespace IFramework
 
 
             private static ProjectConfigInfo __info;
-            private static ProjectConfigInfo Info
+            public static ProjectConfigInfo Info
             {
                 get
                 {
@@ -1288,7 +1288,7 @@ namespace IFramework
                 }
             }
             private const string key = "ProjectConfig";
-            private static void Save()
+            public static void Save()
             {
                 EditorTools.Prefs.SetObject<ProjectConfigInfo, ProjectConfigInfo>(key, Info);
             }
@@ -1303,52 +1303,6 @@ namespace IFramework
                 Log.enable_E = ProjectConfig.enable_E;
                 Log.enable = ProjectConfig.enable;
             }
-
-
-            [EditorWindowCache("ProjectConfig")]
-            class ProjectConfigWindow : EditorWindow
-            {
-
-                private void OnGUI()
-                {
-
-
-                    GUILayout.Space(10);
-                    Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
-                    Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
-
-                    EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));
-                    Info.NameSpace = EditorGUILayout.TextArea(Info.NameSpace);
-                    GUILayout.Label("Description of Scripts");
-                    Info.Description = EditorGUILayout.TextArea(Info.Description, GUILayout.Height(100));
-                    GUILayout.Space(10);
-
-                    GUILayout.Label("LogSetting in Editor mode", GUIStyles.Get("IN Title"));
-                    Info.enable = EditorGUILayout.Toggle("Enable", Info.enable);
-                    GUI.enabled = Info.enable;
-                    Info.enable_L = EditorGUILayout.Toggle("Log Enable", Info.enable_L);
-                    Info.enable_W = EditorGUILayout.Toggle("Warning Enable", Info.enable_W);
-                    Info.enable_E = EditorGUILayout.Toggle("Error Enable", Info.enable_E);
-
-                    GUI.enabled = true;
-
-                    GUILayout.FlexibleSpace();
-                    GUILayout.BeginHorizontal();
-                    {
-                        GUILayout.FlexibleSpace();
-                        if (GUILayout.Button("Save"))
-                        {
-                            Save();
-                        }
-
-                        GUILayout.EndHorizontal();
-                    }
-
-                }
-
-
-            }
-
 
             class FormatProjectScript
             {
@@ -1482,6 +1436,49 @@ namespace IFramework
                     }
                 }
             }
+
+        }
+        [EditorWindowCache("ProjectConfig")]
+        class ProjectConfigWindow : EditorWindow
+        {
+
+            private void OnGUI()
+            {
+
+                var Info = ProjectConfig.Info;
+                GUILayout.Space(10);
+                Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
+                Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
+
+                EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));
+                Info.NameSpace = EditorGUILayout.TextArea(Info.NameSpace);
+                GUILayout.Label("Description of Scripts");
+                Info.Description = EditorGUILayout.TextArea(Info.Description, GUILayout.Height(100));
+                GUILayout.Space(10);
+
+                GUILayout.Label("LogSetting in Editor mode", GUIStyles.Get("IN Title"));
+                Info.enable = EditorGUILayout.Toggle("Enable", Info.enable);
+                GUI.enabled = Info.enable;
+                Info.enable_L = EditorGUILayout.Toggle("Log Enable", Info.enable_L);
+                Info.enable_W = EditorGUILayout.Toggle("Warning Enable", Info.enable_W);
+                Info.enable_E = EditorGUILayout.Toggle("Error Enable", Info.enable_E);
+
+                GUI.enabled = true;
+
+                GUILayout.FlexibleSpace();
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.FlexibleSpace();
+                    if (GUILayout.Button("Save"))
+                    {
+                        ProjectConfig.Save();
+                    }
+
+                    GUILayout.EndHorizontal();
+                }
+
+            }
+
 
         }
     }

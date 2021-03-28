@@ -129,7 +129,7 @@ namespace IFramework.Language
                 else
                     _pairs.Add(tmpPair);
             });
-            pairs.Clear();
+            //pairs.Clear();
             _keyDic = _pairs.GroupBy(lanPair => { return lanPair.key; }, (key, list) => { return new { key, list }; })
                      .ToDictionary((v) => { return v.key; }, (v) => { return v.list.ToList(); });
         }

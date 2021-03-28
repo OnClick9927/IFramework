@@ -299,9 +299,11 @@ namespace IFramework.UI
                         //v
                         WriteTxt(PanelGenDir.CombinePath(viewType.Append(".cs")), viewScriptOrigin,
                             (str) => {
+                                Type t = AppDomain.CurrentDomain.GetAssemblies()
+                                          .SelectMany((a) => { return a.GetTypes(); })
+                                          .ToList().Find((type) => { return type.FullName == panelType; });
 
-
-                                return str.Replace("#VMType#", vmType).Replace("#PanelType#", panelType);
+                                return str.Replace("#VMType#", vmType).Replace("#PanelType#", panelType).Replace("#panelfield#",GetPanelField(t));
                             }
                             );
                         //vm
@@ -322,6 +324,7 @@ namespace IFramework.UI
 
                                     return str.Replace("#ModelType#", t.FullName)
                                               .Replace("#FieldString#", fieldStr)
+                                              .Replace("#viewType#", viewType)
                                               .Replace("#SyncModelValue#", syncStr);
                                 }
                             );
@@ -335,7 +338,14 @@ namespace IFramework.UI
 
 
             }
-
+            private string GetPanelField(Type panel)
+            {
+                string result = "";
+                panel.GetFields().ForEach((field) => {
+                    result += string.Format("\t\tprivate {0} {2} {1} get {1} return Tpanel.{2}; {3} {3}\n", field.FieldType.FullName, "{", field.Name, "}");
+                });
+                return result;
+            }
             private string WriteField(string result, Type ft, string fn)
             {
                 return result.Append(string.Format("\t\tprivate {0} _{1};\n", ft.FullName, fn))
@@ -396,7 +406,7 @@ namespace IFramework.UI
             private const string vmScriptOrigin =head+
             "namespace #UserNameSpace#\n" +
             "{\n" +
-            "\tpublic class #UserSCRIPTNAME# : IFramework.UI.UIViewModel<#ModelType#>\n" +
+            "\tpublic class #UserSCRIPTNAME# : IFramework.UI.UIViewModel<#ModelType#>,IFramework.Modules.Message.IMessageListener\n" +
             "\t{\n" +
             "#FieldString#\n" +
             "\t\tprotected override void SyncModelValue()\n" +
@@ -404,13 +414,47 @@ namespace IFramework.UI
             "#SyncModelValue#\n" +
             "\t\t}\n" +
             "\n" +
+
+
+            "\t\tprotected override void Initialize()\n" +
+            "\t\t{\n" +
+            "\n" +
+            "\t\t}\n" +
+            "\n"+
+            "\t\tprotected override void OnDispose()\n" +
+            "\t\t{\n" +
+            "\n" +
+            "\t\t}\n" +
+            "\n" +
+            "\t\tvoid IFramework.Modules.Message.IMessageListener.Listen(IFramework.Modules.Message.IMessage message)\n" +
+            "\t\t{\n" +
+            "\n" +
+            "\t\t}\n" +
+            "\n" +
+
+            "\t\tprotected override void SubscribeMessage()\n" +
+            "\t\t{\n" +
+            "\t\t\tmessage.Subscribe<#viewType#>(this);" +
+            "\n" +
+            "\t\t}\n" +
+            "\n" +
+           "\t\tprotected override void UnSubscribeMessage()\n" +
+            "\t\t{\n" +
+            "\t\t\tmessage.UnSubscribe<#viewType#>(this);" +
+            "\n" +
+            "\t\t}\n" +
+            "\n" +
+
+
             "\t}\n" +
+
             "}";
             private const string viewScriptOrigin = head +
             "namespace #UserNameSpace#\n" +
             "{\n" +
             "\tpublic class #UserSCRIPTNAME# : IFramework.UI.UIView<#VMType#, #PanelType#>\n" +
             "\t{\n" +
+            "#panelfield#\n"+
             "\t\tprotected override void BindProperty()\n" +
             "\t\t{\n" +
             "\t\t\tbase.BindProperty();\n" +

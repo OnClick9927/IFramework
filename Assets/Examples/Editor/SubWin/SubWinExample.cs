@@ -142,7 +142,7 @@ namespace IFramework_Demo
             Event.current.Use();
         }
 
-        private class LayoutSavePop : EditorWindow, ILayoutGUI
+        private class LayoutSavePop : EditorWindow
         {
             public SubWinTree Tree;
             public XmlElement element;
@@ -152,43 +152,52 @@ namespace IFramework_Demo
             public void OnGUI()
             {
 
-                this.TextField(ref Name)
-                    .Button(()=> {
-                        if (!string.IsNullOrEmpty(Name))
-                        {
-                            element.AppendChild(Tree.Serialize(element.OwnerDocument, Name));
-                            element.OwnerDocument.Save(path);
-                            AssetDatabase.Refresh();
-                        }
-                        else
-                        {
-                            ShowNotification(new GUIContent("Name isNull"));
-                        }
-                    },"Save");
+                Name = EditorGUILayout.TextField(Name);
+                if (GUILayout.Button("Save"))
+                {
+                    if (!string.IsNullOrEmpty(Name))
+                    {
+                        element.AppendChild(Tree.Serialize(element.OwnerDocument, Name));
+                        element.OwnerDocument.Save(path);
+                        AssetDatabase.Refresh();
+                    }
+                    else
+                    {
+                        ShowNotification(new GUIContent("Name isNull"));
+                    }
+                }
+       
             }
         }
-        private class LayoutEditPop : EditorWindow, ILayoutGUI
+        private class LayoutEditPop : EditorWindow
         {
             public XmlElement root;
             public string path;
             public void OnGUI()
             {
-                this.DrawArea(() =>
+                GUILayout.BeginArea(new Rect(Vector2.zero, position.size));
                 {
                     for (int i = root.ChildNodes.Count - 1; i >= 0; i--)
                     {
                         XmlElement e = root.ChildNodes[i] as XmlElement;
+                        GUILayout.BeginHorizontal();
+                        {
 
-                        this.BeginHorizontal()
-                                .Label(e.GetAttribute("Name"))
-                                .Button(() => {
-                                    root.RemoveChild(e);
-                                    root.OwnerDocument.Save(path);
-                                    AssetDatabase.Refresh();
-                                }, "Delete")
-                            .EndHorizontal();
+                            GUILayout.Label(e.GetAttribute("Name"));
+                            if (GUILayout.Button("delete"))
+                            {
+                                root.RemoveChild(e);
+                                root.OwnerDocument.Save(path);
+                                AssetDatabase.Refresh();
+
+                            }
+         
+                        }
+
                     }
-                }, new Rect(Vector2.zero, position.size));
+
+                    GUILayout.EndArea();
+                }
 
             }
         }

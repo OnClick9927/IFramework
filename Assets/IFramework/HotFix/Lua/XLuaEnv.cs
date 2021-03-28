@@ -11,7 +11,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using IFramework.Singleton;
-using  IFramework.Hotfix.AB;
+using System.Linq;
+
 namespace IFramework.Hotfix.Lua
 {
     public interface IXLuaLoader
@@ -19,7 +20,7 @@ namespace IFramework.Hotfix.Lua
         byte[] load(ref string filepath);
     }
 
-    public class AssetBundleLoader : IXLuaLoader
+    public class AddressableLoader : IXLuaLoader
     {
         public static string projectScriptsPath
         {
@@ -32,12 +33,17 @@ namespace IFramework.Hotfix.Lua
             if (textAsset != null)
                 return textAsset.bytes;
             filepath = projectScriptsPath.CombinePath(filepath+ ".lua").ToAssetsPath();
-            var asset = Assets.Load<TextAsset>(filepath);
-            textAsset = asset.asset as TextAsset;
 
+            var handle = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<TextAsset>(filepath);
+            UnityEngine.AddressableAssets.Addressables.ResourceLocators.ToList();
+            while (!handle.IsDone)
+            {
+
+            }
+            textAsset = handle.Result;
             if (textAsset == null) return null;
             var bytes = textAsset.bytes;
-            asset.Release();
+            UnityEngine.AddressableAssets.Addressables.Release(handle);
             return bytes;
         }
     }

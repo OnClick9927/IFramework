@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: LanGroup
   m_EditorClassIdentifier: 
   pairs:
-  - lan: 17
+  - lan: 0
+    key: da
+    value: da
+  - lan: 0
     key: 111qqq222
-    value: aaaaaaaaaaaa
-  - lan: 17
-    key: "\u554A\u554A\u554A"
-    value: a
-  - lan: 10
-    key: "\u554A\u554A\u554A\u5927\u6492\u5927\u6492\u5927\u6492\u5927\u6492\u5927\u6492\u5927\u6492\u554A\u554A\u554A\u554A\u554A\u554A\u554A\u554A\u554A\u554A\u554A\u554A"
-    value: a
+    value: da
+  - lan: 12
+    key: 111qqq222
+    value: 777
   keys:
   - da
   - 111

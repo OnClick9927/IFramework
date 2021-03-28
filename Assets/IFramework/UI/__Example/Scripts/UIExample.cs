@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using IFramework;
 using IFramework.UI;
+using UnityEngine.AddressableAssets;
 
 namespace IFramework_Demo
 {

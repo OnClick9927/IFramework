@@ -8,221 +8,144 @@
 *********************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 namespace IFramework.GUITool
 {
     class SearchablePopup : PopupWindowContent
     {
-        private class FilteredList
+        public static void Show(Rect position, string[] options, int current, Action<int, string> onVakueChange, int width = 400)
         {
-            public struct Entry
-            {
-                public int index;
-                public string value;
-            }
-
-            private string[] items;
-            public string fitter { get; private set; }
-            public List<Entry> entries { get; private set; }
-            public int count
-            {
-                get
-                {
-                    return items.Length;
-                }
-            }
-
-            public FilteredList(string[] items)
-            {
-                this.items = items;
-                entries = new List<Entry>();
-                UpdateFilter("");
-            }
-
-            public bool UpdateFilter(string filter)
-            {
-                if (fitter == filter)
-                    return false;
-
-                fitter = filter;
-                entries.Clear();
-
-                for (int i = 0; i < items.Length; i++)
-                {
-                    if (string.IsNullOrEmpty(fitter) || items[i].ToLower().Contains(fitter.ToLower()))
-                    {
-                        Entry entry = new Entry
-                        {
-                            index = i,
-                            value = items[i]
-                        };
-                        if (string.Equals(items[i], fitter, StringComparison.CurrentCultureIgnoreCase))
-                            entries.Insert(0, entry);
-                        else
-                            entries.Add(entry);
-                    }
-                }
-                return true;
-            }
-        }
-
-        private const float ROW_HEIGHT = 16.0f;
-        private const float ROW_INDENT = 8.0f;
-
-        public static void Show(Rect position, string[] options, int current, Action<int, string> onVakueChange)
-        {
-            SearchablePopup win = new SearchablePopup(options, current, onVakueChange);
+            SearchablePopup win = new SearchablePopup(options, current, onVakueChange,width);
             PopupWindow.Show(position, win);
         }
-
-        private static void DrawBox(Rect rect, Color tint)
-        {
-            Color c = GUI.color;
-            GUI.color = tint;
-            GUI.Box(rect, "", Selection);
-            GUI.color = c;
-        }
-
-        private readonly Action<int, string> onSelectionMade;
-        private readonly int currentIndex;
-        private readonly FilteredList list;
-        private Vector2 scroll;
-        private int hoverIndex;
-        private int scrollToIndex;
-        private float scrollOffset;
-        private static GUIStyle Selection = "SelectionRect";
+        private readonly string[] names;
+        private readonly int width;
         private SearchField searchField;
-
-        private SearchablePopup(string[] names, int currentIndex, Action<int, string> onSelectionMade)
+        private SelectTree _tree;
+        private SearchablePopup(string[] names, int currentIndex, Action<int, string> onSelectionMade,int width=400)
         {
-            list = new FilteredList(names);
-            this.currentIndex = currentIndex;
-            this.onSelectionMade = onSelectionMade;
+            this.names = names;
+            this.width = width;
+            searchField = new SearchField("", null, 0);
+            _tree = new SelectTree(new TreeViewState(),this, currentIndex, names, onSelectionMade);
+            searchField.onValueChange += (str) =>
+            {
+                _tree.searchString = str;
+            };
 
-            hoverIndex = currentIndex;
-            scrollToIndex = currentIndex;
-            scrollOffset = GetWindowSize().y - ROW_HEIGHT * 2;
-            searchField = new SearchField(list.fitter, null, 0);
         }
         public override Vector2 GetWindowSize()
         {
-            return new Vector2(base.GetWindowSize().x*2,Mathf.Min(600, list.count * ROW_HEIGHT +EditorStyles.toolbar.fixedHeight));
+            return new Vector2(width, Mathf.Min(600, (names.Length+1) * EditorStyles.toolbar.fixedHeight+10));
         }
         public override void OnGUI(Rect rect)
         {
-            Rect searchRect = new Rect(0, 0, rect.width, EditorStyles.toolbar.fixedHeight);
-            Rect scrollRect = Rect.MinMaxRect(0, searchRect.yMax, rect.xMax, rect.yMax);
-
-            HandleKeyboard();
-            DrawSearch(searchRect);
-            DrawSelectionArea(scrollRect);
+            var rs = rect.HorizontalSplit(EditorStyles.toolbar.fixedHeight+5);
+            DrawSearch(rs[0].Zoom(AnchorType.LowerCenter,-5));
+            _tree.OnGUI(rs[1].Zoom(AnchorType.UpperCenter, -5));
         }
 
         private void DrawSearch(Rect rect)
         {
-            GUI.Label(rect, "", EditorStyles.toolbar);
             searchField.OnGUI(rect.Zoom(AnchorType.MiddleCenter, -2));
-            if (list.UpdateFilter(searchField.value))
-            {
-                hoverIndex = 0;
-                scroll = Vector2.zero;
-            }
         }
-        private void DrawSelectionArea(Rect scrollRect)
+
+        private class SelectTree : TreeView
         {
-            Rect contentRect = new Rect(0, 0,
-                scrollRect.width - GUI.skin.verticalScrollbar.fixedWidth,
-                list.entries.Count * ROW_HEIGHT);
+            private static GUIStyle Selection = "SelectionRect";
 
-            scroll = GUI.BeginScrollView(scrollRect, scroll, contentRect);
-
-            Rect rowRect = new Rect(0, 0, scrollRect.width, ROW_HEIGHT);
-
-            Event e = Event.current;
-            for (int i = 0; i < list.entries.Count; i++)
+            private readonly SearchablePopup _pop;
+            private readonly int _current;
+            private string[] _names;
+            private readonly Action<int, string> onSelectionMade;
+            private struct Index
             {
-                if (scrollToIndex == i &&
-                    (e.type == EventType.Repaint || e.type == EventType.Layout))
+                public int id;
+                public string value;
+            }
+            private List<Index> _show;
+            public SelectTree(TreeViewState state, SearchablePopup pop,int current,string[] names, Action<int, string> onSelectionMade) : base(state)
+            {
+                this._pop = pop;
+                this._current = current;
+                this._names = names;
+                this._show = new List<Index>();
+                for (int i = 0; i < names.Length; i++)
                 {
-                    Rect r = new Rect(rowRect);
-                    r.y += scrollOffset;
-                    GUI.ScrollTo(r);
-                    scrollToIndex = -1;
-                    scroll.x = 0;
-                }
-
-                if (rowRect.Contains(e.mousePosition))
-                {
-                    if (e.type == EventType.MouseMove)
+                    _show.Add(new Index()
                     {
-                        hoverIndex = i;
-                        e.Use();
-                    }
-                    if (e.type == EventType.MouseDown)
-                    {
-                        onSelectionMade(list.entries[i].index, list.entries[i].value);
-                        EditorWindow.focusedWindow.Close();
-                    }
+                        id = names.ToList().IndexOf(names[i]),
+                        value = names[i]
+                    });
                 }
-
-                DrawRow(rowRect, i);
-
-                rowRect.y = rowRect.yMax;
+                this.onSelectionMade = onSelectionMade;
+                showAlternatingRowBackgrounds = true;
+                Reload();
             }
 
-            GUI.EndScrollView();
-        }
-        private void DrawRow(Rect rowRect, int i)
-        {
-            if (list.entries[i].index == currentIndex)
-                DrawBox(rowRect, Color.cyan);
-            else if (i == hoverIndex)
-                DrawBox(rowRect, Color.white);
-            Rect labelRect = new Rect(rowRect);
-            labelRect.xMin += ROW_INDENT;
-            GUI.Label(labelRect, list.entries[i].value);
-        }
-        private void HandleKeyboard()
-        {
-            Event e = Event.current;
-            if (e.type == EventType.KeyDown)
+            protected override TreeViewItem BuildRoot()
             {
-                if (e.keyCode == KeyCode.DownArrow)
+                var root = new TreeViewItem { id = 0, depth = -1, displayName = "Root" };
+      
+                return root;
+            }
+            protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
+            {
+                var list = new List<TreeViewItem>();
+                for (int i = 0; i < _show.Count; i++)
                 {
-                    hoverIndex = Mathf.Min(list.entries.Count - 1, hoverIndex + 1);
-                    Event.current.Use();
-                    scrollToIndex = hoverIndex;
-                    scrollOffset = ROW_HEIGHT;
-                    e.Use();
-
+                    list.Add(new TreeViewItem() { id = _show[i].id, depth = 1, displayName = _show[i].value });
                 }
-                if (e.keyCode == KeyCode.UpArrow)
+                return list;
+            }
+            protected override void SingleClickedItem(int id)
+            {
+                base.SingleClickedItem(id);
+                onSelectionMade(id, _names[id]);
+                _pop.editorWindow.Close();
+                GUIUtility.ExitGUI();
+            }
+            private void DrawBox(Rect rect, Color tint)
+            {
+                Color c = GUI.color;
+                GUI.color = tint;
+                GUI.Box(rect, "", Selection);
+                GUI.color = c;
+            }
+            protected override void SearchChanged(string newSearch)
+            {
+                _show.Clear();
+                for (int i = 0; i < _names.Length; i++)
                 {
-                    hoverIndex = Mathf.Max(0, hoverIndex - 1);
-                    Event.current.Use();
-                    scrollToIndex = hoverIndex;
-                    scrollOffset = -ROW_HEIGHT;
-                    e.Use();
-
-                }
-                if (e.keyCode == KeyCode.Return || e.character == '\n')
-                {
-                    if (hoverIndex >= 0 && hoverIndex < list.entries.Count)
+                    if (_names[i].ToLower().Contains(searchString.ToLower()))
                     {
-                        onSelectionMade(list.entries[hoverIndex].index, list.entries[hoverIndex].value);
-                        EditorWindow.focusedWindow.Close();
-                        e.Use();
-
+                        _show.Add(new Index()
+                        {
+                            id = _names.ToList().IndexOf(_names[i]),
+                            value = _names[i]
+                        });
                     }
                 }
-                if (Event.current.keyCode == KeyCode.Escape)
-                {
-                    EditorWindow.focusedWindow.Close();
-                    e.Use();
-
-                }
+                Reload();
+            }
+           
+            protected override void RowGUI(RowGUIArgs args)
+            {
+                base.RowGUI(args);
+                if (args.item.id==_current)
+                    DrawBox(args.rowRect, Color.white);
+            }
+            protected override bool CanMultiSelect(TreeViewItem item)
+            {
+                return false;
+            }
+            protected override bool CanBeParent(TreeViewItem item)
+            {
+                return false;
             }
         }
     }

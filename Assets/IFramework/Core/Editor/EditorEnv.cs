@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using IFramework.Modules;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using IFramework.Modules.Message;
 
 namespace IFramework
 {
@@ -84,17 +85,44 @@ namespace IFramework
 
             protected override List<string> files { get { return null; } }
         }
+        private struct ScriptEnvCheckCommand : ICommand
+        {
+            public void Excute()
+            {
+#if UNITY_2018_1_OR_NEWER
+             PlayerSettings.allowUnsafeCode = true;
+#else
+            string  path = UnityEngine.Application.dataPath.CombinePath("mcs.rsp");
+            string content = "-unsafe";
+            if (File.Exists(path) && path.ReadText(System.Text.Encoding.Default) == content) return;
+                path.WriteText(content, System.Text.Encoding.Default); 
+            AssetDatabase.Refresh();
+            EditorTools.Quit();
+#endif
+            }
+        }
+        private struct FileInitializeCommand : ICommand
+        {
+            public void Excute()
+            {
+                typeof(IFileInitializer).GetSubTypesInAssemblys().ForEach((type) =>
+                {
+                    if (!type.IsAbstract)
+                    {
+                        (Activator.CreateInstance(type) as IFileInitializer).Create();
+                    }
+                });
+                delayCall += () => { AssetDatabase.Refresh(); };
+            }
+        }
+
+
 
         private const string _relativeCorePath = "Core";
         private static string _fpath;
-
-
         public const EnvironmentType envType = EnvironmentType.Ev0;
         public static IEnvironment env { get { return Framework.env0; } }
         public static IFrameworkModules moudules { get { return env.modules; } }
-
-
-
         public static string frameworkName { get { return Framework.FrameworkName; } }
         public static string author { get { return Framework.Author; } }
         public static string version { get { return Framework.Version; } }
@@ -114,10 +142,6 @@ namespace IFramework
                 }
                 return _fpath;
             }
-        }
-        private static string GetFilePath([CallerFilePath] string path = "")
-        {
-            return path;
         }
         public static string memoryPath
         {
@@ -142,42 +166,77 @@ namespace IFramework
                 return path;
             }
         }
-
-
-
         public static event EditorApplication.CallbackFunction delayCall { add { EditorApplication.delayCall += value; } remove { EditorApplication.delayCall -= value; } }
 
         [InitializeOnLoadMethod]
         static void EditorEnvInit()
         {
-            UnityEngine.Debug.Log("IFramework: EditorEnv Init?   " + frameworkPath);
+            Debug.Log("IFramework: EditorEnv Init?   " + frameworkPath);
             Framework.CreateEnv(envType).InitWithAttribute();
-            CompilationPipeline.assemblyCompilationStarted += (str) => {
-                Framework.env0.Dispose();
-                UnityEngine.Debug.Log("IFramework: EditorEnv Dispose"); 
-            };
-
+            CompilationPipeline.assemblyCompilationStarted += Dispose;
             EditorApplication.update += Framework.env0.Update;
-#if UNITY_2018_1_OR_NEWER
-            PlayerSettings.allowUnsafeCode = true;
-#else
-          string  path = UnityEngine.Application.dataPath.CombinePath("mcs.rsp");
-            string content = "-unsafe";
-            if (File.Exists(path) && path.ReadText(System.Text.Encoding.Default) == content) return;
-                path.WriteText(content, System.Text.Encoding.Default); 
-            AssetDatabase.Refresh();
-            EditorTools.Quit();
-#endif
-            typeof(IFileInitializer).GetSubTypesInAssemblys().ForEach((type) =>
+            env.modules.Message.fitSubType = true;
+            env.modules.Message.processesPerFrame = 20;
+            env.modules.Message.Subscribe<ICommand>(Listen);
+            SendCommand(new ScriptEnvCheckCommand());
+            SendCommand(new FileInitializeCommand());
+        }
+        private static string GetFilePath([CallerFilePath] string path = "")
+        {
+            return path;
+        }
+        private static void Dispose(string obj)
+        {
+            Framework.env0.Dispose();
+            UnityEngine.Debug.Log("IFramework: EditorEnv Dispose");
+        }
+        private static void Listen(IMessage message)
+        {
+            if (message.args.Is<ICommand>())
             {
-                if (!type.IsAbstract)
-                {
-                    (Activator.CreateInstance(type) as IFileInitializer).Create();
-                }
-            });
-            delayCall += () => { AssetDatabase.Refresh(); };
-              
+                message.args.As<ICommand>().Excute();
+            }
+        }
 
+
+        /// <summary>
+        /// 发送命令
+        /// </summary>
+        /// <param name="command"></param>
+        public static void SendCommand(ICommand command)
+        {
+            env.modules.Message.Publish<ICommand>(command);
+        }
+        /// <summary>
+        /// 注册消息
+        /// </summary>
+        /// <typeparam name="type"></typeparam>
+        /// <param name="listener"></param>
+        /// <returns></returns>
+        public static bool SubscribeRootMessage<type>(IMessageListener listener)
+        {
+            return env.modules.Message.Subscribe<type>(listener);
+        }
+        /// <summary>
+        /// 取消监听
+        /// </summary>
+        /// <typeparam name="type"></typeparam>
+        /// <param name="listener"></param>
+        /// <returns></returns>
+        public static bool UnSubscribeRootMessage<type>(IMessageListener listener)
+        {
+            return env.modules.Message.UnSubscribe<type>(listener);
+        }
+        /// <summary>
+        /// 发布消息
+        /// </summary>
+        /// <typeparam name="Type"></typeparam>
+        /// <param name="args"></param>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        public static IMessage PublishRootMessage<Type>(IEventArgs args, MessageUrgencyType priority = MessageUrgencyType.Common)
+        {
+            return env.modules.Message.Publish<Type>(args, priority);
         }
     }
 
