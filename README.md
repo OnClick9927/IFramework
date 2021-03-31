@@ -1,5 +1,13 @@
 # IFramework
 
+[![Stargazers over time](https://starchart.cc/OnClick9927/IFramework.svg)](https://starchart.cc/OnClick9927/IFramework)
+
+``` csharp
+while(true)
+    Console.Write("Thanks For EveryOne Who Used It Once !")
+```
+QQ Group ：782290296 
+
 ### 依赖 [IFramework_CS](https://github.com/OnClick9927/IFramework_CS)
 
 ### 主要功能
@@ -8,14 +16,6 @@
 * Language （多国语言编辑器配置，支持csv，xml，json，导入导出）
 * Tweens （缓动动画/高度可扩展/支持 AnimationCurve、自制curve、Ease/配套取钱制作器）
 * HotFix  （XLua框架/UI框架的Lua扩展）
-
-### 下一个目标
-    稳定
-``` csharp
-while(true)
-    Console.Write("Thanks For EveryOne Who Used It Once !")
-```
-QQ Group ：782290296 
 
 ### 特别感谢:万能的爸爸们
 * [QFramework](https://github.com/liangxiegame/QFramework)
