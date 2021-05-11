@@ -8,6 +8,7 @@
 *********************************************************************************/
 using IFramework.Modules.MVVM;
 using System;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using static IFramework.UI.MvvmGroups;
 
@@ -24,25 +25,37 @@ namespace IFramework.UI
 
         public ViewEventTpe lastState { get { return _lastState; } }
 
-        protected void Show()
+        protected virtual void Show()
         {
             panel.gameObject.SetActive(true);
         }
-        protected void Hide()
+        protected virtual void Hide()
         {
             panel.gameObject.SetActive(false);
         }
 
-        protected void BindText(Text text, Func<object> getter)
+        protected UIView Bind(Text text, Func<string> getter)
         {
             handler.BindProperty(() => {
-                string tmp = getter().ToString();
+                string tmp = getter();
                 if (tmp!=text.text)
                 {
                     text.text = tmp;
                 }});
+            return this;
         }
-        protected void BindSlider(Slider slider, Func<float> getter)
+        protected UIView Bind(InputField input, Func<string> getter)
+        {
+            handler.BindProperty(() => {
+                string tmp = getter();
+                if (tmp != input.text)
+                {
+                    input.text = tmp;
+                }
+            });
+            return this;
+        }
+        protected UIView Bind(Slider slider, Func<float> getter)
         {
             handler.BindProperty(() => {
                 float tmp = getter();
@@ -50,8 +63,9 @@ namespace IFramework.UI
                 {
                     slider.value = tmp;
                 } });
+            return this;
         }
-        protected void BindToogle(Toggle toggle, Func<bool> getter)
+        protected UIView Bind(Toggle toggle, Func<bool> getter)
         {
             handler.BindProperty(() => {
                 bool tmp = getter();
@@ -59,7 +73,40 @@ namespace IFramework.UI
                 {
                     toggle.isOn = tmp;
                 }});
+            return this;
         }
+
+        protected UIView OnValueChanged(InputField input,UnityAction<string> callback)
+        {
+            input.onValueChanged.AddListener(callback);
+            return this;
+        }
+        protected UIView OnValueChanged(Toggle toggle, UnityAction<bool> callback)
+        {
+            toggle.onValueChanged.AddListener(callback);
+            return this;
+        }
+        protected UIView OnValueChanged(Slider slider, UnityAction<float> callback)
+        {
+            slider.onValueChanged.AddListener(callback);
+            return this;
+        }
+        protected UIView OnEndEdit(InputField input, UnityAction<string> callback)
+        {
+            input.onEndEdit.AddListener(callback);
+            return this;
+        }
+        protected UIView OnValidateInput(InputField input, InputField.OnValidateInput callback)
+        {
+            input.onValidateInput= callback;
+            return this;
+        }
+        protected UIView OnClick(Button button, UnityAction callback)
+        {
+            button.onClick.AddListener(callback);
+            return this;
+        }
+
 
         protected abstract void OnLoad();
         protected abstract void OnTop(UIEventArgs arg);

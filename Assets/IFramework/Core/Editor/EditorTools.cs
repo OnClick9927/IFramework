@@ -55,7 +55,7 @@ namespace IFramework
         }
     }
 
-    static partial class EditorTools
+    partial class EditorTools
     {
         [CustomEditor(typeof(Transform)), CanEditMultipleObjects]
         class TransformEditor : Editor
@@ -1444,7 +1444,6 @@ namespace IFramework
 
             private void OnGUI()
             {
-
                 var Info = ProjectConfig.Info;
                 GUILayout.Space(10);
                 Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
@@ -1482,7 +1481,7 @@ namespace IFramework
 
         }
     }
-    static partial class EditorTools
+    partial class EditorTools
     {
         private const string hierarchyOverridePath = "IFramework/Tool/HierarchyExtension";
         private const string copyAssetPathPath = "IFramework/Tools/Copy Path";

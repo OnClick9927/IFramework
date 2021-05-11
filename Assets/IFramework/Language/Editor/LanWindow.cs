@@ -754,11 +754,12 @@ namespace IFramework.Language
                     },
                     new MultiColumnHeaderState.Column(){
                         headerContent=new GUIContent("Key"),
-                        minWidth=100
+                        width=100
 
                     },
                     new MultiColumnHeaderState.Column(){
                         headerContent=new GUIContent("Value"),
+                        width=200,
                         minWidth=200
                     }
                 }));

@@ -125,7 +125,9 @@ namespace IFramework
                 }
 
                 //public const string host = "https://localhost:5001/api/v1";
-                public const string host = "http://47.116.133.15:5001/api/v1";
+                //public const string host = "http://47.116.133.15:5001/api/v1";
+                public const string host = "https://www.aicxz.com/api/v1";
+
                 public const string getSignupCode = host + "/User/GetSinupRandomCode";
                 public const string login = host + "/User/Login";
                 public const string signup = host + "/User/Sinup";
@@ -465,6 +467,50 @@ namespace IFramework
                 public byte[] buffer;
             }
 
+            private static class Paths
+            {
+                public static string rootPath { get { return EditorEnv.memoryPath; } }
+
+                public static string userjsonPath { get { return rootPath + "/user.json"; } }
+                public static string localVersionsPath { get { return rootPath + "/localVersions.json"; } }
+                public static string pkgjsonPath { get { return rootPath + "/pkgs.json"; } }
+                public static string pkgversionjsonPath
+                {
+                    get
+                    {
+                        string path = rootPath + "/pkgversion";
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        return path;
+                    }
+                }
+                public static string pkgPath
+                {
+                    get
+                    {
+                        string path = rootPath + "/pkgs";
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        return path;
+                    }
+                }
+                public static string localPkgPath
+                {
+                    get
+                    {
+                        string path = rootPath + "/localpkgs";
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        return path;
+                    }
+                }
+            }
             public static event Action onFreshpkgs;
 
             private static LocalPkgVersions _versions;
@@ -472,11 +518,11 @@ namespace IFramework
 
                     if (_versions==null)
                     {
-                        if (!File.Exists(localVersionsPath))
+                        if (!File.Exists(Paths.localVersionsPath))
                         {
-                            File.WriteAllText(localVersionsPath, JsonUtility.ToJson(new LocalPkgVersions(), true));
+                            File.WriteAllText(Paths.localVersionsPath, JsonUtility.ToJson(new LocalPkgVersions(), true));
                         }
-                        _versions = JsonUtility.FromJson<LocalPkgVersions>(File.ReadAllText(localVersionsPath));
+                        _versions = JsonUtility.FromJson<LocalPkgVersions>(File.ReadAllText(Paths.localVersionsPath));
                     }
                     return _versions;
                 } }
@@ -492,7 +538,7 @@ namespace IFramework
                 {
                     tmp.version = version;
                 }
-                File.WriteAllText(localVersionsPath, JsonUtility.ToJson(versions, true));
+                File.WriteAllText(Paths.localVersionsPath, JsonUtility.ToJson(versions, true));
             }
             public static string GetLocalVersion(string name)
             {
@@ -506,64 +552,17 @@ namespace IFramework
             public static PkgkitInfo.UserJson userjson { get { return _window._windowInfo.userJson; } set { _window._windowInfo.userJson = value; } }
             public static List<PkgKitTool.Constant.PackageInfosModel> pkgs { get { return _window._windowInfo.pkgInfos; } }
             public static bool login { get { return _window._windowInfo.login; } }
-            public static string rootPath
-            {
-                get
-                {
-                    return EditorEnv.memoryPath;
-                }
-            }
 
-            private static string userjsonPath { get { return rootPath + "/user.json"; } }
-            private static string localVersionsPath { get { return rootPath + "/localVersions.json"; } }
-
-            private static string pkgjsonPath { get { return rootPath + "/pkgs.json"; } }
-            private static string pkgversionjsonPath
-            {
-                get
-                {
-                    string path = rootPath + "/pkgversion";
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    return path;
-                }
-            }
-            private static string pkgPath
-            {
-                get
-                {
-                    string path = rootPath + "/pkgs";
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    return path;
-                }
-            }
-            private static string localPkgPath
-            {
-                get
-                {
-                    string path = rootPath + "/localpkgs";
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-                    return path;
-                }
-            }
 
             public static void OpenMemory()
             {
-                EditorTools.OpenFloder(rootPath);
+                EditorTools.OpenFloder(Paths.rootPath);
             }
 
             public static void ClearMemory()
             {
                 Logout();
-                Directory.Delete(rootPath, true);
+                Directory.Delete(Paths.rootPath, true);
             }
             public static void Logout()
             {
@@ -572,9 +571,9 @@ namespace IFramework
             private static void ClearUserJson()
             {
                 userjson = new PkgkitInfo.UserJson();
-                if (File.Exists(userjsonPath))
+                if (File.Exists(Paths.userjsonPath))
                 {
-                    File.Delete(userjsonPath);
+                    File.Delete(Paths.userjsonPath);
                 }
             }
             private static void WriteUserJson(string name, string token)
@@ -584,15 +583,15 @@ namespace IFramework
                     name = name,
                     token = token
                 };
-                File.WriteAllText(userjsonPath, JsonUtility.ToJson(userjson, true));
+                File.WriteAllText(Paths.userjsonPath, JsonUtility.ToJson(userjson, true));
             }
 
             public static void Init()
             {
                 if (login) return;
-                if (File.Exists(userjsonPath))
+                if (File.Exists(Paths.userjsonPath))
                 {
-                    userjson = JsonUtility.FromJson<PkgkitInfo.UserJson>(File.ReadAllText(userjsonPath));
+                    userjson = JsonUtility.FromJson<PkgkitInfo.UserJson>(File.ReadAllText(Paths.userjsonPath));
                     LoginWithToken();
                 }
                 FreshWebPackages();
@@ -650,11 +649,11 @@ namespace IFramework
                     if (m.code != Constant.ErrorCode.Sucess) return;
 
                     Constant.PackageListModel local = new Constant.PackageListModel();
-                    if (File.Exists(pkgjsonPath))
+                    if (File.Exists(Paths.pkgjsonPath))
                     {
-                        local = JsonUtility.FromJson<Constant.PackageListModel>(File.ReadAllText(pkgjsonPath));
+                        local = JsonUtility.FromJson<Constant.PackageListModel>(File.ReadAllText(Paths.pkgjsonPath));
                     }
-                    File.WriteAllText(pkgjsonPath, JsonUtility.ToJson(m));
+                    File.WriteAllText(Paths.pkgjsonPath, JsonUtility.ToJson(m));
                     var ps_l = local.pkgs.ToList();
                     if (m.pkgs.Length == 0)
                     {
@@ -667,7 +666,7 @@ namespace IFramework
                     {
                         var p = m.pkgs[i];
                         int count = ps_l.RemoveAll((_p) => { return _p.name == p.name && _p.time == p.time && _p.versions == p.versions; });
-                        string path = Path.Combine(pkgversionjsonPath, p.name + ".json");
+                        string path = Path.Combine(Paths.pkgversionjsonPath, p.name + ".json");
                         if (count > 0)
                         {
                             if (File.Exists(path))
@@ -694,7 +693,7 @@ namespace IFramework
                     }
                     ps_l.ForEach((_p) =>
                     {
-                        string path = Path.Combine(pkgversionjsonPath, _p.name + ".json");
+                        string path = Path.Combine(Paths.pkgversionjsonPath, _p.name + ".json");
                         if (File.Exists(path))
                         {
                             File.Delete(path);
@@ -748,7 +747,7 @@ namespace IFramework
             public static void UploadPkg(UploadInfo info)
             {
                 string file = string.Format("{0}_{1}.unitypackage", info.name, string.Join(".", info.version));
-                string path = Path.Combine(localPkgPath, file);
+                string path = Path.Combine(Paths.localPkgPath, file);
                 AssetDatabase.ExportPackage(info.assetPath, path, ExportPackageOptions.Recurse);
                 info.buffer = File.ReadAllBytes(path);
                 WebRequest.PutPackage(info.name,
@@ -769,7 +768,7 @@ namespace IFramework
             {
                 WebRequest.DownLoadPkg(name, version, (req) =>
                 {
-                    string path = Path.Combine(pkgPath, string.Format("{0}_{1}.unitypackage", name, version));
+                    string path = Path.Combine(Paths.pkgPath, string.Format("{0}_{1}.unitypackage", name, version));
                     File.WriteAllBytes(path, req.downloadHandler.data);
                     AssetDatabase.ImportPackage(path, true);
                     AssetDatabase.Refresh();
@@ -1080,7 +1079,8 @@ namespace IFramework
                            width=200
                         },
                         new MultiColumnHeaderState.Column(){
-                             headerContent=new GUIContent("version")
+                             headerContent=new GUIContent("version"),
+                             width=200
                         }
                     })));
                 }
@@ -1377,7 +1377,7 @@ namespace IFramework
                 }
                 protected override void DoubleClickedItem(int id)
                 {
-                    var w = EditorWindowTool.FindOrCreate(EditorWindowTool.windows[id].searchName);
+                    var w = EditorWindowTool.FindOrCreate(_show.Find((index) => { return index.id == id; }).value.searchName);
                     if (w != null)
                     {
                         w.Focus();
@@ -1481,7 +1481,7 @@ namespace IFramework
                 get
                 {
                     if (userJson == null) return false;
-                    if (userJson.name == null) return false;
+                    if (string.IsNullOrEmpty(userJson.name)) return false;
                     return true;
                 }
             }
