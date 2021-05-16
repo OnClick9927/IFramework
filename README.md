@@ -1,4 +1,4 @@
-# IFramework
+# IFramework（[国内快速下载方式](https://www.aicxz.com/IFramework/PkgListPage)）
 
 [![Stargazers over time](https://starchart.cc/OnClick9927/IFramework.svg)](https://starchart.cc/OnClick9927/IFramework)
 
