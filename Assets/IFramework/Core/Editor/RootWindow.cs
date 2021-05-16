@@ -73,17 +73,11 @@ namespace IFramework
                     public string token;
                 }
 
-                public class GetSignupRandomCodeModel : ResponseModel { }
-                public class GetChangePasswordRandomCodeModel : ResponseModel { }
-                public class ForgetPasswordModel : ResponseModel { }
-
-                public class SignupModel : TokenModel { }
                 public class LoginModel : TokenModel
                 {
                     public string name;
                 }
 
-                public class ChangePasswordModel : TokenModel { }
                 public class PutPackageModel : ResponseModel { }
                 [Serializable]
                 public class PackageListModel : ResponseModel
@@ -116,24 +110,12 @@ namespace IFramework
                     }
 
                 }
-
                 public class DeletePackageModel : ResponseModel { }
 
-                public class GetPackageUrlModel : ResponseModel
-                {
-                    public string url;
-                }
-
-                //public const string host = "https://localhost:5001/api/v1";
-                //public const string host = "http://47.116.133.15:5001/api/v1";
                 public const string host = "https://www.aicxz.com/api/v1";
 
                 public const string getSignupCode = host + "/User/GetSinupRandomCode";
                 public const string login = host + "/User/Login";
-                public const string signup = host + "/User/Sinup";
-                public const string getChangePasswordCode = host + "/User/GetChangePasswordRandomCode";
-                public const string changePassword = host + "/User/ChangePassword";
-                public const string forgetPassword = host + "/User/ForgetPassword";
                 public const string loginWithToken = host + "/User/LoginWithToken";
                 public const string putpackage = host + "/Pkg/PutPkg";
                 public const string getpackageList = host + "/Pkg/GetPkglist";
@@ -151,7 +133,7 @@ namespace IFramework
                     public string name;
                     public string version;
                 }
-                public List<PkgVersion> versions=new List<PkgVersion>();
+                public List<PkgVersion> versions = new List<PkgVersion>();
             }
             static class WebRequest
             {
@@ -267,7 +249,7 @@ namespace IFramework
                     {
                         _waitRequests = new Queue<Request>();
                         _requests = new List<Request>();
-                        EditorEnv.env.BindUpdate( Update);
+                        EditorEnv.env.BindUpdate(Update);
                     }
                     _waitRequests.Enqueue(request);
                 }
@@ -289,7 +271,7 @@ namespace IFramework
                         T t = Constant.ResponseModel.Dispose<T>(req.downloadHandler.text);
                         if (t == null) return;
                         bool bo = t.CheckCode();
-                        if ( callback != null) callback.Invoke(t);
+                        if (callback != null) callback.Invoke(t);
                     });
                 }
                 private static void PostRequest<T>(string url, WWWForm forms, Action<T> callback) where T : Constant.ResponseModel
@@ -299,32 +281,11 @@ namespace IFramework
                         T t = Constant.ResponseModel.Dispose<T>(req.downloadHandler.text);
                         if (t == null) return;
                         bool bo = t.CheckCode();
-                        if ( callback != null) callback.Invoke(t);
+                        if (callback != null) callback.Invoke(t);
                     });
                 }
 
-                public static void GetSignupCode(string email, Action<Constant.GetSignupRandomCodeModel> callback)
-                {
-                    WWWForm www = new WWWForm();
-                    www.AddField("email", email);
-                    PostRequest<Constant.GetSignupRandomCodeModel>(Constant.getSignupCode, www, (m) =>
-                    {
-                        if (callback != null) callback(m);
-                    });
-                }
 
-                public static void Signup(string email, string password, string name, string code, Action<Constant.SignupModel> callback)
-                {
-                    WWWForm www = new WWWForm();
-                    www.AddField("email", email);
-                    www.AddField("password", password);
-                    www.AddField("name", name);
-                    www.AddField("code", code);
-                    PostRequest<Constant.SignupModel>(Constant.signup, www, (m) =>
-                    {
-                        if (callback != null) callback(m);
-                    });
-                }
 
                 public static void Login(string email, string password, Action<Constant.LoginModel> callback)
                 {
@@ -347,37 +308,7 @@ namespace IFramework
                     });
                 }
 
-                public static void GetChangePasswordCode(string email, Action<Constant.GetChangePasswordRandomCodeModel> callback)
-                {
-                    WWWForm www = new WWWForm();
-                    www.AddField("email", email);
-                    PostRequest<Constant.GetChangePasswordRandomCodeModel>(Constant.getChangePasswordCode, www, (m) =>
-                    {
-                        if (callback != null) callback(m);
-                    });
-                }
 
-                public static void ChangePassword(string email, string password, string code, Action<Constant.ChangePasswordModel> callback)
-                {
-                    WWWForm www = new WWWForm();
-                    www.AddField("email", email);
-                    www.AddField("password", password);
-                    www.AddField("code", code);
-                    PostRequest<Constant.ChangePasswordModel>(Constant.changePassword, www, (m) =>
-                    {
-                        if (callback != null) callback(m);
-                    });
-                }
-
-                public static void ForgetPassword(string email, Action<Constant.ForgetPasswordModel> callback)
-                {
-                    WWWForm www = new WWWForm();
-                    www.AddField("email", email);
-                    PostRequest<Constant.ForgetPasswordModel>(Constant.forgetPassword, www, (m) =>
-                    {
-                        if (callback != null) callback(m);
-                    });
-                }
 
 
                 public static void PutPackage(string name, string author, string version, string describtion, bool preview, string dependences, string assetpath, byte[] buffer, Action<Constant.PutPackageModel> callback)
@@ -438,21 +369,12 @@ namespace IFramework
                 }
             }
 
-            public class SignupInfo : ChangePasswordInfo
-            {
-                public string name;
-            }
-            public class ForgetPassworldInfo
+
+            public class LoginInfo
             {
                 public string email;
-            }
-            public class LoginInfo : ForgetPassworldInfo
-            {
+
                 public string password;
-            }
-            public class ChangePasswordInfo : LoginInfo
-            {
-                public string code;
             }
 
             public class UploadInfo
@@ -514,9 +436,12 @@ namespace IFramework
             public static event Action onFreshpkgs;
 
             private static LocalPkgVersions _versions;
-            private static LocalPkgVersions localversion { get {
+            private static LocalPkgVersions localversion
+            {
+                get
+                {
 
-                    if (_versions==null)
+                    if (_versions == null)
                     {
                         if (!File.Exists(Paths.localVersionsPath))
                         {
@@ -525,12 +450,13 @@ namespace IFramework
                         _versions = JsonUtility.FromJson<LocalPkgVersions>(File.ReadAllText(Paths.localVersionsPath));
                     }
                     return _versions;
-                } }
-            private static void UpdateLocalVersion(string name,string version)
+                }
+            }
+            private static void UpdateLocalVersion(string name, string version)
             {
                 var versions = localversion;
                 var tmp = versions.versions.Find((o) => { return o.name == name; });
-                if (tmp==null)
+                if (tmp == null)
                 {
                     versions.versions.Add(new LocalPkgVersions.PkgVersion() { name = name, version = version });
                 }
@@ -588,36 +514,19 @@ namespace IFramework
 
             public static void Init()
             {
-                if (login) return;
+               // if (login) return;
                 if (File.Exists(Paths.userjsonPath))
                 {
                     userjson = JsonUtility.FromJson<PkgkitInfo.UserJson>(File.ReadAllText(Paths.userjsonPath));
                     LoginWithToken();
                 }
-                FreshWebPackages();
+                //FreshWebPackages();
 
             }
 
 
-            public static void GetSignupCode(SignupInfo info)
-            {
-                WebRequest.GetSignupCode(info.email, (m) => {
-                    if (m.code != Constant.ErrorCode.Sucess) return;
 
-                    _window.ShowNotification(new GUIContent("邮件发送成功"));
-                });
-            }
-            public static void Signup(SignupInfo info)
-            {
-                WebRequest.Signup(info.email, info.password, info.name, info.code, (m) =>
-                {
-                    if (m.code != Constant.ErrorCode.Sucess) return;
 
-                    WriteUserJson(info.name, m.token);
-                    LoginWithToken();
-                    _window.ShowNotification(new GUIContent("注册成功"));
-                });
-            }
             private static void LoginWithToken()
             {
                 WebRequest.Login(userjson.token, (m) =>
@@ -626,6 +535,10 @@ namespace IFramework
                     {
                         Logout();
                         return;
+                    }
+                    else
+                    {
+                        WriteUserJson(m.name, m.token);
                     }
                     FreshWebPackages();
                 });
@@ -654,7 +567,7 @@ namespace IFramework
                         local = JsonUtility.FromJson<Constant.PackageListModel>(File.ReadAllText(Paths.pkgjsonPath));
                     }
                     File.WriteAllText(Paths.pkgjsonPath, JsonUtility.ToJson(m));
-                    var ps_l = local.pkgs.ToList();
+                    var localPkgs = local.pkgs.ToList();
                     if (m.pkgs.Length == 0)
                     {
                         if (onFreshpkgs != null)
@@ -665,9 +578,11 @@ namespace IFramework
                     for (int i = 0; i < m.pkgs.Length; i++)
                     {
                         var p = m.pkgs[i];
-                        int count = ps_l.RemoveAll((_p) => { return _p.name == p.name && _p.time == p.time && _p.versions == p.versions; });
+                        var tmp = localPkgs.Find((_p) => { return p.versions==_p.versions && _p.name == p.name && _p.time == p.time && p.author==_p.author; });
+                        Debug.Log($"{p.author}  {tmp == null}");
+                        localPkgs.Remove(tmp);
                         string path = Path.Combine(Paths.pkgversionjsonPath, p.name + ".json");
-                        if (count > 0)
+                        if (tmp !=null)
                         {
                             if (File.Exists(path))
                             {
@@ -691,7 +606,7 @@ namespace IFramework
                             });
                         }
                     }
-                    ps_l.ForEach((_p) =>
+                    localPkgs.ForEach((_p) =>
                     {
                         string path = Path.Combine(Paths.pkgversionjsonPath, _p.name + ".json");
                         if (File.Exists(path))
@@ -706,42 +621,19 @@ namespace IFramework
             {
                 WebRequest.Login(info.email, info.password, (m) =>
                 {
-                    if (m.code!= Constant.ErrorCode.Sucess)
+                    if (m.code != Constant.ErrorCode.Sucess)
                     {
                         Logout();
                         return;
                     }
-                    WriteUserJson(m.name, m.token);
+                    else
+                    {
+                        WriteUserJson(m.name, m.token);
+                    }
                     FreshWebPackages();
                 });
             }
-            public static void ForgetPassword(ForgetPassworldInfo info)
-            {
-                WebRequest.ForgetPassword(info.email, (m) => {
-                    if (m.code != Constant.ErrorCode.Sucess) return;
 
-                    _window.ShowNotification(new GUIContent("邮件发送成功"));
-                });
-            }
-
-
-            public static void GetChangePasswordCode(ChangePasswordInfo info)
-            {
-                WebRequest.GetChangePasswordCode(info.email, (m) => {
-                    if (m.code != Constant.ErrorCode.Sucess) return;
-
-                    _window.ShowNotification(new GUIContent("邮件发送成功"));
-                });
-            }
-
-            public static void ChangePassword(ChangePasswordInfo info)
-            {
-                WebRequest.ChangePassword(info.email, info.password, info.code, (m) => {
-                    if (m.code != Constant.ErrorCode.Sucess) return;
-
-                    _window.ShowNotification(new GUIContent("密码修改成功"));
-                });
-            }
 
 
             public static void UploadPkg(UploadInfo info)
@@ -777,34 +669,38 @@ namespace IFramework
             }
 
 
-     
+
 
 
             public static void DeletePkg(string name, string version)
             {
                 if (!login) return;
-                WebRequest.DeletePkg(userjson.name, name, version, (m) =>
+                if (EditorUtility.DisplayDialog("Make Sure", string.Format("Confirm to delete the pkg in sever \nName:   {0}\nVersion:   {1}", name, version), "Yes", "Cancel"))
                 {
-                    if (m.code != Constant.ErrorCode.Sucess) return;
+                    WebRequest.DeletePkg(userjson.name, name, version, (m) =>
+                    {
+                        if (m.code != Constant.ErrorCode.Sucess) return;
 
-                    _window.ShowNotification(new GUIContent("删除成功"));
-                    FreshWebPackages();
-                });
+                        _window.ShowNotification(new GUIContent("删除成功"));
+                        FreshWebPackages();
+                    });
+                }
+
             }
-            public static void RemoveLocalPkg(string name,string assetPath)
+            public static void RemoveLocalPkg(string name, string assetPath)
             {
                 Directory.Delete(assetPath, true);
                 AssetDatabase.Refresh();
                 UpdateLocalVersion(name, "");
             }
-           
+
         }
 
         class UserOptionWindow
         {
             enum UserOperation
             {
-                Signup, Login, ForgetPassword, ChangePassword, Upload, Memory, SelfPkgs, System
+                Account, Pkg_Upload, Other
             }
 
             class SystemGUI
@@ -834,57 +730,146 @@ namespace IFramework
                     GUILayout.Label("DPI：" + Screen.dpi);
                     GUILayout.Label("分辨率：" + Screen.currentResolution.ToString());
                     GUILayout.EndVertical();
-
-                }
-            }
-            class SignupGUI
-            {
-                PkgKitTool.SignupInfo _signup = new PkgKitTool.SignupInfo();
-
-                public void OnGUI()
-                {
-                    _signup.email = EditorGUILayout.TextField("Email", _signup.email);
+                    if (GUILayout.Button("Open Memory Floder"))
                     {
-                        EditorGUILayout.BeginHorizontal();
-                        _signup.code = EditorGUILayout.TextField("Code", _signup.code);
-                        if (GUILayout.Button(Contents.go, GUILayout.Width(Contents.gap * 5)))
-                        {
-                            PkgKitTool.GetSignupCode(_signup);
-                        }
-                        EditorGUILayout.EndHorizontal();
-                        _signup.name = EditorGUILayout.TextField("Name", _signup.name);
-                        _signup.password = EditorGUILayout.TextField("Password", _signup.password);
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.Space();
-                        if (GUILayout.Button(Contents.go, GUILayout.Width(Contents.gap * 5)))
-                        {
-                            PkgKitTool.Signup(_signup);
-                        }
-                        EditorGUILayout.EndHorizontal();
+                        PkgKitTool.OpenMemory();
+                    }
+                    if (GUILayout.Button("Clear Memory Floder"))
+                    {
+                        PkgKitTool.ClearMemory();
                     }
                 }
             }
+
             class LoginGUI
             {
-                private PkgKitTool.LoginInfo _login = new PkgKitTool.LoginInfo();
+                private class SelectTree : TreeView
+                {
+                    class Temp
+                    {
+                        public string name;
+                        public string version;
+                    }
+                    public SelectTree(TreeViewState state, MultiColumnHeader multiColumnHeader) : base(state, multiColumnHeader)
+                    {
+                        this.rowHeight = 20;
+                        showAlternatingRowBackgrounds = true;
 
-                public void OnGUI()
+                    }
+                    public void Fresh()
+                    {
+                        var pkgs = PkgKitTool.pkgs.FindAll((p) => { return p.author == PkgKitTool.userjson.name; });
+                        tmps.Clear();
+                        pkgs.ForEach((p) => {
+                            for (int i = 0; i < p.versions.Count; i++)
+                            {
+                                tmps.Add(new Temp()
+                                {
+                                    name = p.name,
+                                    version = p.versions[i].version
+                                });
+                            }
+                        });
+                        Reload();
+                    }
+
+                    protected override TreeViewItem BuildRoot()
+                    {
+                        var root = new TreeViewItem { id = 0, depth = -1, displayName = "Root" };
+                        return root;
+                    }
+                    protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
+                    {
+                        List<TreeViewItem> list = new List<TreeViewItem>();
+                        for (int i = 0; i < tmps.Count; i++)
+                        {
+
+                            list.Add(new TreeViewItem() { depth = 1, id = i, displayName = i.ToString() });
+                        }
+                        return list;
+                    }
+                    List<Temp> tmps = new List<Temp>();
+
+                    protected override void RowGUI(RowGUIArgs args)
+                    {
+                        var info = tmps[args.item.id];
+
+                        for (int i = 0; i < args.GetNumVisibleColumns(); i++)
+                        {
+                            switch (i)
+                            {
+                                case 0:
+                                    if (GUI.Button(args.GetCellRect(i), "", Styles.minus))
+                                    {
+                                        PkgKitTool.DeletePkg(info.name, info.version);
+                                    }
+                                    break;
+                                case 1:
+                                    GUI.Label(args.GetCellRect(i), info.name);
+                                    break;
+                                case 2:
+                                    GUI.Label(args.GetCellRect(i), info.version);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                }
+                private PkgKitTool.LoginInfo _login = new PkgKitTool.LoginInfo();
+                private SelectTree _tree;
+                public LoginGUI()
+                {
+                    TreeViewState _state = new TreeViewState();
+                    _tree = new SelectTree(_state, new MultiColumnHeader(new MultiColumnHeaderState(new MultiColumnHeaderState.Column[] {
+                        new MultiColumnHeaderState.Column(){
+                            width=20,
+                            maxWidth=20,
+                            minWidth=20,
+                            autoResize =false
+                        },
+                        new MultiColumnHeaderState.Column()
+                        {
+                           headerContent=new GUIContent("name"),
+                           width=200
+                        },
+                        new MultiColumnHeaderState.Column(){
+                             headerContent=new GUIContent("version"),
+                             width=200
+                        }
+                    })));
+                }
+                public void OnGUI(Rect position)
                 {
                     if (PkgKitTool.login)
                     {
                         EditorGUILayout.BeginHorizontal();
+                        if (GUILayout.Button(Contents.accop, GUILayout.Width(Contents.gap * 20)))
+                        {
+                            Application.OpenURL("https://www.aicxz.com/User");
+                        }
                         EditorGUILayout.Space();
+                        GUILayout.Label(PkgKitTool.userjson.name);
                         if (GUILayout.Button(Contents.logout, GUILayout.Width(Contents.gap * 6)))
                         {
                             PkgKitTool.Logout();
                         }
                         EditorGUILayout.EndHorizontal();
+                        var rect = GUILayoutUtility.GetLastRect();
+                        position.position = new Vector2(0, 0);
+                        rect = position.HorizontalSplit(rect.height)[1];
+                        _tree.Fresh();
+                        _tree.OnGUI(rect);
                     }
                     else
                     {
                         _login.email = EditorGUILayout.TextField("Email", _login.email);
                         _login.password = EditorGUILayout.TextField("Password", _login.password);
                         EditorGUILayout.BeginHorizontal();
+                        if (GUILayout.Button(Contents.accop, GUILayout.Width(Contents.gap * 20)))
+                        {
+                            Application.OpenURL("https://www.aicxz.com/User");
+                        }
                         EditorGUILayout.Space();
                         if (GUILayout.Button(Contents.go, GUILayout.Width(Contents.gap * 5)))
                         {
@@ -895,52 +880,14 @@ namespace IFramework
 
                 }
             }
-            class ChangePasswordGUI
-            {
-                private PkgKitTool.ChangePasswordInfo _change = new PkgKitTool.ChangePasswordInfo();
-                public void OnGUI()
-                {
-                    _change.email = EditorGUILayout.TextField("Email", _change.email);
-                    EditorGUILayout.BeginHorizontal();
-                    _change.code = EditorGUILayout.TextField("Code", _change.code);
-                    if (GUILayout.Button(Contents.go, GUILayout.Width(Contents.gap * 5)))
-                    {
-                        PkgKitTool.GetChangePasswordCode(_change);
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    _change.password = EditorGUILayout.TextField("Password", _change.password);
 
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.Space();
-                    if (GUILayout.Button(Contents.go, GUILayout.Width(Contents.gap * 5)))
-                    {
-                        PkgKitTool.ChangePassword(_change);
-                    }
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
-            class ForgetPassworldGUI
-            {
-                private PkgKitTool.ForgetPassworldInfo _foget = new PkgKitTool.ForgetPassworldInfo();
-                public void OnGUI()
-                {
-                    _foget.email = EditorGUILayout.TextField("Email", _foget.email);
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.Space();
-                    if (GUILayout.Button(Contents.go, GUILayout.Width(Contents.gap * 5)))
-                    {
-                        PkgKitTool.ForgetPassword(_foget);
-                    }
-                    EditorGUILayout.EndHorizontal();
-                }
-            }
             class UploadGUI
             {
                 private PkgKitTool.UploadInfo _upload = new PkgKitTool.UploadInfo();
                 private Vector2 scroll;
                 public void OnGUI()
                 {
-                    scroll= GUILayout.BeginScrollView(scroll);
+                    scroll = GUILayout.BeginScrollView(scroll);
                     EditorGUILayout.LabelField("Author", PkgKitTool.userjson.name);
                     _upload.name = EditorGUILayout.TextField("Name", _upload.name);
                     _upload.preview = EditorGUILayout.Toggle("Preview", _upload.preview);
@@ -1015,14 +962,14 @@ namespace IFramework
                                     for (int i = 0; i < _upload.version.Length; i++)
                                     {
                                         _upload.version[i] = int.Parse(vs[i]);
-                                        if (i== _upload.version.Length-1)
+                                        if (i == _upload.version.Length - 1)
                                         {
                                             _upload.version[i]++;
                                         }
                                     }
-                                    for (int i = _upload.version.Length-1; i >0; i--)
+                                    for (int i = _upload.version.Length - 1; i > 0; i--)
                                     {
-                                        if (_upload.version[i]>=100)
+                                        if (_upload.version[i] >= 100)
                                         {
                                             _upload.version[i] = 1;
                                             _upload.version[i - 1]++;
@@ -1045,129 +992,8 @@ namespace IFramework
                     GUILayout.EndScrollView();
                 }
             }
-            class MemoryGUI
-            {
-                public void OnGUI()
-                {
-                    if (GUILayout.Button("Open Memory Floder"))
-                    {
-                        PkgKitTool.OpenMemory();
-                    }
-                    if (GUILayout.Button("Clear Memory Floder"))
-                    {
-                        PkgKitTool.ClearMemory();
-                    }
-                }
-            }
 
-            class SelfPkgsGUI
-            {
-                private SelectTree _tree;
-                public SelfPkgsGUI()
-                {
-                    TreeViewState _state = new TreeViewState();
-                    _tree = new SelectTree(_state,new MultiColumnHeader(new MultiColumnHeaderState(new MultiColumnHeaderState.Column[] {
-                        new MultiColumnHeaderState.Column(){
-                            width=20,
-                            maxWidth=20,
-                            minWidth=20,
-                            autoResize =false
-                        },
-                        new MultiColumnHeaderState.Column()
-                        {
-                           headerContent=new GUIContent("name"),
-                           width=200
-                        },
-                        new MultiColumnHeaderState.Column(){
-                             headerContent=new GUIContent("version"),
-                             width=200
-                        }
-                    })));
-                }
 
-                private class SelectTree : TreeView
-                {
-                    class Temp
-                    {
-                        public string name;
-                        public string version;
-                    }
-                    public SelectTree(TreeViewState state, MultiColumnHeader multiColumnHeader) : base(state, multiColumnHeader)
-                    {
-                        this.rowHeight = 20;
-                        showAlternatingRowBackgrounds = true;
-
-                    }
-                    public void Fresh()
-                    {
-                        var pkgs = PkgKitTool.pkgs.FindAll((p) => { return p.author == PkgKitTool.userjson.name; });
-                        tmps.Clear();
-                        pkgs.ForEach((p) => {
-                            for (int i = 0; i < p.versions.Count; i++)
-                            {
-                                tmps.Add(new Temp()
-                                {
-                                    name = p.name,
-                                    version = p.versions[i].version
-                                });
-                            }
-                        });
-                        Reload();
-                    }
-
-                    protected override TreeViewItem BuildRoot()
-                    {
-                        var root = new TreeViewItem { id = 0, depth = -1, displayName = "Root" };
-                        return root;
-                    }
-                    protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
-                    {
-                        List<TreeViewItem> list = new List<TreeViewItem>();
-                        for (int i = 0; i < tmps.Count; i++)
-                        {
-
-                            list.Add(new TreeViewItem() { depth = 1, id = i ,displayName=i.ToString()});
-                        }
-                        return list;
-                    }
-                    List<Temp> tmps = new List<Temp>();
-
-                    protected override void RowGUI(RowGUIArgs args)
-                    {
-                        var info = tmps[args.item.id];
-                     
-                        for (int i = 0; i < args.GetNumVisibleColumns(); i++)
-                        {
-                            switch (i)
-                            {
-                                case 0:
-                                    if (GUI.Button(args.GetCellRect(i), "", Styles.minus))
-                                    {
-                                        if (EditorUtility.DisplayDialog("Make Sure", string.Format("Confirm to delete the pkg \nName:   {0}\nVersion:   {1}", tmps[i].name, tmps[i].version), "Yes", "Cancel"))
-                                        {
-                                            PkgKitTool.DeletePkg(info.name, info.version);
-                                        }
-                                    }
-                                    break;
-                                case 1:
-                                    GUI.Label(args.GetCellRect(i), info.name);
-                                    break;
-                                case 2:
-                                    GUI.Label(args.GetCellRect(i), info.version);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-                public void OnGUI(Rect position)
-                {
-                    if (!PkgKitTool.login) return;
-                    _tree.Fresh();
-                    _tree.OnGUI(position);
-                }
-            }
 
             public UserOptionWindow()
             {
@@ -1181,39 +1007,19 @@ namespace IFramework
 
             private void ContentGUI(Rect position)
             {
-                if (_userOperation == UserOperation.SelfPkgs)
-                {
-                    _selfpkgs.OnGUI(position);
-                }
-                position = position.Zoom(AnchorType.MiddleCenter, -10);
                 GUILayout.BeginArea(position);
                 switch (_userOperation)
                 {
-                    case UserOperation.Signup:
-                        _sign.OnGUI();
+
+                    case UserOperation.Account:
+                        _login.OnGUI(position);
                         break;
-                    case UserOperation.Login:
-                        _login.OnGUI();
-                        break;
-                    case UserOperation.ChangePassword:
-                        GUI.enabled = !PkgKitTool.login;
-                        _change.OnGUI();
-                        GUI.enabled = true;
-                        break;
-                    case UserOperation.Upload:
+                    case UserOperation.Pkg_Upload:
                         GUI.enabled = PkgKitTool.login;
                         _upload.OnGUI();
                         GUI.enabled = true;
                         break;
-                    case UserOperation.ForgetPassword:
-                        GUI.enabled = !PkgKitTool.login;
-                        _forget.OnGUI();
-                        GUI.enabled = true;
-                        break;
-                    case UserOperation.Memory:
-                        _memory.OnGUI();
-                        break;
-                    case UserOperation.System:
+                    case UserOperation.Other:
                         _sys.OnGUI();
                         break;
                     default:
@@ -1227,13 +1033,8 @@ namespace IFramework
             private UserOperation _userOperation;
             private MenuTree menu = new MenuTree();
             private SplitView _split = new SplitView();
-            private SignupGUI _sign = new SignupGUI();
             private LoginGUI _login = new LoginGUI();
-            private ChangePasswordGUI _change = new ChangePasswordGUI();
-            private ForgetPassworldGUI _forget = new ForgetPassworldGUI();
             private UploadGUI _upload = new UploadGUI();
-            private MemoryGUI _memory = new MemoryGUI();
-            private SelfPkgsGUI _selfpkgs = new SelfPkgsGUI();
             private SystemGUI _sys = new SystemGUI();
             public void OnGUI(Rect position)
             {
@@ -1290,6 +1091,7 @@ namespace IFramework
                         GUILayout.Label("preview");
                     }
                     GUILayout.FlexibleSpace();
+
                     if (GUILayout.Button(Contents.newest, GUILayout.Width(Contents.gap * 6)))
                     {
                         PkgKitTool.DownLoadPkg(name, p.versions.Last().version);
@@ -1299,18 +1101,25 @@ namespace IFramework
                         PkgKitTool.DownLoadPkg(name, p.versions[index].version);
                     }
                     index = EditorGUILayout.Popup(index, versions, GUILayout.Width(Contents.gap * 6));
-                    using (new EditorGUI.DisabledScope(!Directory.Exists(version.assetPath)))
+                    if (Directory.Exists(version.assetPath))
                     {
                         if (GUILayout.Button(Contents.remove, GUILayout.Width(Contents.gap * 6)))
                         {
-                            PkgKitTool.RemoveLocalPkg(p.name,version.assetPath);
+                            PkgKitTool.RemoveLocalPkg(p.name, version.assetPath);
+                        }
+                    }
+                    if (PkgKitTool.login && PkgKitTool.userjson.name == p.author)
+                    {
+                        if (GUILayout.Button(Contents.delete, GUILayout.Width(Contents.gap * 6)))
+                        {
+                            PkgKitTool.DeletePkg(p.name, version.version);
                         }
                     }
                     GUILayout.EndHorizontal();
                 }
 
                 GUILayout.Label("Author: " + p.author, Styles.boldLabel);
-                GUILayout.Label("Local Version: " +PkgKitTool.GetLocalVersion(p.name));
+                GUILayout.Label("Local Version: " + PkgKitTool.GetLocalVersion(p.name));
 
                 GUILayout.Space(Contents.gap / 2);
                 GUILayout.Label("Dependences", Styles.boldLabel);
@@ -1325,7 +1134,7 @@ namespace IFramework
                 GUILayout.EndArea();
 
                 Event e = Event.current;
-                if (position.Contains(e.mousePosition) && e.button==1)
+                if (position.Contains(e.mousePosition) && e.button == 1)
                 {
                     GenericMenu menu = new GenericMenu();
                     menu.AddItem(new GUIContent("Copy/Name"), false, () => { GUIUtility.systemCopyBuffer = p.name; });
@@ -1333,10 +1142,10 @@ namespace IFramework
                     menu.AddItem(new GUIContent("Copy/AssetPath"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].assetPath; });
                     menu.AddItem(new GUIContent("Copy/Dependences"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].dependences; });
                     menu.AddItem(new GUIContent("Copy/Describtion"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].describtion; });
-                    menu.AddItem(new GUIContent("Copy/All"), false, () => { GUIUtility.systemCopyBuffer = JsonUtility.ToJson(p,true); });
+                    menu.AddItem(new GUIContent("Copy/All"), false, () => { GUIUtility.systemCopyBuffer = JsonUtility.ToJson(p, true); });
 
                     menu.ShowAsContext();
-                    if (e.type!= EventType.Layout && e.type!= EventType.Repaint)
+                    if (e.type != EventType.Layout && e.type != EventType.Repaint)
                     {
                         e.Use();
                     }
@@ -1352,7 +1161,7 @@ namespace IFramework
             }
         }
 
-        class WindowCollection 
+        class WindowCollection
         {
             private class SelectTree : TreeView
             {
@@ -1416,12 +1225,13 @@ namespace IFramework
                     else
                         GUI.Label(args.rowRect, window.searchName);
                 }
-               
+
             }
 
             public static Texture tx = EditorGUIUtility.IconContent("BuildSettings.Editor.Small").image;
             private SelectTree _tree;
-            public WindowCollection() {
+            public WindowCollection()
+            {
                 _tree = new SelectTree(new TreeViewState());
             }
 
@@ -1442,11 +1252,15 @@ namespace IFramework
             public const float lineHeight = 20;
             public const float gap = 10;
 
+            public static GUIContent accop = new GUIContent("Account Operation");
+
             public static GUIContent go = new GUIContent("Go");
             public static GUIContent logout = new GUIContent("Logout");
             public static GUIContent select = new GUIContent("Select");
             public static GUIContent remove = new GUIContent("Remove");
             public static GUIContent install = new GUIContent("Install");
+            public static GUIContent delete = new GUIContent("Delete");
+
             public static GUIContent newest = new GUIContent("Newset");
             public static GUIContent refresh = EditorGUIUtility.IconContent("TreeEditor.Refresh");
         }
@@ -1475,7 +1289,7 @@ namespace IFramework
                 public string token;
             }
             public List<PkgKitTool.Constant.PackageInfosModel> pkgInfos = new List<PkgKitTool.Constant.PackageInfosModel>();
-            public UserJson userJson=new UserJson();
+            public UserJson userJson = new UserJson();
             public bool login
             {
                 get
@@ -1508,7 +1322,7 @@ namespace IFramework
     }
     partial class RootWindow
     {
-        [MenuItem("IFramework/RootWindow",priority =-1000)]
+        [MenuItem("IFramework/RootWindow", priority = -1000)]
         static void ShowWindow()
         {
             GetWindow<RootWindow>();
@@ -1516,7 +1330,7 @@ namespace IFramework
         private void OnEnable()
         {
             _window = this;
-            __windowType= EditorTools.Prefs.GetObject<RootWindow, WindowType>("__windowType");
+            __windowType = EditorTools.Prefs.GetObject<RootWindow, WindowType>("__windowType");
             if (_windowInfo == null)
             {
                 _windowInfo = new PkgkitInfo();
@@ -1533,13 +1347,13 @@ namespace IFramework
                 .Space(20)
                 .Label(new GUIContent(PkgKitTool.userjson.name), 100, () => { return PkgKitTool.login; })
                 .FlexibleSpace()
-                .SearchField((value)=> { search = value; },search,200)
+                .SearchField((value) => { search = value; }, search, 200)
                 ;
         }
-        private string search="";
+        private string search = "";
         private void OnDisable()
         {
-            EditorTools.Prefs.SetObject<RootWindow,WindowType>("__windowType",  __windowType);
+            EditorTools.Prefs.SetObject<RootWindow, WindowType>("__windowType", __windowType);
         }
         private void OnGUI()
         {
