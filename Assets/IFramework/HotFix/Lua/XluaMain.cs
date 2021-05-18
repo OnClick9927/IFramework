@@ -12,7 +12,6 @@ namespace IFramework.Hotfix.Lua
 	{
 		public XluaMain()
 		{
-			XLuaEnv.AddLoader(new AddressableLoader());
 			XLuaEnv.onDispose += LuaDispose;
 			XLuaEnv.DoString("require 'Main'" +
 			                 " Awake()");

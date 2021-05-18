@@ -12,12 +12,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using XLua; 
+using XLua;
 
 namespace IFramework.Hotfix.Lua
-{  
-	public static class LuaConfigs
-	{
+{
+    public static class LuaConfigs
+    {
         class LuaFileInitializer : EditorEnv.FileInitializer
         {
             protected override List<string> directorys
@@ -48,7 +48,7 @@ namespace IFramework.Hotfix.Lua
                 {
                     if (index == 0)
                     {
-                        File.WriteAllText(path, "Log.L('Start Fix C# ')\n"); 
+                        File.WriteAllText(path, "Log.L('Start Fix C# ')\n");
                     }
                     if (index == 1)
                     {
@@ -65,6 +65,8 @@ namespace IFramework.Hotfix.Lua
        {
           typeof(IFramework.Tweens.TweenEx),
           typeof(IFramework.Hotfix.Lua.UnityEngineObjectEx),
+                    typeof(System.Action<bool>),
+
        };
         /***************如果你全lua编程，可以参考这份自动化配置***************/
         //--------------begin 纯lua编程配置参考----------------------------
@@ -120,7 +122,7 @@ namespace IFramework.Hotfix.Lua
             return false;
         }
 
-       // [LuaCallCSharp]
+        // [LuaCallCSharp]
         public static IEnumerable<Type> LuaCallCSharp
         {
             get
@@ -150,7 +152,7 @@ namespace IFramework.Hotfix.Lua
         }
 
         //自动把LuaCallCSharp涉及到的delegate加到CSharpCallLua列表，后续可以直接用lua函数做callback
-      //  [CSharpCallLua]
+        //  [CSharpCallLua]
         public static List<Type> CSharpCallLua
         {
             get
@@ -190,7 +192,7 @@ namespace IFramework.Hotfix.Lua
 
 
         /***************热补丁可以参考这份自动化配置***************/
-       // [Hotfix]
+        // [Hotfix]
         static IEnumerable<Type> HotfixInject
         {
             get
@@ -243,7 +245,7 @@ namespace IFramework.Hotfix.Lua
                     if (typeHasEditorRef(typeArg))
                     {
                         return true;
-                    } 
+                    }
                 }
             }
             return false;

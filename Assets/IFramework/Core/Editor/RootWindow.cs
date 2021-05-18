@@ -1345,7 +1345,7 @@ namespace IFramework
                 //    PkgKitTool.FreshWebPackages();
                 //}, 20)
                 .Space(20)
-                .Label(new GUIContent(PkgKitTool.userjson.name), 100, () => { return PkgKitTool.login; })
+                //.Label(new GUIContent(PkgKitTool.userjson.name), 100, () => { return PkgKitTool.login; })
                 .FlexibleSpace()
                 .SearchField((value) => { search = value; }, search, 200)
                 ;

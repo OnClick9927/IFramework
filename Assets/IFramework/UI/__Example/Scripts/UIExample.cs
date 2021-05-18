@@ -7,12 +7,9 @@
  *History:        2020-02-28--
 *********************************************************************************/
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using IFramework;
 using IFramework.UI;
-using UnityEngine.AddressableAssets;
 
 namespace IFramework_Demo
 {

@@ -16,7 +16,7 @@ using System;
 
 namespace IFramework.Hotfix
 {
-    public class LuaGame : Game
+    public class LuaGame : AAGame
     {
         public class UnityModules
         {
@@ -29,16 +29,21 @@ namespace IFramework.Hotfix
         {
            
         }
-
         public override void Startup()
         {
-            UpdateAssets();
-            new XluaMain();
+            onUpdateCompelete += assets.PrepareDefault;
+            onPrepareCompelete += () => {
+                if (assets.currentPrepare==Assets.defaultKey)
+                {
+                    StartLua();
+                }
+            };
+            assets.UpdateAssets();
         }
-
-        private void UpdateAssets()
+        private void StartLua()
         {
-           
+            XLuaEnv.AddLoader(new AddressableLoader(assets));
+            new XluaMain();
         }
     }
 }
