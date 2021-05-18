@@ -8,7 +8,7 @@
 *********************************************************************************/
 using System;
 using UnityEngine;
-namespace IFramework.Hotfix
+namespace IFramework.AAEX
 {
     [RequireComponent(typeof(Assets))]
     public class AAGame : Game

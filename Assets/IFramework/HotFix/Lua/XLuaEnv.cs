@@ -11,6 +11,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using IFramework.Singleton;
+using IFramework.AAEX;
 
 namespace IFramework.Hotfix.Lua
 {

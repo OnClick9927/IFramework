@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 using System;
 using Object = UnityEngine.Object;
 
-namespace IFramework.Hotfix
+namespace IFramework.AAEX
 {
     public class Assets : MonoBehaviour
     {

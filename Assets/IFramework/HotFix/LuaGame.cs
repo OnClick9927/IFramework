@@ -8,11 +8,8 @@
 *********************************************************************************/
 using IFramework.Language;
 using IFramework.Hotfix.Lua;
-using IFramework.Modules;
-using IFramework.Modules.Coroutine;
-using IFramework.Modules.Message;
 using IFramework.UI;
-using System;
+using IFramework.AAEX;
 
 namespace IFramework.Hotfix
 {
