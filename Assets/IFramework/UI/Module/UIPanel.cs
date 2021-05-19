@@ -14,6 +14,13 @@ namespace IFramework.UI
     /// </summary>
     public abstract class UIPanel : MonoBehaviour
     {
-     
+        /// <summary>
+        /// 该ui所属层级
+        /// </summary>
+        public virtual UILayer layer { get { return UILayer.Common; } }
+        /// <summary>
+        /// 是否放入堆栈
+        /// </summary>
+        public virtual bool addToStack { get { return true; } }
     }
 }

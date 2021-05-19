@@ -146,16 +146,15 @@ namespace IFramework.UI
         /// </summary>
         /// <param name="type"></param>
         /// <param name="name"></param>
-        /// <param name="layer"></param>
         /// <returns></returns>
-        public UIPanel Get(Type type, string name, UILayer layer = UILayer.Common)
+        public UIPanel Get(Type type, string name)
         {
             //if (UICache.Count > 0) ClearCache(arg);
             if (current != null && current.name == name && current.GetType() == type)
                 return current;
             var panel = _groups.FindPanel(name);
             if (panel == null)
-                panel = Load(type, name, layer);
+                panel = Load(type, name);
             Push(panel);
             return panel;
         }
@@ -164,11 +163,10 @@ namespace IFramework.UI
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="name"></param>
-        /// <param name="layer"></param>
         /// <returns></returns>
-        public T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
+        public T Get<T>(string name )where T : UIPanel
         {
-            return (T)Get(typeof(T), name, layer);
+            return (T)Get(typeof(T), name);
         }
         /// <summary>
         /// 前进
@@ -234,11 +232,10 @@ namespace IFramework.UI
         /// 放置ui 到对应的层级
         /// </summary>
         /// <param name="panel"></param>
-        /// <param name="layer"></param>
-        public void PutPanel(UIPanel panel,UILayer layer)
+        public void PutPanel(UIPanel panel)
         {
             RectTransform tmp = null;
-            switch (layer)
+            switch (panel.layer)
             {
                 case UILayer.BelowBackground: tmp = belowBackground; break;
                 case UILayer.Background: tmp = background; break;
@@ -289,9 +286,8 @@ namespace IFramework.UI
         /// </summary>
         /// <param name="type"></param>
         /// <param name="name"></param>
-        /// <param name="layer"></param>
         /// <returns></returns>
-        public UIPanel Load(Type type, string name, UILayer layer = UILayer.Common)
+        public UIPanel Load(Type type, string name)
         {
             if (_groups == null)
                 throw new Exception("Please Set ModuleType First");
@@ -307,13 +303,13 @@ namespace IFramework.UI
                 if (result == null) continue;
                 ui = result;
                 ui = GameObject.Instantiate(ui);
-                PutPanel(ui, layer);
+                PutPanel(ui);
                 ui.name = name;
                 ui.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
                 _groups.Subscribe(ui);
                 return ui;
             }
-            Log.E(string.Format("NO ui Type: {0}    Layer: {1}  Name: {2}", type, layer, name));
+            Log.E(string.Format("NO ui Type: {0}    Layer: {1}  Name: {2}", type, ui.layer, name));
             return ui;
         }
         /// <summary>
@@ -321,11 +317,10 @@ namespace IFramework.UI
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="name"></param>
-        /// <param name="layer"></param>
         /// <returns></returns>
-        public T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel
+        public T Load<T>(string name) where T : UIPanel
         {
-            return (T)Load(typeof(T), name, layer);
+            return (T)Load(typeof(T), name);
         }
         /// <summary>
         /// 查找 ui
@@ -342,15 +337,18 @@ namespace IFramework.UI
         /// <param name="ui"></param>
         public void Push(UIPanel ui)
         {
-            UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
-            arg.code = UIEventArgs.Code.Push;
-            if (stackCount > 0)
-                arg.pressPanel = current;
-            arg.curPanel = ui;
-            stack.Push(ui);
-            InvokeViewState(arg);
-            arg.Recyle();
-            if (memory.Count > 0) ClearMemory();
+            if (ui.addToStack)
+            {
+                UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
+                arg.code = UIEventArgs.Code.Push;
+                if (stackCount > 0)
+                    arg.pressPanel = current;
+                arg.curPanel = ui;
+                stack.Push(ui);
+                InvokeViewState(arg);
+                arg.Recyle();
+                if (memory.Count > 0) ClearMemory();
+            }
         }
         private void InvokeViewState(UIEventArgs arg)
         {

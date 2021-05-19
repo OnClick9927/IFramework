@@ -30,16 +30,16 @@ namespace IFramework.UI
         bool ExistInMemory(UIPanel panel);
         bool ExistInStack(UIPanel panel);
         UIPanel FindPanel(string name);
-        UIPanel Get(Type type, string name, UILayer layer = UILayer.Common);
-        T Get<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel;
+        UIPanel Get(Type type, string name);
+        T Get<T>(string name) where T : UIPanel;
         void GoBack();
         void GoForWard();
-        UIPanel Load(Type type, string name, UILayer layer = UILayer.Common);
-        T Load<T>(string name, UILayer layer = UILayer.Common) where T : UIPanel;
+        UIPanel Load(Type type, string name);
+        T Load<T>(string name) where T : UIPanel;
         UIPanel MemoryPeek();
         void Push(UIPanel ui);
         void PutCamera(Camera camera);
-        void PutPanel(UIPanel panel,UILayer layer);
+        void PutPanel(UIPanel panel);
         void SetCanvas(Canvas canvas);
         void SetGroups(IGroups groups);
     }
