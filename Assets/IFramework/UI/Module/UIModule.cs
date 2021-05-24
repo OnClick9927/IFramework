@@ -228,30 +228,8 @@ namespace IFramework.UI
         {
             camera.transform.SetParent(this.camera);
         }
-        /// <summary>
-        /// 放置ui 到对应的层级
-        /// </summary>
-        /// <param name="panel"></param>
-        public void PutPanel(UIPanel panel)
-        {
-            RectTransform tmp = null;
-            switch (panel.layer)
-            {
-                case UILayer.BelowBackground: tmp = belowBackground; break;
-                case UILayer.Background: tmp = background; break;
-                case UILayer.BelowAnimation: tmp = belowAnimation; break;
-                case UILayer.Common: tmp = common; break;
-                case UILayer.AboveAnimation: tmp = aboveAnimation; break;
-                case UILayer.Pop: tmp = pop; break;
-                case UILayer.Guide: tmp = guide; break;
-                case UILayer.Toast: tmp = toast; break;
-                case UILayer.Top: tmp = top; break;
-                case UILayer.AboveTop: tmp = aboveTop; break;
-                default: break;
-            }
-            panel.transform.SetParent(tmp);
-            panel.transform.LocalIdentity();
-        }
+
+
         /// <summary>
         /// stack 中是否存在 ui
         /// </summary>
@@ -281,6 +259,24 @@ namespace IFramework.UI
             return memory.Peek();
         }
 
+        private RectTransform GetLayerParent(UILayer layer)
+        {
+            switch (layer)
+            {
+                case UILayer.BelowBackground: return belowBackground;
+                case UILayer.Background: return background;
+                case UILayer.BelowAnimation: return belowAnimation;
+                case UILayer.Common: return common;
+                case UILayer.AboveAnimation: return aboveAnimation;
+                case UILayer.Pop: return pop;
+                case UILayer.Guide: return guide;
+                case UILayer.Toast: return toast;
+                case UILayer.Top: return top;
+                case UILayer.AboveTop: return aboveTop;
+                default: return null;
+            }
+        }
+
         /// <summary>
         /// 加载 ui 
         /// </summary>
@@ -302,10 +298,8 @@ namespace IFramework.UI
                 var result = _loaders[i].Load(type, name);
                 if (result == null) continue;
                 ui = result;
-                ui = GameObject.Instantiate(ui);
-                PutPanel(ui);
+                ui = GameObject.Instantiate(ui,GetLayerParent(ui.layer));
                 ui.name = name;
-                ui.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
                 _groups.Subscribe(ui);
                 return ui;
             }

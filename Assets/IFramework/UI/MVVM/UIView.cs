@@ -27,11 +27,23 @@ namespace IFramework.UI
 
         protected virtual void Show()
         {
-            panel.gameObject.SetActive(true);
+            panel.Show();
         }
         protected virtual void Hide()
         {
-            panel.gameObject.SetActive(false);
+            panel.Hide();
+        }
+        public virtual void Pause()
+        {
+            panel.Pause(); 
+        }
+        public virtual void UnPause()
+        {
+            panel.UnPause();
+        }
+        public virtual void Close()
+        {
+            panel.Close();
         }
 
         protected UIView Bind(Text text, Func<string> getter)

@@ -39,7 +39,6 @@ namespace IFramework.UI
         UIPanel MemoryPeek();
         void Push(UIPanel ui);
         void PutCamera(Camera camera);
-        void PutPanel(UIPanel panel);
         void SetCanvas(Canvas canvas);
         void SetGroups(IGroups groups);
     }

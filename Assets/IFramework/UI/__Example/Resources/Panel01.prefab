@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1226420174813762034}
   - component: {fileID: 982923849605115219}
   - component: {fileID: 3004219555158855425}
+  - component: {fileID: 2254916533433485463}
   m_Layer: 5
   m_Name: Panel01
   m_TagString: Untagged
@@ -89,16 +90,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532b92854359d1b41913a3c4d70891d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScriptName: Panel01
-  CreatePath: Assets/Examples/Runtime/UIExample/Scripts
-  scriptMarks:
-  - {fileID: 3566770222047184259}
-  - {fileID: 7903383694942799936}
-  - {fileID: 1297542326386949492}
+  scriptName: Panel01
+  createDirectory: Assets
+  marks: []
   description: 
-  prefabDirectory: Assets/Examples/Runtime/UIExample/Resources
-  prefabName: Panel01
-  isCreatePrefab: 1
+  searchIndex: 0
 --- !u!114 &3004219555158855425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +110,18 @@ MonoBehaviour:
   Count_Text: {fileID: 5958649609537049393}
   BTn_ADD: {fileID: 6500736745656617639}
   BTn_SUB: {fileID: 1457976831989682755}
+--- !u!225 &2254916533433485463
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239496484564857732}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1832703183356093918
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +216,7 @@ MonoBehaviour:
   fieldName: Count_Text
   fieldType: UnityEngine.UI.Text
   description: 
-  SelectTypeIndex: 2
+  index: 0
 --- !u!1 &2214458459100235609
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,7 +348,7 @@ MonoBehaviour:
   fieldName: BTn_SUB
   fieldType: UnityEngine.UI.Button
   description: 
-  SelectTypeIndex: 3
+  index: 0
 --- !u!1 &5330431505522150755
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,7 +480,7 @@ MonoBehaviour:
   fieldName: BTn_ADD
   fieldType: UnityEngine.UI.Button
   description: 
-  SelectTypeIndex: 3
+  index: 0
 --- !u!1 &5698057986219638439
 GameObject:
   m_ObjectHideFlags: 0

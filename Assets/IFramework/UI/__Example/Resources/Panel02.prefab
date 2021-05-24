@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2058385605090478552}
   - component: {fileID: 3816897239163938327}
   - component: {fileID: 7986514884775601202}
+  - component: {fileID: 6160614229276186028}
   m_Layer: 5
   m_Name: Panel02
   m_TagString: Untagged
@@ -86,13 +87,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532b92854359d1b41913a3c4d70891d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScriptName: Panel02
-  CreatePath: Assets/Examples/Runtime/UIExample/Scripts
-  scriptMarks: []
+  scriptName: Panel02
+  createDirectory: Assets
+  marks: []
   description: 
-  prefabDirectory: Assets/Examples/Runtime/UIExample/Resources
-  prefabName: Panel02
-  isCreatePrefab: 1
+  searchIndex: 0
 --- !u!114 &7986514884775601202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,3 +104,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9913b6c05992d6e429ed69ba8631311f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &6160614229276186028
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3234756221919455975}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

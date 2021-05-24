@@ -37,7 +37,7 @@ namespace IFramework_Demo
 
         public override void Init()
         {
-            module = modules.CreateModule<UIModule>();
+            module = modules.CreateModule<UIModule>("ui example");
         }
 
         public override void Startup()
