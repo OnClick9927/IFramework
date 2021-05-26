@@ -27,7 +27,7 @@ namespace IFramework.Language
         [CustomPropertyDrawer(typeof(LanguageKeyAttribute))]
         class LanguageKeyDrawer : PropertyDrawer
         {
-            private LanGroup _LanGroup { get { return AssetDatabase.LoadAssetAtPath<LanGroup>(EditorEnv.frameworkPath.CombinePath(LanGroup.assetPath)); } }
+            private LanKeys _asset { get { return AssetDatabase.LoadAssetAtPath<LanKeys>(EditorEnv.frameworkPath.CombinePath(LanKeys.assetPath)); } }
             private int _hashID;
             public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
             {
@@ -44,15 +44,15 @@ namespace IFramework.Language
                     if (DropdownButton(ctrlId, position, new GUIContent(property.stringValue)))
                     {
                         int index = -1;
-                        for (int i = 0; i < _LanGroup.keys.Count; i++)
+                        for (int i = 0; i < _asset.keys.Count; i++)
                         {
-                            if (_LanGroup.keys[i] == property.stringValue)
+                            if (_asset.keys[i] == property.stringValue)
                             {
                                 index = i;
                                 break;
                             }
                         }
-                        SearchablePopup.Show(position, _LanGroup.keys.ToArray(), index, (i, str) =>
+                        SearchablePopup.Show(position, _asset.keys.ToArray(), index, (i, str) =>
                         {
                             property.stringValue = str;
                             property.serializedObject.ApplyModifiedProperties();
@@ -175,14 +175,19 @@ namespace IFramework.Language
     partial class LanWindow : EditorWindow
     {
         private LanGroup _group;
+        private LanKeys _keyGroup;
         private List<LanPair> _pairs { get { return _group.pairs; } }
-        private List<string> _keys { get { return _group.keys; } }
+        private List<string> _keys { get { return _keyGroup.keys; } }
 
-        private string stoPath;
+        private string _groupPath;
+        private string _keyPath;
+
         private void OnEnable()
         {
             LanwindowItem.window = this;
-            stoPath = EditorEnv.frameworkPath.CombinePath(LanGroup.assetPath);
+            _groupPath = EditorEnv.frameworkPath.CombinePath(LanGroup.assetPath);
+            _keyPath = EditorEnv.frameworkPath.CombinePath(LanKeys.assetPath);
+
             LoadLanGroup();
             this.titleContent = new GUIContent("Lan", EditorGUIUtility.IconContent("d_WelcomeScreen.AssetStoreLogo").image);
             group = new GroupView();
@@ -190,10 +195,14 @@ namespace IFramework.Language
         }
         private void LoadLanGroup()
         {
-            if (File.Exists(stoPath))
-                _group = EditorTools.ScriptableObjectTool.Load<LanGroup>(stoPath);
+            if (File.Exists(_groupPath))
+                _group = EditorTools.ScriptableObjectTool.Load<LanGroup>(_groupPath);
             else
-                _group = EditorTools.ScriptableObjectTool.Create<LanGroup>(stoPath);
+                _group = EditorTools.ScriptableObjectTool.Create<LanGroup>(_groupPath);
+            if (File.Exists(_keyPath))
+                _keyGroup = EditorTools.ScriptableObjectTool.Load<LanKeys>(_keyPath);
+            else
+                _keyGroup = EditorTools.ScriptableObjectTool.Create<LanKeys>(_keyPath);
         }
         private void UpdateLanGroup()
         {
@@ -283,6 +292,11 @@ namespace IFramework.Language
             if (string.IsNullOrEmpty(pair.value.Trim()))
             {
                 ShowNotification(new GUIContent("Value Can't be Null"));
+                return;
+            }
+            if (_keys.Contains(pair.key))
+            {
+                ShowNotification(new GUIContent("key Can't be find"));
                 return;
             }
             LanPair tmpPair = new LanPair()
@@ -696,7 +710,10 @@ namespace IFramework.Language
                                 if (GUILayout.Button(string.Empty, Styles.CloseBtn, GUILayout.Width(smallBtnSize), GUILayout.Height(smallBtnSize)))
                                 {
                                     if (EditorUtility.DisplayDialog("Make sure", "You Will Delete All Pairs with this key", "ok", "no"))
+                                    {
+                                        tmpLanPair = new LanPair();
                                         window.DeleteLanKey(key);
+                                    }
                                 }
 
                                 GUILayout.EndHorizontal();

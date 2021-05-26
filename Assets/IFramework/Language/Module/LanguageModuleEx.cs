@@ -16,6 +16,11 @@ namespace IFramework.Language
 {
     public static class LanguageModuleEx
     {
+        public static void Subscribe(this ILanguageObserver ob)
+        {
+            ob.module.Subscribe(ob);
+        }
+
         public static void LoadCsv(this ILanguageModule module, string path, bool rewrite = true)
         {
             var dw = DataTableTool.CreateReader(new StreamReader(path, Encoding.UTF8), new DataRow(), new DataExplainer());

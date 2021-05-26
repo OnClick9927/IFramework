@@ -17,7 +17,6 @@ namespace IFramework.Language
         public const string assetPath = "Language/Editor/LanGroup.asset";
 #endif
         public List<LanPair> pairs = new List<LanPair>();
-        public List<string> keys = new List<string>();
 
         public void DeletePairsByLan(SystemLanguage lan)
         {

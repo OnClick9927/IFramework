@@ -12,8 +12,10 @@ namespace IFramework.Language
 {
     public interface ILanguageObserver
     {
+        ILanguageModule module { get; }
         string languageKey { get; }
         SystemLanguage fallbackLanguage { get; set; }
         void Listen(SystemLanguage languageType, string value);
+        void SetValue(ILanguageModule module, string key, SystemLanguage fallback, bool autoStart = true);
     }
 }

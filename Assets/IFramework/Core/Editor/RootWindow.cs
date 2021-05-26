@@ -689,9 +689,13 @@ namespace IFramework
             }
             public static void RemoveLocalPkg(string name, string assetPath)
             {
-                Directory.Delete(assetPath, true);
-                AssetDatabase.Refresh();
-                UpdateLocalVersion(name, "");
+                if (EditorUtility.DisplayDialog("Make Sure", string.Format("Confirm to delete the pkg in project \nName:   {0}\nAssetPath:   {1}", name, assetPath), "Yes", "Cancel"))
+                {
+                    Directory.Delete(assetPath, true);
+                    AssetDatabase.Refresh();
+                    UpdateLocalVersion(name, "");
+                }
+
             }
 
         }
@@ -1173,6 +1177,7 @@ namespace IFramework
                 private List<Index> _show;
                 public SelectTree(TreeViewState state) : base(state)
                 {
+                    this.rowHeight = 22;
                     EditorWindowTool.windows.FindAll((w) => { return w.searchName.ToLower().Contains(_window.search); }).ToArray();
                     _show = new List<Index>();
                     EditorWindowTool.windows

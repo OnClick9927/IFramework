@@ -3,11 +3,9 @@ using UnityEngine;
 
 namespace IFramework.Language
 {
-    public interface IDelegateLanguageObserver:IDisposable
+    public interface IDelegateLanguageObserver:ILanguageObserver,IDisposable
     {
         IDelegateLanguageObserver Listen(Action<string> listen);
-        void SetValue(ILanguageModule moudle, string key, SystemLanguage fallback, bool autoStart);
-
 
         void Pause();
         void Start();
