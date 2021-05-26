@@ -11,7 +11,7 @@ namespace IFramework.UI
     /// <summary>
     /// ui 状态
     /// </summary>
-    public enum ViewEventTpe
+    public enum ViewEventType
     {
         None, OnLoad, OnTop, OnPress, OnPop, OnClear
     }

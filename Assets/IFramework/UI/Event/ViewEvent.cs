@@ -11,11 +11,11 @@ namespace IFramework.UI
     /// <summary>
     /// ui模块事件
     /// </summary>
-    public struct ViewEvent: IUIEvent<ViewEventTpe, ViewEvent>
+    public struct ViewEvent: IUIEvent<ViewEventType, ViewEvent>
     {
-        private ViewEventTpe _type;
-        public ViewEventTpe type { get { return _type; } }
-        public ViewEvent SetType(ViewEventTpe type)
+        private ViewEventType _type;
+        public ViewEventType type { get { return _type; } }
+        public ViewEvent SetType(ViewEventType type)
         {
             _type = type;
             return this;

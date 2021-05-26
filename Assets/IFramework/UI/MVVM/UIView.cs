@@ -21,9 +21,9 @@ namespace IFramework.UI
     {
 
         public UIPanel panel;
-        private ViewEventTpe _lastState= ViewEventTpe.None;
+        private ViewEventType _lastState= ViewEventType.None;
 
-        public ViewEventTpe lastState { get { return _lastState; } }
+        public ViewEventType lastState { get { return _lastState; } }
 
         protected virtual void Show()
         {
@@ -128,27 +128,27 @@ namespace IFramework.UI
 
         void IViewStateEventHandler.OnLoad()
         {
-            _lastState = ViewEventTpe.OnLoad;
+            _lastState = ViewEventType.OnLoad;
             OnLoad();
         }
         void IViewStateEventHandler.OnTop(UIEventArgs arg)
         {
-            _lastState = ViewEventTpe.OnTop;
+            _lastState = ViewEventType.OnTop;
             OnTop(arg);
         }
         void IViewStateEventHandler.OnPress(UIEventArgs arg)
         {
-            _lastState = ViewEventTpe.OnPress;
+            _lastState = ViewEventType.OnPress;
             OnPress(arg);
         }
         void IViewStateEventHandler.OnPop(UIEventArgs arg)
         {
-            _lastState = ViewEventTpe.OnPop;
+            _lastState = ViewEventType.OnPop;
             OnPop(arg);
         }
         void IViewStateEventHandler.OnClear()
         {
-            _lastState = ViewEventTpe.OnClear;
+            _lastState = ViewEventType.OnClear;
             OnClear();
         }
     }
