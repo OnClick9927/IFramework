@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//ui 模块存储示意图                                 push/get
+//ui 模块存储示意图                                 push/get( if memory exist panels ,the memory will clear auto )
 //                                                  |
 //    |--------------------------------------       |                     --------------------------------------|
 //    |    stack                               <----|                                                    memory |
@@ -71,9 +71,9 @@ namespace IFramework.UI
 
     }
     /// <summary>
-    /// 常用
+    /// 私有方法
     /// </summary>
-    partial class UIModule 
+    partial class UIModule
     {
         private RectTransform CreateLayer(string name)
         {
@@ -100,6 +100,34 @@ namespace IFramework.UI
             aboveTop = CreateLayer("aboveTop");
             camera = CreateLayer("UICamera");
         }
+        private RectTransform GetLayerParent(UILayer layer)
+        {
+            switch (layer)
+            {
+                case UILayer.BelowBackground: return belowBackground;
+                case UILayer.Background: return background;
+                case UILayer.BelowAnimation: return belowAnimation;
+                case UILayer.Common: return common;
+                case UILayer.AboveAnimation: return aboveAnimation;
+                case UILayer.Pop: return pop;
+                case UILayer.Guide: return guide;
+                case UILayer.Toast: return toast;
+                case UILayer.Top: return top;
+                case UILayer.AboveTop: return aboveTop;
+                default: return null;
+            }
+        }
+        private void InvokeViewState(UIEventArgs arg)
+        {
+            _groups.InvokeViewState(arg);
+        }
+
+    }
+    /// <summary>
+    /// 常用
+    /// </summary>
+    partial class UIModule 
+    {
         /// <summary>
         /// 创建 画布
         /// </summary>
@@ -171,11 +199,11 @@ namespace IFramework.UI
         /// <summary>
         /// 前进
         /// </summary>
-        public void GoForWard()
+        public bool GoForWard()
         {
+            if (memoryCount <= 0) return false;
             UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
             arg.code = UIEventArgs.Code.GoForward;
-            if (memoryCount <= 0) return;
             if (stackCount > 0)
                 arg.pressPanel = current;
             var ui = memory.Pop();
@@ -183,15 +211,16 @@ namespace IFramework.UI
             stack.Push(ui);
             InvokeViewState(arg);
             arg.Recyle();
+            return true;
         }
         /// <summary>
         /// 后退
         /// </summary>
-        public void GoBack()
+        public bool GoBack()
         {
+            if (stackCount <= 0) return false;
             UIEventArgs arg = UIEventArgs.Allocate<UIEventArgs>(this.container.env.envType);
             arg.code = UIEventArgs.Code.GoBack;
-            if (stackCount <= 0) return;
             var ui = stack.Pop();
             arg.popPanel = ui;
             memory.Push(ui);
@@ -199,6 +228,7 @@ namespace IFramework.UI
                 arg.curPanel = current;
             InvokeViewState(arg);
             arg.Recyle();
+            return true;
         }
         /// <summary>
         /// 清理缓存
@@ -259,23 +289,7 @@ namespace IFramework.UI
             return memory.Peek();
         }
 
-        private RectTransform GetLayerParent(UILayer layer)
-        {
-            switch (layer)
-            {
-                case UILayer.BelowBackground: return belowBackground;
-                case UILayer.Background: return background;
-                case UILayer.BelowAnimation: return belowAnimation;
-                case UILayer.Common: return common;
-                case UILayer.AboveAnimation: return aboveAnimation;
-                case UILayer.Pop: return pop;
-                case UILayer.Guide: return guide;
-                case UILayer.Toast: return toast;
-                case UILayer.Top: return top;
-                case UILayer.AboveTop: return aboveTop;
-                default: return null;
-            }
-        }
+
 
         /// <summary>
         /// 加载 ui 
@@ -300,6 +314,7 @@ namespace IFramework.UI
                 ui = result;
                 ui = GameObject.Instantiate(ui,GetLayerParent(ui.layer));
                 ui.name = name;
+                ui.module = this;
                 _groups.Subscribe(ui);
                 return ui;
             }
@@ -343,10 +358,6 @@ namespace IFramework.UI
                 arg.Recyle();
                 if (memory.Count > 0) ClearMemory();
             }
-        }
-        private void InvokeViewState(UIEventArgs arg)
-        {
-            _groups.InvokeViewState(arg);
         }
     }
     /// <summary>

@@ -15,6 +15,12 @@ namespace IFramework.UI
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIPanel : MonoBehaviour
     {
+
+        private CanvasGroup _group;
+        private RectTransform _rect;
+        public IUIModule module { get; set; }
+
+
         public RectTransform rectTransform
         {
             get
@@ -26,9 +32,6 @@ namespace IFramework.UI
                 return _rect;
             }
         }
-
-        private CanvasGroup _group;
-        private RectTransform _rect;
 
         public CanvasGroup group
         {
@@ -53,26 +56,47 @@ namespace IFramework.UI
 
 
 
-
+        /// <summary>
+        /// 使ui不响应事件
+        /// </summary>
         public void Pause()
         {
             group.interactable = false;
         }
+        /// <summary>
+        /// 使ui响应事件
+        /// </summary>
         public void UnPause()
         {
             group.interactable = true;
         }
+        /// <summary>
+        /// 把ui藏起来
+        /// </summary>
         public void Hide()
         {
             gameObject.SetActive(false);
         }
+        /// <summary>
+        /// 展示出ui
+        /// </summary>
         public void Show()
         {
             gameObject.SetActive(true);
         }
+        /// <summary>
+        /// 关闭/删除ui物体
+        /// </summary>
         public void Close()
         {
-            GameObject.Destroy(gameObject);
+            if (module.ExistInStack(this))
+            {
+                Log.E(string.Format("{0} still usefull ,you can't  close it", GetType()));
+            }
+            else
+            {
+                GameObject.Destroy(gameObject);
+            }
         }
     }
 }

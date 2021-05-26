@@ -32,8 +32,8 @@ namespace IFramework.UI
         UIPanel FindPanel(string name);
         UIPanel Get(Type type, string name);
         T Get<T>(string name) where T : UIPanel;
-        void GoBack();
-        void GoForWard();
+        bool GoBack();
+        bool GoForWard();
         UIPanel Load(Type type, string name);
         T Load<T>(string name) where T : UIPanel;
         UIPanel MemoryPeek();
