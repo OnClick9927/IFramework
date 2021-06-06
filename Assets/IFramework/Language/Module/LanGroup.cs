@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace IFramework.Language
 {
-    [CreateAssetMenu(fileName ="NewLanGoup",menuName = "IFramework/NewLanGoup")]
     public class LanGroup:ScriptableObject
 	{
 #if UNITY_EDITOR

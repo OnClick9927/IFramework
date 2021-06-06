@@ -482,7 +482,7 @@ namespace IFramework
 
             public static void OpenMemory()
             {
-                EditorTools.OpenFloder(Paths.rootPath);
+                EditorTools.OpenFolder(Paths.rootPath);
             }
 
             public static void ClearMemory()
@@ -704,14 +704,14 @@ namespace IFramework
         {
             enum UserOperation
             {
-                Account, Pkg_Upload, Other
+                ProjectConfig, WindowCollection, Account, Pkg_Upload,Other
             }
 
             class SystemGUI
             {
                 public void OnGUI()
                 {
-                    GUILayout.Label("System Information");
+                    GUILayout.BeginVertical("Box");
 
                     GUILayout.Label("操作系统：" + SystemInfo.operatingSystem);
                     GUILayout.Label("系统内存：" + SystemInfo.systemMemorySize + "MB");
@@ -727,20 +727,49 @@ namespace IFramework
                     GUILayout.Label("设备名称：" + SystemInfo.deviceName);
                     GUILayout.Label("设备类型：" + SystemInfo.deviceType);
                     GUILayout.Label("设备标识：" + SystemInfo.deviceUniqueIdentifier);
-                    GUILayout.Space(10);
-                    GUILayout.Label("Screen Information");
 
-                    GUILayout.BeginVertical("Box");
                     GUILayout.Label("DPI：" + Screen.dpi);
                     GUILayout.Label("分辨率：" + Screen.currentResolution.ToString());
                     GUILayout.EndVertical();
-                    if (GUILayout.Button("Open Memory Floder"))
+
+
+                    GUILayout.FlexibleSpace();
+                    GUILayout.BeginHorizontal();
                     {
-                        PkgKitTool.OpenMemory();
+                        if (GUILayout.Button("Open Memory "))
+                        {
+                            PkgKitTool.OpenMemory();
+                        }
+                        if (GUILayout.Button("Clear Memory "))
+                        {
+                            PkgKitTool.ClearMemory();
+                        }
+
+                        GUILayout.EndHorizontal();
                     }
-                    if (GUILayout.Button("Clear Memory Floder"))
+
+                    GUILayout.BeginHorizontal();
                     {
-                        PkgKitTool.ClearMemory();
+                        OpenFolderGUI("Open Doc", Application.persistentDataPath);
+                        OpenFolderGUI("Open Streaming", Application.streamingAssetsPath);
+                        OpenFolderGUI("Open DataPath", Application.dataPath);
+                        OpenFolderGUI("Open Temporary", Application.temporaryCachePath);
+
+                        GUILayout.EndHorizontal();
+                    }
+
+#if UNITY_2018_1_OR_NEWER
+
+                    OpenFolderGUI("Open Console", Application.consoleLogPath);
+
+#endif
+                    GUILayout.Space(10);
+                }
+                private void OpenFolderGUI(string name, string path)
+                {
+                    if (GUILayout.Button(name))
+                    {
+                        EditorTools.OpenFolder(path);
                     }
                 }
             }
@@ -884,7 +913,44 @@ namespace IFramework
 
                 }
             }
+            class ProjectConfigGUI
+            {
+                public void OnGUI()
+                {
+                    var Info = EditorTools.ProjectConfig.Info;
+                    GUILayout.Space(10);
+                    Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
+                    Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
 
+                    EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));
+                    Info.NameSpace = EditorGUILayout.TextArea(Info.NameSpace);
+                    GUILayout.Label("Description of Scripts");
+                    Info.Description = EditorGUILayout.TextArea(Info.Description, GUILayout.Height(100));
+                    GUILayout.Space(10);
+
+                    GUILayout.Label("LogSetting in Editor mode", GUIStyles.Get("IN Title"));
+                    Info.enable = EditorGUILayout.Toggle("Enable", Info.enable);
+                    GUI.enabled = Info.enable;
+                    Info.enable_L = EditorGUILayout.Toggle("Log Enable", Info.enable_L);
+                    Info.enable_W = EditorGUILayout.Toggle("Warning Enable", Info.enable_W);
+                    Info.enable_E = EditorGUILayout.Toggle("Error Enable", Info.enable_E);
+
+                    GUI.enabled = true;
+
+                    GUILayout.FlexibleSpace();
+                    GUILayout.BeginHorizontal();
+                    {
+                        GUILayout.FlexibleSpace();
+                        if (GUILayout.Button("Save"))
+                        {
+                            EditorTools.ProjectConfig.Save();
+                        }
+
+                        GUILayout.EndHorizontal();
+                    }
+
+                }
+            }
             class UploadGUI
             {
                 private PkgKitTool.UploadInfo _upload = new PkgKitTool.UploadInfo();
@@ -996,14 +1062,97 @@ namespace IFramework
                     GUILayout.EndScrollView();
                 }
             }
+            class WindowCollection
+            {
+                private class SelectTree : TreeView
+                {
+                    private struct Index
+                    {
+                        public int id;
+                        public EditorWindowTool.Entity value;
+                    }
+                    private List<Index> _show;
+                    public SelectTree(TreeViewState state) : base(state)
+                    {
+                        this.rowHeight = 22;
+                        EditorWindowTool.windows.FindAll((w) => { return w.searchName.ToLower().Contains(_window.search); }).ToArray();
+                        _show = new List<Index>();
+                        EditorWindowTool.windows
+                            .ForEach((entity) =>
+                            {
+                                _show.Add(new Index() { value = entity, id = EditorWindowTool.windows.IndexOf(entity) });
+                            });
+                        showAlternatingRowBackgrounds = true;
 
+                        Reload();
+                    }
+                    protected override void DoubleClickedItem(int id)
+                    {
+                        var w = EditorWindowTool.FindOrCreate(_show.Find((index) => { return index.id == id; }).value.searchName);
+                        if (w != null)
+                        {
+                            w.Focus();
+                        }
+                    }
+                    protected override TreeViewItem BuildRoot()
+                    {
+                        var root = new TreeViewItem { id = -1, depth = -1, displayName = "Root" };
+                        return root;
+                    }
+                    protected override void SearchChanged(string newSearch)
+                    {
+                        _show.Clear();
+                        EditorWindowTool.windows.FindAll((w) => { return w.searchName.ToLower().Contains(_window.search); })
+                            .ForEach((entity) =>
+                            {
+                                _show.Add(new Index() { value = entity, id = EditorWindowTool.windows.IndexOf(entity) });
 
+                            });
+                        Reload();
+                    }
+                    protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
+                    {
+                        List<TreeViewItem> list = new List<TreeViewItem>();
+                        for (int i = 0; i < _show.Count; i++)
+                        {
+                            list.Add(new TreeViewItem() { depth = 1, id = _show[i].id, displayName = _show[i].value.searchName });
+                        }
+                        return list;
+                    }
+                    protected override void RowGUI(RowGUIArgs args)
+                    {
+                        var window = EditorWindowTool.windows[args.item.id];
+                        if (!string.IsNullOrEmpty(window.type.Namespace) && window.type.Namespace.Contains("UnityEditor"))
+                            GUI.Label(args.rowRect, new GUIContent(window.searchName, tx));
+                        else
+                            GUI.Label(args.rowRect, window.searchName);
+                    }
+
+                }
+
+                public static Texture tx = EditorGUIUtility.IconContent("BuildSettings.Editor.Small").image;
+                private SelectTree _tree;
+                public WindowCollection()
+                {
+                    _tree = new SelectTree(new TreeViewState());
+                }
+
+                public void OnGUI(Rect position)
+                {
+                    position.position = Vector2.zero;
+                    position = position.Zoom(AnchorType.MiddleCenter, -5);
+                    _tree.searchString = _window.search;
+                    _tree.OnGUI(position);
+                }
+            }
+
+     
 
             public UserOptionWindow()
             {
                 _split.fistPan += menu.OnGUI;
                 _split.secondPan += ContentGUI;
-                menu.ReadTree(Enum.GetNames(typeof(UserOperation)).ToList());
+                menu.ReadTree(Enum.GetNames(typeof(UserOperation)).ToList(), false);
                 menu.onCurrentChange += (obj) => {
                     _userOperation = (UserOperation)Enum.Parse(typeof(UserOperation), obj);
                 };
@@ -1026,6 +1175,13 @@ namespace IFramework
                     case UserOperation.Other:
                         _sys.OnGUI();
                         break;
+                    case UserOperation.ProjectConfig:
+                        _pc.OnGUI();
+                        break;
+
+                    case UserOperation.WindowCollection:
+                        _wc.OnGUI(position);
+                        break;
                     default:
                         break;
                 }
@@ -1040,6 +1196,9 @@ namespace IFramework
             private LoginGUI _login = new LoginGUI();
             private UploadGUI _upload = new UploadGUI();
             private SystemGUI _sys = new SystemGUI();
+            private ProjectConfigGUI _pc = new ProjectConfigGUI();
+            private WindowCollection _wc = new WindowCollection();
+
             public void OnGUI(Rect position)
             {
                 menu.Fitter(_window.search);
@@ -1080,80 +1239,86 @@ namespace IFramework
             string name;
             string[] versions;
             int index;
+
+            Vector2 scroll;
             private void ContentGUI(Rect position)
             {
                 if (p == null) return;
                 var version = p.versions[index];
                 GUILayout.BeginArea(position.Zoom(AnchorType.MiddleCenter, -10));
-
-
+                scroll = GUILayout.BeginScrollView(scroll);
                 {
-                    GUILayout.BeginHorizontal();
-                    GUILayout.Label(p.name, Styles.header);
-                    if (version.preview)
                     {
-                        GUILayout.Label("preview");
-                    }
-                    GUILayout.FlexibleSpace();
-
-                    if (GUILayout.Button(Contents.newest, GUILayout.Width(Contents.gap * 6)))
-                    {
-                        PkgKitTool.DownLoadPkg(name, p.versions.Last().version);
-                    }
-                    if (GUILayout.Button(Contents.install, GUILayout.Width(Contents.gap * 6)))
-                    {
-                        PkgKitTool.DownLoadPkg(name, p.versions[index].version);
-                    }
-                    index = EditorGUILayout.Popup(index, versions, GUILayout.Width(Contents.gap * 6));
-                    if (Directory.Exists(version.assetPath))
-                    {
-                        if (GUILayout.Button(Contents.remove, GUILayout.Width(Contents.gap * 6)))
+                        GUILayout.BeginHorizontal();
+                        GUILayout.Label(p.name, Styles.header);
+                        if (version.preview)
                         {
-                            PkgKitTool.RemoveLocalPkg(p.name, version.assetPath);
+                            GUILayout.Label("preview");
+                        }
+                        GUILayout.FlexibleSpace();
+
+                        if (GUILayout.Button(Contents.newest, GUILayout.Width(Contents.gap * 6)))
+                        {
+                            PkgKitTool.DownLoadPkg(name, p.versions.Last().version);
+                        }
+                        if (GUILayout.Button(Contents.install, GUILayout.Width(Contents.gap * 6)))
+                        {
+                            PkgKitTool.DownLoadPkg(name, p.versions[index].version);
+                        }
+                        index = EditorGUILayout.Popup(index, versions, GUILayout.Width(Contents.gap * 6));
+                        if (Directory.Exists(version.assetPath))
+                        {
+                            if (GUILayout.Button(Contents.remove, GUILayout.Width(Contents.gap * 6)))
+                            {
+                                PkgKitTool.RemoveLocalPkg(p.name, version.assetPath);
+                            }
+                        }
+                        if (PkgKitTool.login && PkgKitTool.userjson.name == p.author)
+                        {
+                            if (GUILayout.Button(Contents.delete, GUILayout.Width(Contents.gap * 6)))
+                            {
+                                PkgKitTool.DeletePkg(p.name, version.version);
+                            }
+                        }
+                        GUILayout.EndHorizontal();
+                    }
+
+                    GUILayout.Label("Author: " + p.author, Styles.boldLabel);
+                    GUILayout.Label("Local Version: " + PkgKitTool.GetLocalVersion(p.name));
+
+                    GUILayout.Space(Contents.gap / 2);
+                    GUILayout.Label("Dependences", Styles.boldLabel);
+                    var strs = version.dependences.Split('@');
+                    for (int i = 0; i < strs.Length; i++)
+                    {
+                        GUILayout.Label(strs[i]);
+                    }
+                    GUILayout.Space(Contents.gap / 2);
+                    GUILayout.Label("Describtion", Styles.boldLabel);
+                    GUILayout.Label(version.describtion);
+                    GUILayout.EndArea();
+
+                    GUILayout.EndScrollView();
+                }
+                    Event e = Event.current;
+                    if (position.Contains(e.mousePosition) && e.button == 1)
+                    {
+                        GenericMenu menu = new GenericMenu();
+                        menu.AddItem(new GUIContent("Copy/Name"), false, () => { GUIUtility.systemCopyBuffer = p.name; });
+                        menu.AddItem(new GUIContent("Copy/Author"), false, () => { GUIUtility.systemCopyBuffer = p.author; });
+                        menu.AddItem(new GUIContent("Copy/AssetPath"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].assetPath; });
+                        menu.AddItem(new GUIContent("Copy/Dependences"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].dependences; });
+                        menu.AddItem(new GUIContent("Copy/Describtion"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].describtion; });
+                        menu.AddItem(new GUIContent("Copy/All"), false, () => { GUIUtility.systemCopyBuffer = JsonUtility.ToJson(p, true); });
+
+                        menu.ShowAsContext();
+                        if (e.type != EventType.Layout && e.type != EventType.Repaint)
+                        {
+                            e.Use();
                         }
                     }
-                    if (PkgKitTool.login && PkgKitTool.userjson.name == p.author)
-                    {
-                        if (GUILayout.Button(Contents.delete, GUILayout.Width(Contents.gap * 6)))
-                        {
-                            PkgKitTool.DeletePkg(p.name, version.version);
-                        }
-                    }
-                    GUILayout.EndHorizontal();
-                }
 
-                GUILayout.Label("Author: " + p.author, Styles.boldLabel);
-                GUILayout.Label("Local Version: " + PkgKitTool.GetLocalVersion(p.name));
 
-                GUILayout.Space(Contents.gap / 2);
-                GUILayout.Label("Dependences", Styles.boldLabel);
-                var strs = version.dependences.Split('@');
-                for (int i = 0; i < strs.Length; i++)
-                {
-                    GUILayout.Label(strs[i]);
-                }
-                GUILayout.Space(Contents.gap / 2);
-                GUILayout.Label("Describtion", Styles.boldLabel);
-                GUILayout.Label(version.describtion);
-                GUILayout.EndArea();
-
-                Event e = Event.current;
-                if (position.Contains(e.mousePosition) && e.button == 1)
-                {
-                    GenericMenu menu = new GenericMenu();
-                    menu.AddItem(new GUIContent("Copy/Name"), false, () => { GUIUtility.systemCopyBuffer = p.name; });
-                    menu.AddItem(new GUIContent("Copy/Author"), false, () => { GUIUtility.systemCopyBuffer = p.author; });
-                    menu.AddItem(new GUIContent("Copy/AssetPath"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].assetPath; });
-                    menu.AddItem(new GUIContent("Copy/Dependences"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].dependences; });
-                    menu.AddItem(new GUIContent("Copy/Describtion"), false, () => { GUIUtility.systemCopyBuffer = p.versions[index].describtion; });
-                    menu.AddItem(new GUIContent("Copy/All"), false, () => { GUIUtility.systemCopyBuffer = JsonUtility.ToJson(p, true); });
-
-                    menu.ShowAsContext();
-                    if (e.type != EventType.Layout && e.type != EventType.Repaint)
-                    {
-                        e.Use();
-                    }
-                }
             }
 
             private MenuTree menu = new MenuTree();
@@ -1165,90 +1330,8 @@ namespace IFramework
             }
         }
 
-        class WindowCollection
-        {
-            private class SelectTree : TreeView
-            {
-                private struct Index
-                {
-                    public int id;
-                    public EditorWindowTool.Entity value;
-                }
-                private List<Index> _show;
-                public SelectTree(TreeViewState state) : base(state)
-                {
-                    this.rowHeight = 22;
-                    EditorWindowTool.windows.FindAll((w) => { return w.searchName.ToLower().Contains(_window.search); }).ToArray();
-                    _show = new List<Index>();
-                    EditorWindowTool.windows
-                        .ForEach((entity) =>
-                        {
-                            _show.Add(new Index() { value = entity, id = EditorWindowTool.windows.IndexOf(entity) });
-                        });
-                    showAlternatingRowBackgrounds = true;
-
-                    Reload();
-                }
-                protected override void DoubleClickedItem(int id)
-                {
-                    var w = EditorWindowTool.FindOrCreate(_show.Find((index) => { return index.id == id; }).value.searchName);
-                    if (w != null)
-                    {
-                        w.Focus();
-                    }
-                }
-                protected override TreeViewItem BuildRoot()
-                {
-                    var root = new TreeViewItem { id = -1, depth = -1, displayName = "Root" };
-                    return root;
-                }
-                protected override void SearchChanged(string newSearch)
-                {
-                    _show.Clear();
-                    EditorWindowTool.windows.FindAll((w) => { return w.searchName.ToLower().Contains(_window.search); })
-                        .ForEach((entity) =>
-                        {
-                            _show.Add(new Index() { value = entity, id = EditorWindowTool.windows.IndexOf(entity) });
-
-                        });
-                    Reload();
-                }
-                protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
-                {
-                    List<TreeViewItem> list = new List<TreeViewItem>();
-                    for (int i = 0; i < _show.Count; i++)
-                    {
-                        list.Add(new TreeViewItem() { depth = 1, id = _show[i].id, displayName = _show[i].value.searchName });
-                    }
-                    return list;
-                }
-                protected override void RowGUI(RowGUIArgs args)
-                {
-                    var window = EditorWindowTool.windows[args.item.id];
-                    if (!string.IsNullOrEmpty(window.type.Namespace) && window.type.Namespace.Contains("UnityEditor"))
-                        GUI.Label(args.rowRect, new GUIContent(window.searchName, tx));
-                    else
-                        GUI.Label(args.rowRect, window.searchName);
-                }
-
-            }
-
-            public static Texture tx = EditorGUIUtility.IconContent("BuildSettings.Editor.Small").image;
-            private SelectTree _tree;
-            public WindowCollection()
-            {
-                _tree = new SelectTree(new TreeViewState());
-            }
-
-            public void OnGUI(Rect position)
-            {
-                _tree.searchString = _window.search;
-                _tree.OnGUI(position);
-            }
-        }
         enum WindowType
         {
-            WindowCollection,
             UserOption,
             Pkgs,
         }
@@ -1308,7 +1391,6 @@ namespace IFramework
         private PkgkitInfo _windowInfo;
         private static RootWindow _window;
         private UserOptionWindow _userOption;
-        private WindowCollection _collection;
         private PkgsWindow _pkgs;
         private ToolBarTree _toolBarTree;
         private WindowType __windowType;
@@ -1327,7 +1409,9 @@ namespace IFramework
     }
     partial class RootWindow
     {
-        [MenuItem("IFramework/RootWindow", priority = -1000)]
+        [MenuItem("Window/IFramework %#i")]
+        [MenuItem("Assets/IFramework/RootWindow")]
+
         static void ShowWindow()
         {
             GetWindow<RootWindow>();
@@ -1335,12 +1419,12 @@ namespace IFramework
         private void OnEnable()
         {
             _window = this;
+            this.minSize= new Vector2(700, 400);
             __windowType = EditorTools.Prefs.GetObject<RootWindow, WindowType>("__windowType");
             if (_windowInfo == null)
             {
                 _windowInfo = new PkgkitInfo();
             }
-            _collection = new WindowCollection();
             _pkgs = new PkgsWindow();
             _userOption = new UserOptionWindow();
             _toolBarTree = new ToolBarTree();
@@ -1374,9 +1458,6 @@ namespace IFramework
                     break;
                 case WindowType.Pkgs:
                     _pkgs.OnGUI(r2);
-                    break;
-                case WindowType.WindowCollection:
-                    _collection.OnGUI(r2);
                     break;
                 default:
                     break;

@@ -332,7 +332,7 @@ namespace IFramework
                     GUI.enabled = true;
                     if (GUILayout.Button("Open"))
                     {
-                        EditorTools.OpenFloder(_path);
+                        EditorTools.OpenFolder(_path);
                     }
                 }
             }
@@ -405,7 +405,7 @@ namespace IFramework
             private static string newScriptName = "newScript.cs";
             private static string originScriptPath = EditorEnv.formatScriptsPath.CombinePath("AuthorCharpScript.txt");
 
-            [MenuItem("Assets/Create/IFramework/AuthorScript", priority = -1000)]
+            [MenuItem("Assets/IFramework/Create/AuthorScript", priority = -1000)]
             public static void Create()
             {
                 CreateOriginIfNull();
@@ -1340,7 +1340,7 @@ namespace IFramework
                     private static string newScriptName = "newScript.cs";
                     private static string originScriptPathWithNameSpace = EditorEnv.formatScriptsPath.CombinePath("UserCSharpScript.txt");
 
-                    [MenuItem("Assets/Create/IFramework/FormatProjectCSharpScript", priority = -1000)]
+                    [MenuItem("Assets/IFramework/Create/FormatProjectCSharpScript", priority = -1000)]
                     public static void Create()
                     {
                         CreateOriginIfNull();
@@ -1389,7 +1389,7 @@ namespace IFramework
                     private static string newScriptName = "newScript.cs";
                     private static string originScriptPathWithNameSpace = EditorEnv.formatScriptsPath.CombinePath("UserMonoScript.txt");
 
-                    [MenuItem("Assets/Create/IFramework/FormatProjectMonoScript", priority = -1000)]
+                    [MenuItem("Assets/IFramework/Create/FormatProjectMonoScript", priority = -1000)]
                     public static void Create()
                     {
                         CreateOriginIfNull();
@@ -1438,60 +1438,11 @@ namespace IFramework
             }
 
         }
-        [EditorWindowCache("ProjectConfig")]
-        class ProjectConfigWindow : EditorWindow
-        {
 
-            private void OnGUI()
-            {
-                var Info = ProjectConfig.Info;
-                GUILayout.Space(10);
-                Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
-                Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
-
-                EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));
-                Info.NameSpace = EditorGUILayout.TextArea(Info.NameSpace);
-                GUILayout.Label("Description of Scripts");
-                Info.Description = EditorGUILayout.TextArea(Info.Description, GUILayout.Height(100));
-                GUILayout.Space(10);
-
-                GUILayout.Label("LogSetting in Editor mode", GUIStyles.Get("IN Title"));
-                Info.enable = EditorGUILayout.Toggle("Enable", Info.enable);
-                GUI.enabled = Info.enable;
-                Info.enable_L = EditorGUILayout.Toggle("Log Enable", Info.enable_L);
-                Info.enable_W = EditorGUILayout.Toggle("Warning Enable", Info.enable_W);
-                Info.enable_E = EditorGUILayout.Toggle("Error Enable", Info.enable_E);
-
-                GUI.enabled = true;
-
-                GUILayout.FlexibleSpace();
-                GUILayout.BeginHorizontal();
-                {
-                    GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("Save"))
-                    {
-                        ProjectConfig.Save();
-                    }
-
-                    GUILayout.EndHorizontal();
-                }
-
-            }
-
-
-        }
     }
     partial class EditorTools
     {
-        private const string hierarchyOverridePath = "IFramework/Tool/HierarchyExtension";
-        private const string copyAssetPathPath = "IFramework/Tools/Copy Path";
-        private const string quitPath = "IFramework/Tools/Editor Quit";
-
-        private const string openDocPathPath = "IFramework/Folder/Open DocPath";
-        private const string openStreamingPath = "IFramework/Folder/Open StreamingPath";
-        private const string openDataPath = "IFramework/Folder/Open DataPath";
-        private const string openConsoleLogPath = "IFramework/Folder/Open ConsoleLogPath";
-        private const string openTemporaryCachePath = "IFramework/Folder/Open TemporaryCachePath";
+        private const string copyAssetPathPath = "Assets/IFramework/Copy Path";
         private const string findScriptPath = "CONTEXT/MonoBehaviour/IFramework.FindScript";
 
 
@@ -1502,7 +1453,7 @@ namespace IFramework
             Selection.activeObject = MonoScript.FromMonoBehaviour(command.context as MonoBehaviour);
         }
 
-        [MenuItem(copyAssetPathPath)]
+        [MenuItem(copyAssetPathPath,priority =-100000000)]
         public static void CopyAssetPath()
         {
             if (EditorApplication.isCompiling)
@@ -1512,47 +1463,16 @@ namespace IFramework
             string path = AssetDatabase.GetAssetPath(Selection.activeInstanceID);
             GUIUtility.systemCopyBuffer = path;
         }
-        [MenuItem(quitPath)]
-        public static void Quit()
-        {
-            //  Environment.Exit(0);
-            EditorApplication.Exit(0);
-        }
-
-
-        [MenuItem(openDocPathPath)]
-        public static void OpenDoc()
-        {
-            OpenFloder(Application.persistentDataPath);
-        }
-        [MenuItem(openStreamingPath)]
-        public static void OpenStreaming()
-        {
-            OpenFloder(Application.streamingAssetsPath);
-        }
-        [MenuItem(openDataPath)]
-        public static void OpenDataPath()
-        {
-            OpenFloder(Application.dataPath);
-        }
-        [MenuItem(openTemporaryCachePath)]
-        public static void OpenTemporary()
-        {
-            OpenFloder(Application.temporaryCachePath);
-        }
-#if UNITY_2018_1_OR_NEWER
-        [MenuItem(openConsoleLogPath)]
-        public static void OpenConsoleLog()
-        {
-            OpenFloder(Application.consoleLogPath);
-        }
-#endif
 
 
 
 
 
-        public static void OpenFloder(string folder)
+
+
+
+
+        public static void OpenFolder(string folder)
         {
             EditorUtility.OpenWithDefaultApp(folder);
         }
@@ -1560,49 +1480,8 @@ namespace IFramework
         {
             return EditorBuildSettings.scenes;
         }
-        public static string[] GetScenesInBuildSetting()
-        {
-            List<string> levels = new List<string>();
-            for (int i = 0; i < EditorBuildSettings.scenes.Length; ++i)
-            {
-                if (EditorBuildSettings.scenes[i].enabled)
-                    levels.Add(EditorBuildSettings.scenes[i].path);
-            }
 
-            return levels.ToArray();
-        }
 
-        public static string GetBuildTargetName(BuildTarget target)
-        {
-            string name = PlayerSettings.productName + "_" + PlayerSettings.bundleVersion;
-            if (target == BuildTarget.Android)
-            {
-                return name + PlayerSettings.Android.bundleVersionCode + ".apk";
-            }
-            if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64)
-            {
-                return name + PlayerSettings.Android.bundleVersionCode + ".exe";
-            }
-            if
-#if UNITY_2017_3_OR_NEWER
-            (target == BuildTarget.StandaloneOSX)
-#else
-            (target == BuildTarget.StandaloneOSXIntel || target == BuildTarget.StandaloneOSXIntel64 || target == BuildTarget.StandaloneOSXUniversal)
-#endif
-            {
-                return name + ".Game";
-            }
-            if (target == BuildTarget.iOS)
-            {
-                return "iOS";
-            }
-            return null;
-            //if (target == BuildTarget.WebGL)
-            //{
-            //    return "/web";
-            //}
-
-        }
         public static GameObject CreatePrefab(GameObject source, string savePath)
         {
             GameObject goClone = GameObject.Instantiate(source);

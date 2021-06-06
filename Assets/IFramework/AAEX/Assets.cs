@@ -14,6 +14,7 @@ using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 using System;
 using Object = UnityEngine.Object;
+using System.Threading.Tasks;
 
 namespace IFramework.AAEX
 {
@@ -184,8 +185,10 @@ namespace IFramework.AAEX
         }
 
 
-        private void Handler_Completed(AsyncOperationHandle<IList<Object>> obj)
+        private async void Handler_Completed(AsyncOperationHandle<IList<Object>> obj)
         {
+            //处理1.18.4
+            await Task.Delay(1);
             prepareState = PrepareState.None;
         }
     }

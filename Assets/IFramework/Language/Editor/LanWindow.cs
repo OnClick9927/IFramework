@@ -24,6 +24,17 @@ namespace IFramework.Language
     [EditorWindowCache("IFramework.Language")]
     partial class LanWindow : EditorWindow
     {
+        [MenuItem("Assets/IFramework/Create/LanGroup")]
+        static void CreateLangroup()
+        {
+            string path = "Assets";
+            if (Selection.activeObject)
+            {
+                var tmp = AssetDatabase.GetAssetPath(Selection.activeObject);
+                path = tmp.IsDirectory() ? tmp : tmp.GetDirPath();
+            }
+            EditorTools.ScriptableObjectTool.Create<LanGroup>(path.CombinePath("LanGroup.asset"));
+        }
         [CustomPropertyDrawer(typeof(LanguageKeyAttribute))]
         class LanguageKeyDrawer : PropertyDrawer
         {
