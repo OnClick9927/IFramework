@@ -52,7 +52,7 @@ MonoBehaviour:
       - m_Id: 341d7878af9ac4742a8ff43c224efd98
         m_Value: ServerData/[BuildTarget]
       - m_Id: 6ea594e482935074b954caef1a5cfe9d
-        m_Value: http://192.168.18.107:12345
+        m_Value: http://localhost:12345
     m_ProfileEntryNames:
     - m_Id: ad3ac6ba952841b4aa9cc853c18f636c
       m_Name: BuildTarget
@@ -103,7 +103,7 @@ MonoBehaviour:
           m_Key: ContentRoot
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.Boolean
-          m_Data: False
+          m_Data: True
           m_Key: IsEnabled
         - m_AssemblyName: mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
           m_ClassName: System.String
