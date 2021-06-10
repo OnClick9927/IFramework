@@ -10,19 +10,17 @@ using System;
 using UnityEngine;
 namespace IFramework.AAEX
 {
-    [RequireComponent(typeof(Assets))]
     public class AAGame : Game
     {
         private void Awake()
         {
-            assets = GetComponent<Assets>();
-            assets.onPrepareBegin +=()=> { onPrepareBegin?.Invoke(); } ;
-            assets.onPrepareCompelete += () => { onPrepareCompelete?.Invoke(); };
-            assets.onPrepareProgress += (value) => { onPrepareProgress?.Invoke(value); };
+            Assets.onPrepareBegin +=()=> { onPrepareBegin?.Invoke(); } ;
+            Assets.onPrepareCompelete += () => { onPrepareCompelete?.Invoke(); };
+            Assets.onPrepareProgress += (value) => { onPrepareProgress?.Invoke(value); };
 
-            assets.onUpdateBegin += () => { onUpdateBegin?.Invoke(); };
-            assets.onUpdateCompelete += () => { onUpdateCompelete?.Invoke(); };
-            assets.onUpdateProgress += (value) => { onUpdateProgress?.Invoke(value); };
+            Assets.onUpdateBegin += () => { onUpdateBegin?.Invoke(); };
+            Assets.onUpdateCompelete += () => { onUpdateCompelete?.Invoke(); };
+            Assets.onUpdateProgress += (value) => { onUpdateProgress?.Invoke(value); };
         }
         public event Action onUpdateBegin;
         public event Action onUpdateCompelete;
@@ -31,20 +29,19 @@ namespace IFramework.AAEX
         public event Action onPrepareBegin;
         public event Action onPrepareCompelete;
         public event Action<float> onPrepareProgress;
-        [HideInInspector]public Assets assets;
         public override void Init()
         {
         }
 
         public override void Startup()
         {
-            onUpdateCompelete += assets.PrepareDefault;
+            onUpdateCompelete += Assets.PrepareDefault;
             onPrepareCompelete += () => {
-                GameObject prefab= assets.LoadPreparedAsset<GameObject>("cube");
+                GameObject prefab= Assets.LoadPreparedAsset<GameObject>("cube");
                 Debug.Log(prefab);
                 GameObject.Instantiate(prefab);
             };
-            assets.UpdateAssets();
+            Assets.UpdateAssets();
         }
     }
 }

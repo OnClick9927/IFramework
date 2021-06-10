@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace IFramework.AAEX
 {
-    public class Assets : MonoBehaviour
+    public static class Assets
     {
         public const string defaultKey = "default";
         public enum PrepareState
@@ -33,20 +33,19 @@ namespace IFramework.AAEX
             Compelete
         }
 
-        private PrepareState _prepareState;
-        private Dictionary<string, AsyncOperationHandle> handles = new Dictionary<string, AsyncOperationHandle>();
-        private AsyncOperationHandle downloadHandle;
-        private UpdateState _updateState;
+        private static PrepareState _prepareState;
+        private static Dictionary<string, AsyncOperationHandle> handles = new Dictionary<string, AsyncOperationHandle>();
+        private static AsyncOperationHandle downloadHandle;
+        private static UpdateState _updateState;
 
-        public event Action onPrepareBegin;
-        public event Action onPrepareCompelete;
-        public event Action<float> onPrepareProgress;
-
-        public event Action onUpdateBegin;
-        public event Action onUpdateCompelete;
-        public event Action<float> onUpdateProgress;
-        public string currentPrepare { get; private set; }
-        public UpdateState updateState
+        public static event Action onPrepareBegin;
+        public static event Action onPrepareCompelete;
+        public static event Action<float> onPrepareProgress;
+        public static event Action onUpdateBegin;
+        public static event Action onUpdateCompelete;
+        public static event Action<float> onUpdateProgress;
+        public static string currentPrepare { get; private set; }
+        public static UpdateState updateState
         {
             get { return _updateState; }
             private set
@@ -71,7 +70,7 @@ namespace IFramework.AAEX
                 }
             }
         }
-        public PrepareState prepareState
+        public static PrepareState prepareState
         {
             get { return _prepareState; }
             private set
@@ -95,7 +94,7 @@ namespace IFramework.AAEX
                 }
             }
         }
-        public async void UpdateAssets()
+        public static async void UpdateAssets()
         {
             updateState = UpdateState.Updating;
             Debug.Log("开始更新资源");
@@ -117,7 +116,7 @@ namespace IFramework.AAEX
             updateState = UpdateState.Compelete;
             Launcher.env.BindUpdate(FrshProgress);
         }
-        private void FrshProgress()
+        private static void FrshProgress()
         {
             try
             {
@@ -137,12 +136,12 @@ namespace IFramework.AAEX
 
 
 
-        public void PrepareDefault()
+        public static void PrepareDefault()
         {
             Debug.Log("加载默认资源");
             PrepareAssets(defaultKey);
         }
-        public void PrepareAssets(string key)
+        public static void PrepareAssets(string key)
         {
             if (handles.ContainsKey(key)) return;
             prepareState = PrepareState.Preparing;
@@ -152,40 +151,40 @@ namespace IFramework.AAEX
             handles.Add(key, handler);
             handler.Completed += Handler_Completed;
         }
-        public void ReleaseAssets(string key)
+        public static void ReleaseAssets(string key)
         {
             if (!handles.ContainsKey(key)) return;
             Addressables.Release(handles[key]);
             handles.Remove(key);
         }
-        public T LoadPreparedAsset<T>(string key)
+        public static T LoadPreparedAsset<T>(string key)
         {
             return Addressables.LoadAssetAsync<T>(key).WaitForCompletion();
         }
 
 
 
-        public void Release<T>(T t)
+        public static void Release<T>(T t)
         {
             Addressables.Release(t);
         }
-        public AsyncOperationHandle<T> Load<T>(string key)
+        public static AsyncOperationHandle<T> Load<T>(string key)
         {
             return Addressables.LoadAssetAsync<T>(key);
         }
 
-        public AsyncOperationHandle<SceneInstance> LoadScene(object key, LoadSceneMode loadMode = LoadSceneMode.Single, bool activateOnLoad = true, int priority = 100)
+        public static AsyncOperationHandle<SceneInstance> LoadScene(object key, LoadSceneMode loadMode = LoadSceneMode.Single, bool activateOnLoad = true, int priority = 100)
         {
             return Addressables.LoadSceneAsync(key, loadMode, activateOnLoad, priority);
         }
 
-        public AsyncOperationHandle<SceneInstance> ReleaseScene(AsyncOperationHandle<SceneInstance> scene, bool autoReleaseHandle = true)
+        public static AsyncOperationHandle<SceneInstance> ReleaseScene(AsyncOperationHandle<SceneInstance> scene, bool autoReleaseHandle = true)
         {
             return Addressables.UnloadSceneAsync(scene.Result, autoReleaseHandle);
         }
 
 
-        private async void Handler_Completed(AsyncOperationHandle<IList<Object>> obj)
+        private static async void Handler_Completed(AsyncOperationHandle<IList<Object>> obj)
         {
             //处理1.18.4
             await Task.Delay(1);

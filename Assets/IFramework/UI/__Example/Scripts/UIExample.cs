@@ -27,6 +27,10 @@ namespace IFramework_Demo
             {
                 module.Get<Panel02>("Panel02");
             }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Launcher.env.modules.Message.Publish<UIExample>(new MathEvent().SetType(MathType.Add));
+            }
         }
 
         public UIPanel Load(Type type, string name)

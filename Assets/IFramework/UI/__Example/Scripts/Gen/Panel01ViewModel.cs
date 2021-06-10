@@ -31,11 +31,16 @@ namespace IFramework_Demo
         {
             base.SubscribeMessage();
             this.message.Subscribe<Panel01View>(Listen);
+
+            Launcher.env.modules.Message.Subscribe<UIExample>(Listen);
+
         }
         protected override void UnSubscribeMessage()
         {
             base.UnSubscribeMessage();
             this.message.UnSubscribe<Panel01View>(Listen);
+            Launcher.env.modules.Message. UnSubscribe<UIExample>(Listen);
+
         }
         private void Listen(IMessage message)
         {

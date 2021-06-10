@@ -28,18 +28,18 @@ namespace IFramework.Hotfix
         }
         public override void Startup()
         {
-            onUpdateCompelete += assets.PrepareDefault;
+            onUpdateCompelete += Assets.PrepareDefault;
             onPrepareCompelete += () => {
-                if (assets.currentPrepare==Assets.defaultKey)
+                if (Assets.currentPrepare==Assets.defaultKey)
                 {
                     StartLua();
                 }
             };
-            assets.UpdateAssets();
+            Assets.UpdateAssets();
         }
         private void StartLua()
         {
-            XLuaEnv.AddLoader(new AddressableLoader(assets));
+            XLuaEnv.AddLoader(new AddressableLoader());
             new XluaMain();
         }
     }

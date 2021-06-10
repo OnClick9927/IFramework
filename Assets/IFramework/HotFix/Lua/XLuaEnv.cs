@@ -22,13 +22,6 @@ namespace IFramework.Hotfix.Lua
 
     public class AddressableLoader : IXLuaLoader
     {
-        private Assets assets;
-
-        public AddressableLoader(Assets assets)
-        {
-            this.assets = assets;
-        }
-
         public static string projectScriptsPath
         {
             get { return Application.dataPath.CombinePath("Project/Lua").ToRegularPath(); }
@@ -41,11 +34,11 @@ namespace IFramework.Hotfix.Lua
                 return textAsset.bytes;
             filepath = projectScriptsPath.CombinePath(filepath+ ".lua").ToAssetsPath();
 
-            var handle = assets.LoadPreparedAsset<TextAsset>(filepath);
+            var handle = Assets.LoadPreparedAsset<TextAsset>(filepath);
             textAsset = handle;
             if (textAsset == null) return null;
             var bytes = textAsset.bytes;
-            assets.Release(handle);
+            Assets.Release(handle);
             return bytes;
         }
     }
