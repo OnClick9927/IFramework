@@ -134,22 +134,22 @@ namespace IFramework.UI
 
                     GUILayout.EndHorizontal();
                 }
-                GUILayout.BeginHorizontal();
-                {
-                    GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("Create UIMap"))
-                    {
-                        if (string.IsNullOrEmpty(UIMapDir))
-                        {
-                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Map Gen Dir "));
-                            return;
-                        }
-                        WriteTxt(UIMapDir.CombinePath(UIMap_CSName),mapScriptOrigin, null);
-                        AssetDatabase.Refresh();
-                    }
+                //GUILayout.BeginHorizontal();
+                //{
+                //    GUILayout.FlexibleSpace();
+                //    if (GUILayout.Button("Create UIMap"))
+                //    {
+                //        if (string.IsNullOrEmpty(UIMapDir))
+                //        {
+                //            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Map Gen Dir "));
+                //            return;
+                //        }
+                //        WriteTxt(UIMapDir.CombinePath(UIMap_CSName), mapScriptOrigin, null);
+                //        AssetDatabase.Refresh();
+                //    }
 
-                    GUILayout.EndHorizontal();
-                }
+                //    GUILayout.EndHorizontal();
+                //}
                 GUILayout.Space(30);
                 if (hashID == 0) hashID = "MVVM_GenCodeView".GetHashCode();
 
@@ -272,11 +272,11 @@ namespace IFramework.UI
                             EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Map Gen Dir "));
                             return;
                         }
-                        if (!File.Exists(UIMapDir.CombinePath(UIMap_CSName)))
-                        {
-                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Copy UI Map"));
-                            return;
-                        }
+                        //if (!File.Exists(UIMapDir.CombinePath(UIMap_CSName)))
+                        //{
+                        //    EditorWindow.focusedWindow.ShowNotification(new GUIContent("Copy UI Map"));
+                        //    return;
+                        //}
                         if (string.IsNullOrEmpty(panelType))
                         {
                             EditorWindow.focusedWindow.ShowNotification(new GUIContent("Choose UI Panel Type "));
@@ -296,39 +296,9 @@ namespace IFramework.UI
                         string paneltype = panelType.Split('.').ToList().Last();
                         string vmType = paneltype.Append("ViewModel");
                         string viewType = paneltype.Append("View");
-                        //v
-                        WriteTxt(PanelGenDir.CombinePath(viewType.Append(".cs")), viewScriptOrigin,
-                            (str) => {
-                                Type t = AppDomain.CurrentDomain.GetAssemblies()
-                                          .SelectMany((a) => { return a.GetTypes(); })
-                                          .ToList().Find((type) => { return type.FullName == panelType; });
 
-                                return str.Replace("#VMType#", vmType).Replace("#PanelType#", panelType).Replace("#panelfield#",GetPanelField(t));
-                            }
-                            );
-                        //vm
-                        WriteTxt(PanelGenDir.CombinePath(vmType.Append(".cs")), vmScriptOrigin,
-                                (str) => {
-                                    string fieldStr = " ";
-                                    string syncStr = " ";
-                                    Type t = AppDomain.CurrentDomain.GetAssemblies()
-                                                .SelectMany((a) => { return a.GetTypes(); })
-                                                .ToList().Find((type) => { return type.FullName == modelType; });
-                                    var fs = t.GetFields();
-                                    for (int i = 0; i < fs.Length; i++)
-                                    {
-                                        var info = fs[i];
-                                        fieldStr = WriteField(fieldStr, info.FieldType, info.Name);
-                                        syncStr = WriteSyncStr(syncStr, info.Name);
-                                    }
-
-                                    return str.Replace("#ModelType#", t.FullName)
-                                              .Replace("#FieldString#", fieldStr)
-                                              .Replace("#viewType#", viewType)
-                                              .Replace("#SyncModelValue#", syncStr);
-                                }
-                            );
-
+                        WriteView(viewType, vmType);
+                        WriteVM(vmType, viewType);
                         WriteMap(UIMapDir.CombinePath(UIMap_CSName), UIMapDir.CombinePath(UIMap_CSName));
                         AssetDatabase.Refresh();
                     }
@@ -337,6 +307,63 @@ namespace IFramework.UI
                 }
 
 
+            }
+            private void WriteVM(string vmType, string viewType)
+            {
+                string designPath = PanelGenDir.CombinePath(vmType.Append(".Design.cs"));
+                string path = PanelGenDir.CombinePath(vmType.Append(".cs"));
+
+                WriteTxt(designPath, vmDesignScriptOrigin,
+                               (str) => {
+                                   string fieldStr = " ";
+                                   string syncStr = " ";
+                                   Type t = AppDomain.CurrentDomain.GetAssemblies()
+                                               .SelectMany((a) => { return a.GetTypes(); })
+                                               .ToList().Find((type) => { return type.FullName == modelType; });
+                                   var fs = t.GetFields();
+                                   for (int i = 0; i < fs.Length; i++)
+                                   {
+                                       var info = fs[i];
+                                       fieldStr = WriteField(fieldStr, info.FieldType, info.Name);
+                                       syncStr = WriteSyncStr(syncStr, info.Name);
+                                   }
+
+                                   return str.Replace("#ModelType#", t.FullName)
+                                             .Replace("#FieldString#", fieldStr)
+                                             .Replace("#viewType#", viewType)
+                                             .Replace("#SyncModelValue#", syncStr)
+                                             .Replace(".Design","");
+                               }
+                           );
+                if (!File.Exists(path))
+                {
+                    WriteTxt(path, vmScriptOrigin, (str)=> {
+                        return str.Replace("#viewType#", viewType);
+                    });
+                }
+            }
+
+            private void WriteView(string viewType, string vmType)
+            {
+                string designPath = PanelGenDir.CombinePath(viewType.Append(".Design.cs"));
+                string path = PanelGenDir.CombinePath(viewType.Append(".cs"));
+
+                WriteTxt(designPath, viewDesignScriptOrigin,
+               (str) => {
+                   Type t = AppDomain.CurrentDomain.GetAssemblies()
+                             .SelectMany((a) => { return a.GetTypes(); })
+                             .ToList().Find((type) => { return type.FullName == panelType; });
+
+                   return str.Replace("#VMType#", vmType)
+                   .Replace("#PanelType#", panelType)
+                   .Replace("#panelfield#", GetPanelField(t))
+                   .Replace(".Design", "");
+               }
+               );
+                if (!File.Exists(path))
+                {
+                    WriteTxt(path, viewScriptOrigin, null);
+                }
             }
             private string GetPanelField(Type panel)
             {
@@ -371,13 +398,45 @@ namespace IFramework.UI
 
             private void WriteMap(string writePath, string sourcePath)
             {
-                var txt = File.ReadAllText(sourcePath);
+                string txt = "";
+                if (File.Exists(sourcePath))
+                {
+                    txt = File.ReadAllText(sourcePath);
+                }
+                var strs = txt.Replace("\r\n", "\n").Split('\n');
                 string flag = "//ToDo";
+                List<string> fits = new List<string>();
 
+                for (int i = 0; i < strs.Length; i++)
+                {
+                    if (strs[i].Contains("typeof") || strs[i].Contains(flag))
+                    {
+                        fits.Add(strs[i]);
+                    }
+                }
+                if (fits.Count==0)
+                {
+                    fits.Add(flag);
+                }
+                string panelfitString = string.Format("typeof({0})", panelType);
+                for (int i = 0; i < fits.Count; i++)
+                {
+                    if (fits[i].Contains(panelfitString))
+                    {
+                        fits.RemoveAt(i);
+                        break;
+                    }
+                }
                 string tmp = string.Format("typeof({0}),System.Tuple.Create(typeof({1}),typeof({0}View),typeof({0}ViewModel))", panelType, modelType);
-                tmp = tmp.Append("},\n").AppendHead("\t\t\t{").Append(flag);
-                txt = txt.Replace(flag, tmp);
-                File.WriteAllText(writePath, txt, System.Text.Encoding.UTF8);
+                fits.Insert(0, tmp);
+                string replace = "";
+                for (int i = 0; i < fits.Count-1; i++)
+                {
+                    replace= replace.Append(string.Format("\t\t\t{1}{0}{2},\n", fits[i],"{","}"));
+                }
+
+                txt = mapScriptOrigin.Replace(flag, replace.Append(string.Format("\t\t\t{0}\n",flag)));
+                WriteTxt(writePath, txt, null);
             }
             private static void WriteTxt(string writePath, string source, Func<string, string> func)
             {
@@ -403,10 +462,10 @@ namespace IFramework.UI
             " *History:        #UserDATE#--\n" +
             "*********************************************************************************/\n";
 
-            private const string vmScriptOrigin =head+
+            private const string vmDesignScriptOrigin = head +
             "namespace #UserNameSpace#\n" +
             "{\n" +
-            "\tpublic class #UserSCRIPTNAME# : IFramework.UI.UIViewModel<#ModelType#>,IFramework.Modules.Message.IMessageListener\n" +
+            "\tpublic partial class #UserSCRIPTNAME# : IFramework.UI.UIViewModel<#ModelType#>,IFramework.Modules.Message.IMessageListener\n" +
             "\t{\n" +
             "#FieldString#\n" +
             "\t\tprotected override void SyncModelValue()\n" +
@@ -414,13 +473,19 @@ namespace IFramework.UI
             "#SyncModelValue#\n" +
             "\t\t}\n" +
             "\n" +
-
+            "\t}\n" +
+            "}";
+            private const string vmScriptOrigin = head +
+            "namespace #UserNameSpace#\n" +
+            "{\n" +
+            "\tpublic partial class #UserSCRIPTNAME#\n" +
+            "\t{\n" +
 
             "\t\tprotected override void Initialize()\n" +
             "\t\t{\n" +
             "\n" +
             "\t\t}\n" +
-            "\n"+
+            "\n" +
             "\t\tprotected override void OnDispose()\n" +
             "\t\t{\n" +
             "\n" +
@@ -449,12 +514,19 @@ namespace IFramework.UI
             "\t}\n" +
 
             "}";
+            private const string viewDesignScriptOrigin = head +
+            "namespace #UserNameSpace#\n" +
+            "{\n" +
+            "\tpublic partial class #UserSCRIPTNAME# : IFramework.UI.UIView<#VMType#, #PanelType#> \n" +
+            "\t{\n" +
+            "#panelfield#\n" +
+            "\t}\n" +
+            "}";
             private const string viewScriptOrigin = head +
             "namespace #UserNameSpace#\n" +
             "{\n" +
-            "\tpublic class #UserSCRIPTNAME# : IFramework.UI.UIView<#VMType#, #PanelType#>\n" +
+            "\tpublic partial class #UserSCRIPTNAME#\n" +
             "\t{\n" +
-            "#panelfield#\n"+
             "\t\tprotected override void BindProperty()\n" +
             "\t\t{\n" +
             "\t\t\tbase.BindProperty();\n" +
