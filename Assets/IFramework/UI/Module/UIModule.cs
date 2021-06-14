@@ -120,6 +120,8 @@ namespace IFramework.UI
         private void InvokeViewState(UIEventArgs arg)
         {
             _groups.InvokeViewState(arg);
+            arg.SetDirty();
+            arg.Recyle();
         }
 
     }
@@ -148,6 +150,7 @@ namespace IFramework.UI
         public void SetCanvas(Canvas canvas)
         {
             this.canvas = canvas;
+            canvas.name = name;
             CreateLayers();
         }
 
@@ -210,7 +213,7 @@ namespace IFramework.UI
             arg.curPanel = ui;
             stack.Push(ui);
             InvokeViewState(arg);
-            arg.Recyle();
+            //arg.Recyle();
             return true;
         }
         /// <summary>
@@ -223,11 +226,13 @@ namespace IFramework.UI
             arg.code = UIEventArgs.Code.GoBack;
             var ui = stack.Pop();
             arg.popPanel = ui;
+
             memory.Push(ui);
             if (stackCount > 0)
                 arg.curPanel = current;
+
             InvokeViewState(arg);
-            arg.Recyle();
+            //arg.Recyle();
             return true;
         }
         /// <summary>
@@ -318,7 +323,7 @@ namespace IFramework.UI
                 _groups.Subscribe(ui);
                 return ui;
             }
-            Log.E(string.Format("NO ui Type: {0}    Layer: {1}  Name: {2}", type, ui.layer, name));
+            Log.E(string.Format("NO ui Type: {0}  Name: {1}", type, name));
             return ui;
         }
         /// <summary>
@@ -355,7 +360,7 @@ namespace IFramework.UI
                 arg.curPanel = ui;
                 stack.Push(ui);
                 InvokeViewState(arg);
-                arg.Recyle();
+                //arg.Recyle();
                 if (memory.Count > 0) ClearMemory();
             }
         }

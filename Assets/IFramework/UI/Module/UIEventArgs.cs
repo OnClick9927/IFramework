@@ -6,7 +6,8 @@
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
-
+using System;
+using UnityEngine;
 namespace IFramework.UI
 {
     /// <summary>
@@ -51,11 +52,18 @@ namespace IFramework.UI
         /// <summary>
         /// 重置数据
         /// </summary>
+
         protected override void OnDataReset()
         {
+
             popPanel = null;
             curPanel = null;
             pressPanel = null;
+        }
+
+        internal void SetDirty()
+        {
+            this.SetDataDirty();
         }
     }
 }

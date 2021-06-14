@@ -427,12 +427,12 @@ namespace IFramework.UI
                         break;
                     }
                 }
-                string tmp = string.Format("typeof({0}),System.Tuple.Create(typeof({1}),typeof({0}View),typeof({0}ViewModel))", panelType, modelType);
+                string tmp = string.Format("\t\t\t{2}typeof({0}),System.Tuple.Create(typeof({1}),typeof({0}View),typeof({0}ViewModel)){3},", panelType, modelType, "{", "}");
                 fits.Insert(0, tmp);
                 string replace = "";
                 for (int i = 0; i < fits.Count-1; i++)
                 {
-                    replace= replace.Append(string.Format("\t\t\t{1}{0}{2},\n", fits[i],"{","}"));
+                    replace= replace.Append(string.Format("{0}\n", fits[i]));
                 }
 
                 txt = mapScriptOrigin.Replace(flag, replace.Append(string.Format("\t\t\t{0}\n",flag)));
