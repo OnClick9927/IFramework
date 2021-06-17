@@ -915,11 +915,22 @@ namespace IFramework
             }
             class ProjectConfigGUI
             {
+                public ProjectConfigGUI() {
+                    EditorEnv.env.BindDispose(Dispose);
+                }
+
+                private void Dispose()
+                {
+                    EditorTools.ProjectConfig.Save();
+                }
+
                 public void OnGUI()
                 {
                     var Info = EditorTools.ProjectConfig.Info;
                     GUILayout.Space(10);
-                    Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), Info.UserName);
+                    GUI.enabled = false;
+                    Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), PkgKitTool.userjson.name);
+                    GUI.enabled = true;
                     Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
 
                     EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));

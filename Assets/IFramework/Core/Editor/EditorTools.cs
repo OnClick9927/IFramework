@@ -487,7 +487,8 @@ namespace IFramework
             public override void OnInspectorGUI()
             {
                 GUILayout.Space(10);
-                GUILayout.Label("Base Class : " + baseTypes[_creater.searchIndex]);
+                GUIContent content = new GUIContent("Base Class : " + baseTypes[_creater.searchIndex], "Click to choose Base Class");
+                GUILayout.Label(content, GUIStyles.Get("PreDropDown"),GUILayout.ExpandWidth(true));
                 Rect pos = GUILayoutUtility.GetLastRect();
                 int ctrlId = GUIUtility.GetControlID(GetHashCode(), FocusType.Keyboard, pos);
                 {
@@ -501,6 +502,7 @@ namespace IFramework
                         GUIUtility.ExitGUI();
                     }
                 }
+                GUILayout.Space(10);
 
                 _creater.scriptName = EditorGUILayout.TextField("Script Name", _creater.scriptName);
                 if (!_creater.scriptName.IsLegalFieldName())
