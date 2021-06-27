@@ -579,7 +579,6 @@ namespace IFramework
                     {
                         var p = m.pkgs[i];
                         var tmp = localPkgs.Find((_p) => { return p.versions==_p.versions && _p.name == p.name && _p.time == p.time && p.author==_p.author; });
-                        Debug.Log($"{p.author}  {tmp == null}");
                         localPkgs.Remove(tmp);
                         string path = Path.Combine(Paths.pkgversionjsonPath, p.name + ".json");
                         if (tmp !=null)
@@ -702,6 +701,7 @@ namespace IFramework
 
         class UserOptionWindow
         {
+
             enum UserOperation
             {
                 ProjectConfig, WindowCollection, Account, Pkg_Upload,Other
@@ -832,7 +832,7 @@ namespace IFramework
                             switch (i)
                             {
                                 case 0:
-                                    if (GUI.Button(args.GetCellRect(i), "", Styles.minus))
+                                    if (GUI.Button(args.GetCellRect(i), "", GUIStyles.minus))
                                     {
                                         PkgKitTool.DeletePkg(info.name, info.version);
                                     }
@@ -915,51 +915,44 @@ namespace IFramework
             }
             class ProjectConfigGUI
             {
-                public ProjectConfigGUI() {
-                    EditorEnv.env.BindDispose(Dispose);
-                }
-
-                private void Dispose()
+                static class Contents
                 {
-                    EditorTools.ProjectConfig.Save();
+                    public static GUIContent Name = new GUIContent("UserName", "Project Author's Name");
+                    public static GUIContent Version = new GUIContent("Version", "Version of Project");
+                    public static GUIContent Namespace = new GUIContent("NameSpace_ProductName", "Script's Namespace and ProductName");
+                    public static GUIContent Describe = new GUIContent("Description of Scripts");
+                    public static string logset = "LogSetting in Editor mode";
+                    public static string enable = "Enable";
+                    public static string logenable = "Log Enable";
+                    public static string wenable = "Warning Enable";
+                    public static string errenable = "Error Enable";
                 }
-
                 public void OnGUI()
                 {
                     var Info = EditorTools.ProjectConfig.Info;
                     GUILayout.Space(10);
+                    EditorGUI.BeginChangeCheck();
                     GUI.enabled = false;
-                    Info.UserName = EditorGUILayout.TextField(new GUIContent("UserName", "Project Author's Name"), PkgKitTool.userjson.name);
+                    Info.UserName = EditorGUILayout.TextField(Contents.Name, PkgKitTool.userjson.name);
                     GUI.enabled = true;
-                    Info.Version = EditorGUILayout.TextField(new GUIContent("Version", "Version of Project"), Info.Version);
-
-                    EditorGUILayout.LabelField(new GUIContent("NameSpace", "Script's Namespace"));
-                    Info.NameSpace = EditorGUILayout.TextArea(Info.NameSpace);
-                    GUILayout.Label("Description of Scripts");
+                    Info.Version = EditorGUILayout.TextField(Contents.Version, Info.Version);
+                    Info.NameSpace= EditorGUILayout.TextField(Contents.Namespace, Info.NameSpace);
+                    GUILayout.Label(Contents.Describe);
                     Info.Description = EditorGUILayout.TextArea(Info.Description, GUILayout.Height(100));
                     GUILayout.Space(10);
 
-                    GUILayout.Label("LogSetting in Editor mode", GUIStyles.Get("IN Title"));
-                    Info.enable = EditorGUILayout.Toggle("Enable", Info.enable);
+                    GUILayout.Label(Contents.logset, GUIStyles.IN_title);
+                    Info.enable = EditorGUILayout.Toggle(Contents.enable, Info.enable);
                     GUI.enabled = Info.enable;
-                    Info.enable_L = EditorGUILayout.Toggle("Log Enable", Info.enable_L);
-                    Info.enable_W = EditorGUILayout.Toggle("Warning Enable", Info.enable_W);
-                    Info.enable_E = EditorGUILayout.Toggle("Error Enable", Info.enable_E);
+                    Info.enable_L = EditorGUILayout.Toggle(Contents.logenable, Info.enable_L);
+                    Info.enable_W = EditorGUILayout.Toggle(Contents.wenable, Info.enable_W);
+                    Info.enable_E = EditorGUILayout.Toggle(Contents.errenable, Info.enable_E);
 
-                    GUI.enabled = true;
-
-                    GUILayout.FlexibleSpace();
-                    GUILayout.BeginHorizontal();
+                    if (EditorGUI.EndChangeCheck())
                     {
-                        GUILayout.FlexibleSpace();
-                        if (GUILayout.Button("Save"))
-                        {
-                            EditorTools.ProjectConfig.Save();
-                        }
-
-                        GUILayout.EndHorizontal();
-                    }
-
+                        EditorTools.ProjectConfig.Save();
+                    }  
+                    GUI.enabled = true;
                 }
             }
             class UploadGUI
@@ -1002,12 +995,12 @@ namespace IFramework
                         GUILayout.EndHorizontal();
                     }
 
-                    GUILayout.Label("Dependences", Styles.boldLabel);
+                    GUILayout.Label("Dependences", GUIStyles.BoldLabel);
                     for (int i = 0; i < _upload.dependences.Length; i++)
                     {
                         GUILayout.BeginHorizontal();
                         _upload.dependences[i] = EditorGUILayout.TextField(_upload.dependences[i]);
-                        if (GUILayout.Button("", Styles.minus, GUILayout.Width(18)))
+                        if (GUILayout.Button("", GUIStyles.minus, GUILayout.Width(18)))
                         {
                             ArrayUtility.RemoveAt(ref _upload.dependences, i);
                         }
@@ -1015,13 +1008,13 @@ namespace IFramework
                     }
                     GUILayout.BeginHorizontal();
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("", Styles.plus))
+                    if (GUILayout.Button("", GUIStyles.plus))
                     {
                         ArrayUtility.Add(ref _upload.dependences, "");
                     }
                     GUILayout.EndHorizontal();
 
-                    GUILayout.Label("Describtion", Styles.boldLabel);
+                    GUILayout.Label("Describtion", GUIStyles.BoldLabel);
                     _upload.describtion = EditorGUILayout.TextArea(_upload.describtion, GUILayout.MinHeight(Contents.gap * 10));
 
                     {
@@ -1227,7 +1220,7 @@ namespace IFramework
                     name = obj;
                     index = 0;
                     p = _window._windowInfo.pkgInfos.Find((_p) => { return _p.name == name; });
-                    versions = p.versions.ToList().ConvertAll((v) => { return "v" + v.version; }).ToArray();
+                    versions = p.versions.ToList().ConvertAll((v) => { return v.version; }).ToArray();
                 };
 
                 PkgKitTool.onFreshpkgs += () => {
@@ -1261,7 +1254,7 @@ namespace IFramework
                 {
                     {
                         GUILayout.BeginHorizontal();
-                        GUILayout.Label(p.name, Styles.header);
+                        GUILayout.Label(p.name, GUIStyles.header);
                         if (version.preview)
                         {
                             GUILayout.Label("preview");
@@ -1294,18 +1287,18 @@ namespace IFramework
                         GUILayout.EndHorizontal();
                     }
 
-                    GUILayout.Label("Author: " + p.author, Styles.boldLabel);
+                    GUILayout.Label("Author: " + p.author, GUIStyles.BoldLabel);
                     GUILayout.Label("Local Version: " + PkgKitTool.GetLocalVersion(p.name));
 
                     GUILayout.Space(Contents.gap / 2);
-                    GUILayout.Label("Dependences", Styles.boldLabel);
+                    GUILayout.Label("Dependences", GUIStyles.BoldLabel);
                     var strs = version.dependences.Split('@');
                     for (int i = 0; i < strs.Length; i++)
                     {
                         GUILayout.Label(strs[i]);
                     }
                     GUILayout.Space(Contents.gap / 2);
-                    GUILayout.Label("Describtion", Styles.boldLabel);
+                    GUILayout.Label("Describtion", GUIStyles.BoldLabel);
                     GUILayout.Label(version.describtion);
                     GUILayout.EndArea();
 
@@ -1363,20 +1356,7 @@ namespace IFramework
             public static GUIContent newest = new GUIContent("Newset");
             public static GUIContent refresh = EditorGUIUtility.IconContent("TreeEditor.Refresh");
         }
-        class Styles
-        {
-            public static GUIStyle titlestyle = GUIStyles.Get("IN BigTitle");
 
-            public static GUIStyle minus = "OL Minus";
-            public static GUIStyle plus = "OL Plus";
-            public static GUIStyle boldLabel = "BoldLabel";
-            public static GUIStyle header = new GUIStyle("BoldLabel")
-            {
-                fontSize = 20
-            };
-            public static GUIStyle entryBackodd = GUIStyles.Get("CN EntryBackodd");
-            public static GUIStyle entryBackEven = GUIStyles.Get("CN EntryBackEven");
-        }
 
         [Serializable]
         public class PkgkitInfo

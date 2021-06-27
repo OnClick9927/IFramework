@@ -22,22 +22,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
-    m_MainAsset: {fileID: 4900000, guid: 53ca1d646bddfd0439c9373e1b7d2726, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: 53ca1d646bddfd0439c9373e1b7d2726, type: 3}
   - m_GUID: f9e67bd7644bbd444bb4b649d62766a9
     m_Address: Assets/Project/Lua/GameLogic.lua
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
-    m_MainAsset: {fileID: 4900000, guid: f9e67bd7644bbd444bb4b649d62766a9, type: 3}
-    m_TargetAsset: {fileID: 4900000, guid: f9e67bd7644bbd444bb4b649d62766a9, type: 3}
   - m_GUID: df5d4d31f28dac94b844bdbbda26b18b
     m_Address: cube
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
-    m_MainAsset: {fileID: 0}
-    m_TargetAsset: {fileID: 0}
+  - m_GUID: 8417a6cf9860c37488f733d4d8aa9fd1
+    m_Address: Assets/Project/Lua/GlobalDefine.lua
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7a9c5b484ec3edb43921acd04625e0a2, type: 2}
   m_SchemaSet:

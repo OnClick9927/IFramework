@@ -12,19 +12,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//ui 模块存储示意图                                 push/get( if memory exist panels ,the memory will clear auto )
+//ui 模块存储示意图                                 push/get ( if memory exist panels ,the memory will clear auto )
 //                                                  |
 //    |--------------------------------------       |                     --------------------------------------|
 //    |    stack                               <----|                                                    memory |
 //    |                                        <----------- ui ---------- go forward                            |
 //    |                                        go back ---- ui ----------------->                               |
 //    |--------------------------------------                             --------------------------------------|
+//    1     CreateCanvas  or SetCanvas                              -- this set ui module root canvas for uipanels
+//    2     AddLoader                                               -- this tell ui module how to load uipanels if the panel have not been loaded
+//    3     SetGroups                                               -- this group tell ui module how to handle the uipanel events
+//                                                                  -- we can use default group MvvmGroups ; also you can extend your own groups
+//
+//    4.1   use  (Get , GoForWard , GoBack ,ClearMemory) to  control  uipanels          -- this work with two stacks in module
+//          this will call (OnLoad ,  OnPress , OnTop , OnPop , OnClear) in uiview 
+//    4.2   use  (Show , Hide , Pause ,UnPause , Close) to  control  uipanels           -- this will not use stacks
+//          this will call (OnLoad, OnShow, OnHide, OnPause, OnUnPause , OnClose , OnClear) in uiview
+//
+//    you can control uipanels with  4.1 or 4.2
+//
+//    if you can understand (ui moudule) thoroughly  , you  can  use 4.1 and 4.2 at the same time
+
 namespace IFramework.UI
 {
     /// <summary>
     /// 字段
     /// </summary>
-    partial class UIModule 
+    partial class UIModule : IUIModule
     {
         #region ui层级
         public Canvas canvas { get; private set; }
@@ -42,6 +56,7 @@ namespace IFramework.UI
         #endregion
         private IGroups _groups;
         private List<IPanelLoader> _loaders;
+        private Dictionary<UILayer, List<WeakReference<UIPanel>>> _panelOrders;
         private Stack<UIPanel> stack;
         private Stack<UIPanel> memory;
         /// <summary>
@@ -119,16 +134,61 @@ namespace IFramework.UI
         }
         private void InvokeViewState(UIEventArgs arg)
         {
-            _groups.InvokeViewState(arg);
+            if (arg.pressPanel != null)
+                _groups.OnPress(arg.pressPanel.name,arg);
+            if (arg.popPanel != null)
+                _groups.OnPop(arg.popPanel.name, arg);
+            if (arg.curPanel != null)
+                _groups.OnTop(arg.curPanel.name,arg);
             arg.SetDirty();
             arg.Recyle();
         }
+        private List<UIPanel> _orderHelp = new List<UIPanel>();
+        private void SetOrder(UIPanel panel)
+        {
+            UILayer layer = panel.layer;
+            int order = panel.layerOrder;
+            if (!_panelOrders.ContainsKey(layer))
+                _panelOrders.Add(layer, new List<WeakReference<UIPanel>>());
+            var list = _panelOrders[layer];
+            _orderHelp.Clear();
 
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                UIPanel _tmp;
+                if (!list[i].TryGetTarget(out _tmp))
+                {
+                    list.Remove(list[i]);
+                }
+                else
+                {
+                    _orderHelp.Add(_tmp);
+                }
+            }
+            if (_orderHelp.Contains(panel)) return;
+            _orderHelp.Sort((a, b) => { return a.layerOrder - b.layerOrder; });
+            int sbindex = 0;
+            bool bigExist = false;
+            for (int i = 0; i < _orderHelp.Count; i++)
+            {
+                if (_orderHelp[i].layerOrder > order)
+                {
+                    sbindex = _orderHelp[i].transform.GetSiblingIndex();
+                    bigExist = true;
+                    break;
+                }
+            }
+            if (bigExist)
+            {
+                panel.transform.SetSiblingIndex(sbindex);
+            }
+            list.Add(new WeakReference<UIPanel>(panel));
+        }
     }
     /// <summary>
     /// 常用
     /// </summary>
-    partial class UIModule 
+    partial class UIModule
     {
         /// <summary>
         /// 创建 画布
@@ -178,26 +238,16 @@ namespace IFramework.UI
         /// <param name="type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public UIPanel Get(Type type, string name)
+        public UIPanel Get(string name)
         {
             //if (UICache.Count > 0) ClearCache(arg);
-            if (current != null && current.name == name && current.GetType() == type)
+            if (current != null && current.name == name)
                 return current;
             var panel = _groups.FindPanel(name);
             if (panel == null)
-                panel = Load(type, name);
+                panel = Load(name);
             Push(panel);
             return panel;
-        }
-        /// <summary>
-        /// 获取ui
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public T Get<T>(string name )where T : UIPanel
-        {
-            return (T)Get(typeof(T), name);
         }
         /// <summary>
         /// 前进
@@ -256,6 +306,73 @@ namespace IFramework.UI
     partial class UIModule
     {
         /// <summary>
+        /// 展示一个界面
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="addtoStack"></param>
+        public void Show(string name)
+        {
+            if (current != null && current.name == name) return;
+            var panel = FindPanel(name);
+            if (panel == null)
+                panel = Load(name);
+            this._groups.OnShow(name);
+        }
+        /// <summary>
+        /// 藏一个界面
+        /// </summary>
+        /// <param name="name"></param>
+        public void Hide(string name)
+        {
+            var panel = FindPanel(name);
+            if (panel != null)
+            {
+                this._groups.OnHide(name);
+            }
+        }
+        /// <summary>
+        /// 挂起一个界面
+        /// </summary>
+        /// <param name="name"></param>
+        public void Pause(string name)
+        {
+            var panel = FindPanel(name);
+            if (panel != null)
+            {
+                this._groups.OnPause(name);
+            }
+        }
+        /// <summary>
+        /// 重新启用一个界面
+        /// </summary>
+        /// <param name="name"></param>
+        public void UnPause(string name)
+        {
+            var panel = FindPanel(name);
+            if (panel != null)
+            {
+                this._groups.OnUnPause(name);
+            }
+        }
+        /// <summary>
+        /// 彻底关闭一个界面
+        /// </summary>
+        /// <param name="name"></param>
+        public void Close(string name)
+        {
+            var panel = FindPanel(name);
+
+            if (panel != null)
+            {
+                if (!ExistInStack(panel))
+                {
+                    this._groups.OnClose(name);
+                    _groups.UnSubscribe(panel);
+                }
+            }
+        }
+
+        /// <summary>
         /// 放置相机到 ui模块的 camera 层级
         /// </summary>
         /// <param name="camera"></param>
@@ -299,10 +416,9 @@ namespace IFramework.UI
         /// <summary>
         /// 加载 ui 
         /// </summary>
-        /// <param name="type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public UIPanel Load(Type type, string name)
+        public UIPanel Load(string name)
         {
             if (_groups == null)
                 throw new Exception("Please Set ModuleType First");
@@ -314,28 +430,20 @@ namespace IFramework.UI
             }
             for (int i = 0; i < _loaders.Count; i++)
             {
-                var result = _loaders[i].Load(type, name);
+                var result = _loaders[i].Load(ref name);
                 if (result == null) continue;
                 ui = result;
-                ui = GameObject.Instantiate(ui,GetLayerParent(ui.layer));
+                ui = GameObject.Instantiate(ui, GetLayerParent(ui.layer));
                 ui.name = name;
                 ui.module = this;
+                SetOrder(ui);
                 _groups.Subscribe(ui);
                 return ui;
             }
-            Log.E(string.Format("NO ui Type: {0}  Name: {1}", type, name));
+            Log.E(string.Format("Can't load ui with Name: {0}", name));
             return ui;
         }
-        /// <summary>
-        /// 加载 ui
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public T Load<T>(string name) where T : UIPanel
-        {
-            return (T)Load(typeof(T), name);
-        }
+
         /// <summary>
         /// 查找 ui
         /// </summary>
@@ -360,7 +468,6 @@ namespace IFramework.UI
                 arg.curPanel = ui;
                 stack.Push(ui);
                 InvokeViewState(arg);
-                //arg.Recyle();
                 if (memory.Count > 0) ClearMemory();
             }
         }
@@ -377,6 +484,7 @@ namespace IFramework.UI
             stack = new Stack<UIPanel>();
             memory = new Stack<UIPanel>();
             _loaders = new List<IPanelLoader>();
+            _panelOrders = new Dictionary<UILayer, List<WeakReference<UIPanel>>>();
         }
         protected override void OnDispose()
         {
@@ -390,9 +498,9 @@ namespace IFramework.UI
         }
         protected override void OnUpdate()
         {
-            if (_groups!=null)
+            if (_groups != null)
             {
-                 _groups.Update();
+                _groups.Update();
             }
         }
     }

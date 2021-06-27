@@ -21,7 +21,7 @@ namespace IFramework.UI
     {
 
         public UIPanel panel;
-        private ViewEventType _lastState= ViewEventType.None;
+        private ViewEventType _lastState = ViewEventType.None;
 
         public ViewEventType lastState { get { return _lastState; } }
 
@@ -35,7 +35,7 @@ namespace IFramework.UI
         }
         public virtual void Pause()
         {
-            panel.Pause(); 
+            panel.Pause();
         }
         public virtual void UnPause()
         {
@@ -50,10 +50,11 @@ namespace IFramework.UI
         {
             handler.BindProperty(() => {
                 string tmp = getter();
-                if (tmp!=text.text)
+                if (tmp != text.text)
                 {
                     text.text = tmp;
-                }});
+                }
+            });
             return this;
         }
         protected UIView Bind(InputField input, Func<string> getter)
@@ -71,49 +72,51 @@ namespace IFramework.UI
         {
             handler.BindProperty(() => {
                 float tmp = getter();
-                if (slider.value!=tmp)
+                if (slider.value != tmp)
                 {
                     slider.value = tmp;
-                } });
+                }
+            });
             return this;
         }
         protected UIView Bind(Toggle toggle, Func<bool> getter)
         {
             handler.BindProperty(() => {
                 bool tmp = getter();
-                if (tmp!=toggle.isOn)
+                if (tmp != toggle.isOn)
                 {
                     toggle.isOn = tmp;
-                }});
+                }
+            });
             return this;
         }
 
-        protected UIView OnValueChanged(InputField input,UnityAction<string> callback)
+        protected UIView BindInputField(InputField input, UnityAction<string> callback)
         {
             input.onValueChanged.AddListener(callback);
             return this;
         }
-        protected UIView OnValueChanged(Toggle toggle, UnityAction<bool> callback)
+        protected UIView BindToggle(Toggle toggle, UnityAction<bool> callback)
         {
             toggle.onValueChanged.AddListener(callback);
             return this;
         }
-        protected UIView OnValueChanged(Slider slider, UnityAction<float> callback)
+        protected UIView BindSlider(Slider slider, UnityAction<float> callback)
         {
             slider.onValueChanged.AddListener(callback);
             return this;
         }
-        protected UIView OnEndEdit(InputField input, UnityAction<string> callback)
+        protected UIView BindOnEndEdit(InputField input, UnityAction<string> callback)
         {
             input.onEndEdit.AddListener(callback);
             return this;
         }
-        protected UIView OnValidateInput(InputField input, InputField.OnValidateInput callback)
+        protected UIView BindOnValidateInput(InputField input, InputField.OnValidateInput callback)
         {
-            input.onValidateInput= callback;
+            input.onValidateInput = callback;
             return this;
         }
-        protected UIView OnClick(Button button, UnityAction callback)
+        protected UIView BindBUtton(Button button, UnityAction callback)
         {
             button.onClick.AddListener(callback);
             return this;
@@ -125,6 +128,12 @@ namespace IFramework.UI
         protected abstract void OnPress(UIEventArgs arg);
         protected abstract void OnPop(UIEventArgs arg);
         protected abstract void OnClear();
+
+        protected abstract void OnShow();
+        protected abstract void OnHide();
+        protected abstract void OnPause();
+        protected abstract void OnUnPause();
+        protected abstract void OnClose();
 
         void IViewStateEventHandler.OnLoad()
         {
@@ -150,6 +159,31 @@ namespace IFramework.UI
         {
             _lastState = ViewEventType.OnClear;
             OnClear();
+        }
+
+        void IViewStateEventHandler.OnShow()
+        {
+            OnShow();
+        }
+
+        void IViewStateEventHandler.OnHide()
+        {
+            OnHide();
+        }
+
+        void IViewStateEventHandler.OnPause()
+        {
+            OnPause();
+        }
+
+        void IViewStateEventHandler.OnUnPause()
+        {
+            OnUnPause();
+        }
+
+        void IViewStateEventHandler.OnClose()
+        {
+            OnClose();
         }
     }
     public abstract class UIView<VM, Panel> : UIView where VM : UIViewModel where Panel : UIPanel

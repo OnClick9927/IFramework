@@ -15,7 +15,7 @@ namespace IFramework.UI
     /// <summary>
     /// ui MVVM 组容器
     /// </summary>
-    public class MvvmGroups:IGroups
+    public class MvvmGroups : IGroups
     {
         internal interface IViewStateEventHandler
         {
@@ -24,11 +24,20 @@ namespace IFramework.UI
             void OnPress(UIEventArgs arg);
             void OnPop(UIEventArgs arg);
             void OnClear();
+
+            void OnShow();
+
+            void OnHide();
+
+            void OnPause();
+            void OnUnPause();
+
+            void OnClose();
         }
         private MVVMModule _moudule;
-        private Dictionary<Type, Tuple<Type, Type, Type>> _map;
+        private Dictionary<string, Tuple<Type, Type, Type>> _map;
 
-        public MvvmGroups(Dictionary<Type, Tuple<Type, Type, Type>> map)
+        public MvvmGroups(Dictionary<string, Tuple<Type, Type, Type>> map)
         {
             _moudule = MVVMModule.CreatInstance<MVVMModule>("UIGroup");
             this._map = map;
@@ -38,10 +47,6 @@ namespace IFramework.UI
         {
             return _moudule.FindGroup(name);
         }
-        private MVVMGroup FindGroup(UIPanel panel)
-        {
-            return FindGroup(panel.name);
-        }
 
 
 
@@ -50,28 +55,25 @@ namespace IFramework.UI
         {
             var group = FindGroup(name);
             if (group == null) return null;
-                return (group.view as UIView).panel;
+            return (group.view as UIView).panel;
         }
-        void IGroups.InvokeViewState(UIEventArgs arg)
+        bool IGroups.Subscribe(UIPanel panel)
         {
-            if (arg.pressPanel != null)
-                (FindGroup(arg.pressPanel).view as IViewStateEventHandler).OnPress(arg);
-            if (arg.popPanel != null)
-                (FindGroup(arg.popPanel).view as IViewStateEventHandler).OnPop(arg);
-            if (arg.curPanel != null)
-                (FindGroup(arg.curPanel).view as IViewStateEventHandler).OnTop(arg);
-        }
-        void IGroups.Subscribe(UIPanel panel)
-        {
-            var _group = FindGroup(panel);
-            if (_group != null) throw new Exception(string.Format("Have Subscribe Panel Name: {0}", panel.name));
+            var _group = FindGroup(panel.name);
+            if (_group != null) {
+                Log.E(string.Format("Have Subscribe Panel Name: {0} ready", panel.name));
+                return false;
+            } 
 
             Tuple<Type, Type, Type> tuple;
-            _map.TryGetValue(panel.GetType(), out tuple);
-            if (tuple == null) throw new Exception(string.Format("Could Not Find map with Type: {0}", panel.GetType()));
-
-
+            _map.TryGetValue(panel.name, out tuple);
+            if (tuple == null)
+            {
+                Log.L(string.Format("Could Not Find map with Type: {0}", panel.name));
+                return false;
+            } 
             var model = Activator.CreateInstance(tuple.Item1) as IModel;
+
             var view = Activator.CreateInstance(tuple.Item2) as UIView;
             var vm = Activator.CreateInstance(tuple.Item3) as UIViewModel;
             view.panel = panel;
@@ -79,15 +81,18 @@ namespace IFramework.UI
             var group = new MVVMGroup(panel.name, view, vm, model);
             _moudule.AddGroup(group);
             (view as IViewStateEventHandler).OnLoad();
+            return true;
         }
-        void IGroups.UnSubscribe(UIPanel panel)
+        bool IGroups.UnSubscribe(UIPanel panel)
         {
-            var group = FindGroup(panel);
+            var group = FindGroup(panel.name);
             if (group != null)
             {
                 (group.view as IViewStateEventHandler).OnClear();
                 group.Dispose();
+                return true;
             }
+            return false;
         }
         void IDisposable.Dispose()
         {
@@ -96,6 +101,49 @@ namespace IFramework.UI
         void IGroups.Update()
         {
             _moudule.Update();
+        }
+
+        void IGroups.OnShow(string panel)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnShow();
+        }
+
+        void IGroups.OnHide(string panel)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnHide();
+
+        }
+
+        void IGroups.OnPause(string panel)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnPause();
+
+        }
+
+        void IGroups.OnUnPause(string panel)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnUnPause();
+        }
+
+        void IGroups.OnClose(string panel)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnClose();
+        }
+
+         void IGroups.OnPress(string panel, UIEventArgs arg)
+        {
+          (FindGroup(panel).view as IViewStateEventHandler).OnPress(arg);
+
+        }
+
+         void IGroups.OnTop(string panel, UIEventArgs arg)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnTop(arg);
+        }
+
+        void IGroups.OnPop(string panel, UIEventArgs arg)
+        {
+            (FindGroup(panel).view as IViewStateEventHandler).OnPop(arg);
         }
     }
 }

@@ -1,26 +1,15 @@
 ﻿/*********************************************************************************
- *Author:         OnClick
- *Version:        0.0.1
- *UnityVersion:   2018.4.17f1
- *Date:           2020-02-28
+ *Author:         爱吃水蜜桃
+ *Version:        1.0
+ *UnityVersion:   2018.4.24f1
+ *Date:           2021-06-27
  *Description:    Description
- *History:        2020-02-28--
+ *History:        2021-06-27--
 *********************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
-using IFramework;
-using IFramework.Modules.MVVM;
-using IFramework.UI;
-using UnityEngine;
 
-namespace IFramework_Demo
+namespace IFramework.UI.Example
 {
-    public class Panel02Model: IModel
-    { 
-        //public int count;
-    }
-
-    public class Panel02 : UIPanel
+	public class Panel02 : IFramework.UI.UIPanel
 	{
 
 	}

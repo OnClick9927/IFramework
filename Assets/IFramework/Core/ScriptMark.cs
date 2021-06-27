@@ -13,12 +13,13 @@ namespace IFramework
     [AddComponentMenu("IFramework/ScriptMark")]
     public class ScriptMark:MonoBehaviour
 	{
+#if UNITY_EDITOR
         public bool isPublic=true;
         public string fieldName;
         public string fieldType;
         public string description;
         public int index;
-
+#endif
 
         private void OnEnable()
         {

@@ -14,6 +14,13 @@ namespace IFramework.GUITool
 {
     public class RenameField : GUIBase
     {
+
+        static GUIContent[] contents = new GUIContent[] {
+                        new GUIContent("Copy"),
+                        new GUIContent("Paste"),
+                        new GUIContent("Clear"),
+                        new GUIContent("Rename"),
+                    };
         public string value;
         private bool _label = true;
         public bool outline = true;
@@ -87,12 +94,7 @@ namespace IFramework.GUITool
                 else if (e.button == 1 && position.Contains(e.mousePosition) && _label)
                 {
                     Vector2 pos = e.mousePosition;
-                    EditorUtility.DisplayCustomMenu(position, new GUIContent[] {
-                        new GUIContent("Copy"),
-                        new GUIContent("Paste"),
-                        new GUIContent("Clear"),
-                        new GUIContent("Rename"),
-                    },
+                    EditorUtility.DisplayCustomMenu(position, contents,
                     (index) => {
                         switch (index)
                         {

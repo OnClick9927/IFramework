@@ -16,13 +16,6 @@ namespace IFramework.GUITool
 {
     public class SubWinTree
     {
-        private class Styles
-        {
-            public static GUIStyle FlowWindow = "window";
-            public static GUIStyle SelectRect = "SelectionRect";
-            public static GUIStyle DockArea = "LODBlackBox";
-
-        }
         public enum DockType
         {
             Down, Up, Left, Right
@@ -481,10 +474,6 @@ namespace IFramework.GUITool
         {
             private class Styles
             {
-                public static GUIStyle DockArea = "dockarea";
-                public static GUIStyle TitileContent = "dragtabdropwindow";
-                public static GUIStyle CloseBtn = "WinBtnClose";
-                public static GUIStyle ContentBG = "IN BigTitle Inner";
                 public const float ContentHeight = 17;
                 public const float CloseBtnSize = 17;
                 public const float minize = 120;
@@ -524,15 +513,15 @@ namespace IFramework.GUITool
             private void DrawTitle(Rect rect)
             {
                 if (Event.current.type == EventType.Repaint)
-                        Styles.TitileContent.Draw(rect, titleContent, false, false, false, false);
+                        GUIStyles.dragtabdropwindow.Draw(rect, titleContent, false, false, false, false);
                 Rect r = new Rect(rect.xMax - Styles.CloseBtnSize, rect.y, Styles.CloseBtnSize, Styles.CloseBtnSize);
-                if (GUI.Button(r, string.Empty, Styles.CloseBtn))
+                if (GUI.Button(r, string.Empty, GUIStyles.WinBtnClose))
                     tree.CloseLeaf(this);
             }
             private void DrawContent(Rect rect)
             {
                 if (Event.current.type == EventType.Repaint)
-                    Styles.ContentBG.Draw(rect, false, false, false, false);
+                    GUIStyles.IN_BigTitle_Inner.Draw(rect, false, false, false, false);
 
                 if (paintDelegate != null)
                 {
@@ -709,7 +698,7 @@ namespace IFramework.GUITool
         public void OnGUI(Rect position)
         {
             if (Event.current.type == EventType.Repaint)
-                Styles.DockArea.Draw(position, false, false, false, false);
+                GUIStyles.DockArea.Draw(position, false, false, false, false);
             if (!isLocked) Resize(position);
             root.OnGUI();
             if (isShowTitle && !isLocked) DragWindow();
@@ -795,8 +784,8 @@ namespace IFramework.GUITool
                 case EventType.Repaint:
                     if (dragleaf != null)
                     {
-                        Styles.FlowWindow.Draw(new Rect(e.mousePosition, Vector2.one * 150), dragleaf.titleContent, false, false, false, false);
-                        Styles.SelectRect.Draw(selectionRect, false, false, false, false);
+                        GUIStyles.window.Draw(new Rect(e.mousePosition, Vector2.one * 150), dragleaf.titleContent, false, false, false, false);
+                        GUIStyles.SelectRect.Draw(selectionRect, false, false, false, false);
                     }
                     break;
                 case EventType.MouseDrag:

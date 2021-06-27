@@ -487,7 +487,24 @@ namespace IFramework
             public override void OnInspectorGUI()
             {
                 GUILayout.Space(10);
-                GUIContent content = new GUIContent("Base Class : " + baseTypes[_creater.searchIndex], "Click to choose Base Class");
+                if (_creater.type != baseTypes[_creater.searchIndex])
+                {
+                    bool find=false;
+                    for (int i = 0; i < baseTypes.Count; i++)
+                    {
+                        if (baseTypes[i]==_creater.type)
+                        {
+                            _creater.searchIndex = i;
+                            find = true;
+                            break;
+                        }
+                    }
+                    if (!find)
+                    {
+                        _creater.type = baseTypes[_creater.searchIndex];
+                    }
+                }
+                GUIContent content = new GUIContent("Base Class : " + _creater.type, "Click to choose Base Class");
                 GUILayout.Label(content, GUIStyles.Get("PreDropDown"),GUILayout.ExpandWidth(true));
                 Rect pos = GUILayoutUtility.GetLastRect();
                 int ctrlId = GUIUtility.GetControlID(GetHashCode(), FocusType.Keyboard, pos);
@@ -498,11 +515,17 @@ namespace IFramework
                         SearchablePopup.Show(pos, baseTypes.ToArray(), _creater.searchIndex, (i, str) =>
                         {
                             _creater.searchIndex = i;
+                            _creater.type = baseTypes[_creater.searchIndex];
                         });
                         GUIUtility.ExitGUI();
                     }
                 }
                 GUILayout.Space(10);
+                if (string.IsNullOrEmpty(_creater.ns) || !_creater.ns.Contains(EditorTools.ProjectConfig.NameSpace))
+                {
+                    _creater.ns = EditorTools.ProjectConfig.NameSpace;
+                }
+                _creater.ns = EditorGUILayout.TextField("Script Namspace", _creater.ns);
 
                 _creater.scriptName = EditorGUILayout.TextField("Script Name", _creater.scriptName);
                 if (!_creater.scriptName.IsLegalFieldName())
@@ -564,7 +587,7 @@ namespace IFramework
                 if (EditorApplication.isCompiling) return;
                 if (_creater.marks == null || _creater.marks.Length == 0)
                 {
-                    _creater.marks = _creater.GetComponentsInChildren<ScriptMark>(true);
+                    _creater.Colllect();
 
                 }
 
@@ -577,9 +600,9 @@ namespace IFramework
                              .Replace("#SCVERSION#", ProjectConfig.Version)
                              .Replace("#SCUNITYVERSION#", Application.unityVersion)
                              .Replace("#SCDATE#", DateTime.Now.ToString("yyyy-MM-dd"))
-                             .Replace("#SCNameSpace#", ProjectConfig.NameSpace)
+                             .Replace("#SCNameSpace#", _creater.ns)
                              .Replace("#SCSCRIPTNAME#", _creater.scriptName)
-                             .Replace("#BaseClass#", baseTypes[_creater.searchIndex])
+                             .Replace("#BaseClass#", _creater.type)
                              .Replace("#SCDescription#", DescriptionString())
                              .Replace("#SCField#", FieldString());
                     File.WriteAllText(path, txt, Encoding.UTF8);
@@ -662,23 +685,18 @@ namespace IFramework
                     }
                     if (!bo) return false;
                 }
-                for (int i = 0; i < _creater.marks.Length; i++)
+                string err;
+                if (!_creater.FieldCheckWithScriptName(out err))
                 {
-                    var mark = _creater.marks[i];
-                    if (mark.fieldName == _creater.scriptName)
-                    {
-                        EditorUtility.DisplayDialog("Err", "Field Name Should be diferent With ScriptName", "ok");
-                        return false;
-                    }
-                    var sameFields = _creater.marks.ToList().FindAll((__sm) => { return mark.fieldName == __sm.fieldName; });
-                    if (sameFields.Count > 1)
-                    {
-                        EditorUtility.DisplayDialog("Err", "Can't Exist Same Name Field", "ok");
-                        return false;
-                    }
-
+                    EditorUtility.DisplayDialog("Err", err, "ok");
+                    return false;
                 }
-
+                
+                if (!_creater.FieldCheck(out err))
+                {
+                    EditorUtility.DisplayDialog("Err", err, "ok");
+                    return false;
+                }
                 if (!Directory.Exists(_creater.createDirectory))
                 {
                     EditorUtility.DisplayDialog("Err", "Directory Not Exist ", "ok");
@@ -695,7 +713,7 @@ namespace IFramework
                     AppDomain.CurrentDomain
                              .GetAssemblies()
                              .First(assembly => assembly.GetName().Name == "Assembly-CSharp");
-                Type type = defaultAssembly.GetType(ProjectConfig.NameSpace + "." + _creater.scriptName);
+                Type type = defaultAssembly.GetType(_creater.ns + "." + _creater.scriptName);
 
                 if (type == null) return;
 
@@ -1258,15 +1276,13 @@ namespace IFramework
 
 
 
-                public string NameSpace;
+                public string NameSpace { get { return PlayerSettings.productName; } set { PlayerSettings.productName = value; } }
                 public string UserName;
-                public string Version;
+                public string Version { get { return PlayerSettings.bundleVersion; } set { PlayerSettings.bundleVersion = value; } }
                 public string Description;
                 public ProjectConfigInfo()
                 {
-                    UserName = "OnClick";
-                    NameSpace = "IFramework_Demo";
-                    Version = "0.0.1";
+
                     Description = "Description";
                 }
             }
@@ -1334,6 +1350,7 @@ namespace IFramework
 
                         File.WriteAllText(realPath, txt, Encoding.UTF8);
                         EditorPrefs.SetBool(key, false);
+                        AssetDatabase.Refresh();
                     }
                 }
                 private class FormatUserCSScript
@@ -1342,7 +1359,7 @@ namespace IFramework
                     private static string newScriptName = "newScript.cs";
                     private static string originScriptPathWithNameSpace = EditorEnv.formatScriptsPath.CombinePath("UserCSharpScript.txt");
 
-                    [MenuItem("Assets/IFramework/Create/FormatProjectCSharpScript", priority = -1000)]
+                    [MenuItem("Assets/IFramework/Create/FormatCSharpScript", priority = -1000)]
                     public static void Create()
                     {
                         CreateOriginIfNull();
@@ -1391,7 +1408,7 @@ namespace IFramework
                     private static string newScriptName = "newScript.cs";
                     private static string originScriptPathWithNameSpace = EditorEnv.formatScriptsPath.CombinePath("UserMonoScript.txt");
 
-                    [MenuItem("Assets/IFramework/Create/FormatProjectMonoScript", priority = -1000)]
+                    [MenuItem("Assets/IFramework/Create/FormatMonoScript", priority = -1000)]
                     public static void Create()
                     {
                         CreateOriginIfNull();

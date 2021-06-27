@@ -6,7 +6,6 @@
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,7 @@ using XLua;
 
 namespace IFramework.Hotfix.Lua
 {
-    public static class LuaConfigs
+    static class LuaConfigs
     {
         class LuaFileInitializer : EditorEnv.FileInitializer
         {
@@ -39,6 +38,7 @@ namespace IFramework.Hotfix.Lua
                     return new List<string>() {
                         "Assets/Project/Lua/FixCsharp.lua",
                         "Assets/Project/Lua/GameLogic.lua",
+                        "Assets/Project/Lua/GlobalDefine.lua",
                     };
                 }
             }
@@ -54,20 +54,15 @@ namespace IFramework.Hotfix.Lua
                     {
                         File.WriteAllText(path, "Log.L('Game Logic')\n");
                     }
+                    if (index == 2)
+                    {
+                        File.WriteAllText(path, "Log.L('GlobalDefine')\n");
+                    }
                 }
                 return true;
             }
         }
 
-        [CSharpCallLua]
-        [ReflectionUse]
-        public static List<Type> refs = new List<Type>()
-       {
-          typeof(IFramework.Tweens.TweenEx),
-          typeof(IFramework.Hotfix.Lua.UnityEngineObjectEx),
-                    typeof(System.Action<bool>),
-
-       };
         /***************如果你全lua编程，可以参考这份自动化配置***************/
         //--------------begin 纯lua编程配置参考----------------------------
         static List<string> exclude = new List<string> {
@@ -122,7 +117,7 @@ namespace IFramework.Hotfix.Lua
             return false;
         }
 
-        // [LuaCallCSharp]
+        [LuaCallCSharp]
         public static IEnumerable<Type> LuaCallCSharp
         {
             get
@@ -141,6 +136,7 @@ namespace IFramework.Hotfix.Lua
 
                 string[] customAssemblys = new string[] {
                     "Assembly-CSharp",
+                    "IFramework"
                 };
                 var customTypes = (from assembly in customAssemblys.Select(s => Assembly.Load(s))
                                    from type in assembly.GetExportedTypes()
@@ -152,7 +148,7 @@ namespace IFramework.Hotfix.Lua
         }
 
         //自动把LuaCallCSharp涉及到的delegate加到CSharpCallLua列表，后续可以直接用lua函数做callback
-        //  [CSharpCallLua]
+        [CSharpCallLua]
         public static List<Type> CSharpCallLua
         {
             get
@@ -192,7 +188,7 @@ namespace IFramework.Hotfix.Lua
 
 
         /***************热补丁可以参考这份自动化配置***************/
-        // [Hotfix]
+        [Hotfix]
         static IEnumerable<Type> HotfixInject
         {
             get

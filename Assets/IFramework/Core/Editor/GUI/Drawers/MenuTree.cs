@@ -183,5 +183,10 @@ namespace IFramework.GUITool
         {
             _tree.Clear();
         }
+
+        protected override void OnDispose()
+        {
+            Clear();
+        }
     }
 }

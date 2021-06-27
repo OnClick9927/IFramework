@@ -250,6 +250,12 @@ namespace IFramework.Tweens
 
                 GUI.EndGroup();
             }
+
+            protected override void OnDispose()
+            {
+                
+            }
+
             ITween tween;
         }
         [Serializable]
@@ -351,6 +357,11 @@ namespace IFramework.Tweens
                     GUI.Label(new Rect(cone.position + Vector2.one * 10, size), content);
                 }
                 GUI.EndGroup();
+            }
+
+            protected override void OnDispose()
+            {
+               
             }
         }
     }

@@ -45,10 +45,21 @@ namespace IFramework.UI
             }
         }
 
+
+        public IEventArgs args { get; private set; }
+        public void SetArgs(IEventArgs args)
+        {
+            this.args = args;
+        }
+
         /// <summary>
         /// 该ui所属层级
         /// </summary>
         public virtual UILayer layer { get { return UILayer.Common; } }
+        /// <summary>
+        /// 相同层级的比较的值，越大，越后面渲染
+        /// </summary>
+        public virtual int layerOrder { get { return 0; } }
         /// <summary>
         /// 是否放入堆栈
         /// </summary>

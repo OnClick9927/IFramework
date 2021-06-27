@@ -25,21 +25,24 @@ namespace IFramework.UI
 
         void AddLoader(IPanelLoader loader);
         void ClearMemory();
+        void Close(string name);
         void CreateCanvas();
         bool Exist(UIPanel panel);
         bool ExistInMemory(UIPanel panel);
         bool ExistInStack(UIPanel panel);
         UIPanel FindPanel(string name);
-        UIPanel Get(Type type, string name);
-        T Get<T>(string name) where T : UIPanel;
+        UIPanel Get(string name);
         bool GoBack();
         bool GoForWard();
-        UIPanel Load(Type type, string name);
-        T Load<T>(string name) where T : UIPanel;
+        void Hide(string name);
+        UIPanel Load(string name);
         UIPanel MemoryPeek();
+        void Pause(string name);
         void Push(UIPanel ui);
         void PutCamera(Camera camera);
         void SetCanvas(Canvas canvas);
         void SetGroups(IGroups groups);
+        void Show(string name);
+        void UnPause(string name);
     }
 }

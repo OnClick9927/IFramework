@@ -13,6 +13,6 @@ namespace IFramework.UI
     /// </summary>
     public enum ViewEventType
     {
-        None, OnLoad, OnTop, OnPress, OnPop, OnClear
+        None, OnLoad, OnTop, OnPress, OnPop, OnClear, OnShow, OnHide, OnPause, OnUnPause, OnClose
     }
 }

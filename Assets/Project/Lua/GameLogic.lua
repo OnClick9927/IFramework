@@ -1,1 +1,1 @@
-Log.L('Game Logic')
+Log.L("Game Logic")

@@ -68,20 +68,25 @@ namespace IFramework
         }
         class ProjectFloderInitializer : FileInitializer
         {
-            protected override List<string> directorys { get {
+            protected override List<string> directorys
+            {
+                get
+                {
                     return new List<string>()
                     {
                         "Assets/Project",
-                        "Assets/Project/Sources",
-                        "Assets/Project/Sources/Shaders",
-                        "Assets/Project/Sources/Textures",
-                        "Assets/Project/Sources/Images",
+                        "Assets/Project",
+                        "Assets/Project/Shaders",
+                        "Assets/Project/Textures",
+                        "Assets/Project/Images",
                         "Assets/Project/Scripts",
                         "Assets/Project/Sences",
+                        "Assets/Project/Prefabs",
                         "Assets/Project/Resources",
                         "Assets/StreamingAssets",
                     };
-                } }
+                }
+            }
 
             protected override List<string> files { get { return null; } }
         }
@@ -90,7 +95,7 @@ namespace IFramework
             public void Excute()
             {
 #if UNITY_2018_1_OR_NEWER
-             PlayerSettings.allowUnsafeCode = true;
+                PlayerSettings.allowUnsafeCode = true;
 #else
             string  path = UnityEngine.Application.dataPath.CombinePath("mcs.rsp");
             string content = "-unsafe";
@@ -160,7 +165,7 @@ namespace IFramework
         {
             get
             {
-                string path = Path.Combine(memoryPath,"FormatScripts");
+                string path = Path.Combine(memoryPath, "FormatScripts");
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 return path;

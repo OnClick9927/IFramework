@@ -6,7 +6,6 @@
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
-using System;
 
 namespace IFramework.UI
 {
@@ -18,9 +17,8 @@ namespace IFramework.UI
         /// <summary>
         /// 加载
         /// </summary>
-        /// <param name="type"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        UIPanel Load(Type type, string name);
+        UIPanel Load(ref string name);
     }
 }

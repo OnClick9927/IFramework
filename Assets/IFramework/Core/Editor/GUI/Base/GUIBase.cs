@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace IFramework.GUITool
 {
-    public abstract class GUIBase :IDisposable
+    public abstract class GUIBase :DisposableObject
     {
         public Rect position { get; private set; }
 
@@ -19,12 +19,6 @@ namespace IFramework.GUITool
         {
             this.position = position;
         }
-        public void Dispose()
-        {
-            OnDispose();
-        }
-
-        protected virtual void OnDispose() { }
     }
 
 }

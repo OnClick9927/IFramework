@@ -13,13 +13,6 @@ using UnityEditor;
 
 namespace IFramework.GUITool.ToorbarMenu
 {
-    class Styles
-    {
-        public static GUIStyle toolBar = GUIStyles.Get("ToolBar");
-        public static GUIStyle toolbarbutton = GUIStyles.Get("toolbarbutton");
-        public static GUIStyle tooltip = GUIStyles.Get("Tooltip");
-        public static GUIStyle dropDown = GUIStyles.Get("ToolbarDropDown");
-    }
     public abstract class ToolbarNode 
     {
         public ToolBarTree tree;
@@ -108,10 +101,10 @@ namespace IFramework.GUITool.ToorbarMenu
             switch (tree.type)
             {
                 case BarType.Horzontal:
-                    GUILayout.Label(content, Styles.tooltip, GUILayout.Width(width));
+                    GUILayout.Label(content, GUIStyles.Tooltip, GUILayout.Width(width));
                     break;
                 case BarType.Vertical:
-                    GUILayout.Label(content, Styles.tooltip, GUILayout.Height(width));
+                    GUILayout.Label(content, GUIStyles.Tooltip, GUILayout.Height(width));
 
                     break;
                 default:
@@ -171,7 +164,7 @@ namespace IFramework.GUITool.ToorbarMenu
                     break;
             }
             Rect r = GUILayoutUtility.GetLastRect();
-            if (GUI.Button(r, content, Styles.toolbarbutton))
+            if (GUI.Button(r, content, GUIStyles.toolbarbutton))
             {
                 if (onClick != null) onClick(r);
             }
@@ -196,7 +189,7 @@ namespace IFramework.GUITool.ToorbarMenu
                     break;
             }
             Rect r = GUILayoutUtility.GetLastRect();
-            if (GUI.Button(r, content, Styles.dropDown))
+            if (GUI.Button(r, content, GUIStyles.ToolbarDropDown))
             {
                 if (onClick != null) onClick(r);
             }
@@ -219,10 +212,10 @@ namespace IFramework.GUITool.ToorbarMenu
             switch (tree.type)
             {
                 case BarType.Horzontal:
-                    val= GUILayout.Toggle( val, content, Styles.toolbarbutton, GUILayout.Width(width));
+                    val= GUILayout.Toggle( val, content, GUIStyles.toolbarbutton, GUILayout.Width(width));
                     break;
                 case BarType.Vertical:
-                    val= GUILayout.Toggle( val, content, Styles.toolbarbutton, GUILayout.Height(width));
+                    val= GUILayout.Toggle( val, content, GUIStyles.toolbarbutton, GUILayout.Height(width));
                     break;
                 default:
                     break;
@@ -255,10 +248,10 @@ namespace IFramework.GUITool.ToorbarMenu
             switch (tree.type)
             {
                 case BarType.Horzontal:
-                    tmp = EditorGUILayout.Popup(value, ops, Styles.dropDown, GUILayout.Width(width));
+                    tmp = EditorGUILayout.Popup(value, ops, GUIStyles.ToolbarDropDown, GUILayout.Width(width));
                     break;
                 case BarType.Vertical:
-                    tmp = EditorGUILayout.Popup(value, ops, Styles.dropDown, GUILayout.Height(width));
+                    tmp = EditorGUILayout.Popup(value, ops, GUIStyles.ToolbarDropDown, GUILayout.Height(width));
                     break;
                 default:
                     break;
@@ -280,12 +273,12 @@ namespace IFramework.GUITool.ToorbarMenu
         private List<ToolbarNode> _nodes = new List<ToolbarNode>();
         public override void OnGUI(Rect position)
         {
-            Styles.toolBar.fixedHeight = position.height;
+            GUIStyles.ToolBar.fixedHeight = position.height;
             GUILayout.BeginArea(position);
             switch (type)
             {
                 case BarType.Horzontal:
-                    GUILayout.BeginHorizontal(Styles.toolBar, GUILayout.Width(position.width));
+                    GUILayout.BeginHorizontal(GUIStyles.ToolBar, GUILayout.Width(position.width));
                     _nodes.ForEach((n) =>
                     {
                         if (n.canshow)
@@ -296,7 +289,7 @@ namespace IFramework.GUITool.ToorbarMenu
                     GUILayout.EndHorizontal();
                     break;
                 case BarType.Vertical:
-                    GUILayout.BeginVertical(Styles.toolBar, GUILayout.Width(position.width));
+                    GUILayout.BeginVertical(GUIStyles.ToolBar, GUILayout.Width(position.width));
                     _nodes.ForEach((n) =>
                     {
                         if (n.canshow)
