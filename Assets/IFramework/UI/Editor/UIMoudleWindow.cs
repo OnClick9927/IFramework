@@ -19,6 +19,13 @@ namespace IFramework.UI
     [EditorWindowCache("IFramework.UIModule")]
     public partial class UIMoudleWindow : EditorWindow
     {
+        [CustomEditor(typeof(NamesSto))]
+        class NamesStoEditor:Editor
+        {
+            public override void OnInspectorGUI()
+            {
+            }
+        }
         public class UIMoudleWindowTab
         {
             public virtual string name { get; }
@@ -32,20 +39,28 @@ namespace IFramework.UI
         {
             private const string key = "MVVM_GenCodeView";
             public override string name { get { return "MVVN_GenCode_CS"; } }
-            [SerializeField] private string UIMapDir;
-            [SerializeField] private string PanelGenDir { get {
+            [SerializeField] private string UIMapDir="Assets/Project";
+            [SerializeField]
+            private string PanelGenDir
+            {
+                get
+                {
                     if (panel == null) return "";
                     string path = UIMapDir.CombinePath(panel.name);
                     return path;
-                } }
-            private string ns { get
+                }
+            }
+            private string ns
+            {
+                get
                 {
-                    if (panel!=null)
+                    if (panel != null)
                     {
                         return panel.GetType().Namespace;
                     }
                     return "";
-                } }
+                }
+            }
             [SerializeField] private string UIMapName = "UIMap_MVVM";
             //[SerializeField] private List<string> panelTypes;
             [SerializeField] private UIPanel panel;
@@ -53,20 +68,17 @@ namespace IFramework.UI
             //[SerializeField] private string panelType;
             [SerializeField] private List<string> modelTypes;
             [SerializeField] private string modelType;
-
+            private NamesSto sto;
             string UIMap_CSName { get { return UIMapName.Append(".cs"); } }
 
             public override void OnEnable()
-            {
+            {   
                 var last = EditorTools.Prefs.GetObject<MVVM_GenCodeView, MVVM_GenCodeView>(key);
                 if (last != null)
                 {
                     this.panel = last.panel;
                     this.UIMapDir = last.UIMapDir;
                     this.UIMapName = last.UIMapName;
-
-                    //this.panelTypes = last.panelTypes;
-                    //this.panelType = last.panelType;
                     this.modelTypes = last.modelTypes;
                     this.modelType = last.modelType;
                 }
@@ -106,7 +118,7 @@ namespace IFramework.UI
                 if (EditorApplication.isCompiling)
                 {
                     GUILayout.Label("Editor is Compiling");
-                    GUILayout.Label("please wait"); 
+                    GUILayout.Label("please wait");
                     return;
                 }
                 GUILayout.Space(5);
@@ -144,7 +156,7 @@ namespace IFramework.UI
                 EditorGUILayout.LabelField("UIPanelGenPath", PanelGenDir);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if (panel !=null && !Directory.Exists(PanelGenDir))
+                    if (panel != null && !Directory.Exists(PanelGenDir))
                     {
                         Directory.CreateDirectory(PanelGenDir);
                         AssetDatabase.Refresh();
@@ -173,7 +185,7 @@ namespace IFramework.UI
                         }
                         else
                         {
-                            CreateModel(panel.GetType(),ns);
+                            CreateModel(panel.GetType(), ns);
                         }
                     }
                     GUILayout.Space(20);
@@ -189,14 +201,14 @@ namespace IFramework.UI
                     }
                     GUILayout.EndHorizontal();
                 }
-               
+
                 GUILayout.Space(10);
                 if (hashID == 0) hashID = "MVVM_GenCodeView".GetHashCode();
 
                 GUILayout.Space(10);
                 GUILayout.BeginHorizontal();
                 {
-                    GUILayout.Label("Click To Select Model Type",GUIStyles.toolbar);
+                    GUILayout.Label("Click To Select Model Type", GUIStyles.toolbar);
                     GUILayout.Label("");
                     Rect pos = GUILayoutUtility.GetLastRect();
 
@@ -228,46 +240,96 @@ namespace IFramework.UI
                 }
 
                 GUILayout.Space(10);
-                    if (GUILayout.Button("Gen"))
+                if (GUILayout.Button("Gen"))
+                {
+                    if (string.IsNullOrEmpty(UIMapDir))
                     {
-                        if (string.IsNullOrEmpty(UIMapDir))
-                        {
-                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Map Gen Dir "));
-                            return;
-                        }
-                        if (panel==null)
-                        {
-                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Select UI Panel"));
-                            return;
-                        }
-                        if (string.IsNullOrEmpty(modelType))
-                        {
-                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Select UI Model Type "));
-                            return;
-                        }
-                        string _modelType = modelType.Split('.').ToList().Last();
-                        string paneltype = panel.GetType().Name;
-                        string vmType = paneltype.Append("ViewModel");
-                        string viewType = paneltype.Append("View");
-                        WriteView(viewType, vmType, panel.GetType(),paneltype,ns);
-                        WriteVM(vmType, viewType,ns);
-                        WriteMap(UIMapDir.CombinePath(UIMap_CSName),panel.name,ns);
-                        AssetDatabase.Refresh();
+                        EditorWindow.focusedWindow.ShowNotification(new GUIContent("Set UI Map Gen Dir "));
+                        return;
                     }
+                    if (panel == null)
+                    {
+                        EditorWindow.focusedWindow.ShowNotification(new GUIContent("Select UI Panel"));
+                        return;
+                    }
+                    if (string.IsNullOrEmpty(modelType))
+                    {
+                        EditorWindow.focusedWindow.ShowNotification(new GUIContent("Select UI Model Type "));
+                        return;
+                    }
+                    string _modelType = modelType.Split('.').ToList().Last();
+                    string paneltype = panel.GetType().Name;
+                    string vmType = paneltype.Append("ViewModel");
+                    string viewType = paneltype.Append("View");
+                    if (panel != null && !Directory.Exists(PanelGenDir))
+                    {
+                        Directory.CreateDirectory(PanelGenDir);
+                    }
+                    WriteView(viewType, vmType, panel.GetType(), paneltype, ns);
+                    WriteVM(vmType, viewType, ns);
+                    WriteMap(UIMapDir.CombinePath(UIMap_CSName), panel.name, ns, modelType);
+                    AssetDatabase.Refresh();
+                }
+                GUILayout.Space(10);
+                if (GUILayout.Button("Load Panel Names Map"))
+                {
+                    sto = CheckNameSto(UIMapDir);
+                }
+                if (sto!=null)
+                {
+                    scroll = GUILayout.BeginScrollView(scroll);
+                    {
+                        sto.map.ForEach((index,_nm) =>
+                        {
+                            GUILayout.BeginHorizontal();
+                            {
+                                GUILayout.Label(_nm.panelName);
+                                if (GUILayout.Button("",GUIStyles.minus))
+                                {
+                                    sto.RemoveMap(_nm.panelName);
+                                    EditorTools.ScriptableObjectTool.Update(sto);
+                                    Directory.Delete(sto.workspace.CombinePath(_nm.panelName), true);
+                                    WriteMap(sto.workspace.CombinePath(UIMap_CSName), sto.ns);
+                                }
+                                GUILayout.EndHorizontal();
+                            }
 
+                        });
+
+                        GUILayout.EndScrollView();
+                    }
+                }
 
             }
+            Vector2 scroll;
+            private NamesSto CheckNameSto(string work)
+            {
+                string path = work.CombinePath("Editor");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                path = path.CombinePath("NamesSto.asset");
+                if (!File.Exists(path))
+                {
+                    return EditorTools.ScriptableObjectTool.Create<NamesSto>(path);
+                }
+                return EditorTools.ScriptableObjectTool.Load<NamesSto>(path);
+            }
+        
+
+
             private void CreateEventArgs(Type type, string ns)
             {
                 WriteTxt(PanelGenDir.CombinePath($"{type.Name}Args.cs"), argsOrigin, null, ns);
                 AssetDatabase.Refresh();
             }
-            private void CreateModel(Type type,string ns)
+            private void CreateModel(Type type, string ns)
             {
-                WriteTxt(PanelGenDir.CombinePath($"{type.Name}Model.cs"), modelOrigin, null,ns);
+                WriteTxt(PanelGenDir.CombinePath($"{type.Name}Model.cs"), modelOrigin, null, ns);
                 AssetDatabase.Refresh();
             }
-            private void WriteVM(string vmType, string viewType,string ns)
+            private void WriteVM(string vmType, string viewType, string ns)
             {
                 string designPath = PanelGenDir.CombinePath(vmType.Append(".Design.cs"));
                 string path = PanelGenDir.CombinePath(vmType.Append(".cs"));
@@ -293,32 +355,32 @@ namespace IFramework.UI
                                              .Replace("#SyncModelValue#", syncStr)
                                              .Replace(".Design", "");
                                }
-                           ,ns);
+                           , ns);
                 if (!File.Exists(path))
                 {
                     WriteTxt(path, vmScriptOrigin, (str) => {
                         return str.Replace("#viewType#", viewType);
-                    },ns);
+                    }, ns);
                 }
             }
 
-            private void WriteView(string viewType, string vmType,Type type,string panelType,string ns)
+            private void WriteView(string viewType, string vmType, Type type, string panelType, string ns)
             {
                 string designPath = PanelGenDir.CombinePath(viewType.Append(".Design.cs"));
                 string path = PanelGenDir.CombinePath(viewType.Append(".cs"));
 
                 WriteTxt(designPath, viewDesignScriptOrigin,
                (str) => {
-                 
+
                    return str.Replace("#VMType#", vmType)
                    .Replace("#PanelType#", panelType)
                    .Replace("#panelfield#", GetPanelField(type))
                    .Replace(".Design", "");
-               },ns
+               }, ns
                );
                 if (!File.Exists(path))
                 {
-                    WriteTxt(path, viewScriptOrigin, null,ns);
+                    WriteTxt(path, viewScriptOrigin, null, ns);
                 }
             }
             private string GetPanelField(Type panel)
@@ -351,81 +413,28 @@ namespace IFramework.UI
                 return result.Append(string.Format("\t\t\tthis.{0} = Tmodel.{0};\n", fn));
 
             }
-
-            private void WriteMap(string path,string panelName,string ns)
+            private void WriteMap(string path,string ns)
             {
-                string txt = "";
-                if (File.Exists(path))
-                {
-                    txt = File.ReadAllText(path);
-                }
-                var strs = txt.Replace("\r\n", "\n").Split('\n');
-                string flag = "//ToDo";
-                List<string> fits = new List<string>();
-
-                for (int i = 0; i < strs.Length; i++)
-                {
-                    if (strs[i].Contains("System.Tuple.Create") || strs[i].Contains(flag))
-                    {
-                        fits.Add(strs[i]);
-                    }
-                }
-                if (fits.Count == 0)
-                {
-                    fits.Add(flag);
-                }
-                string panelfitString = string.Format("{0} {1} ,","{", panelName);
-                for (int i = 0; i < fits.Count; i++)
-                {
-                    if (fits[i].Contains(panelfitString))
-                    {
-                        fits.RemoveAt(i);
-                        break;
-                    }
-                }
-                string tmp = string.Format("\t\t\t{2} {0} ,System.Tuple.Create(typeof({1}),typeof({0}View),typeof({0}ViewModel)){3},", panelName, modelType, "{", "}");
-                fits.Insert(0, tmp);
                 string replace = "";
-                for (int i = 0; i < fits.Count - 1; i++)
-                {
-                    replace = replace.Append(string.Format("{0}\n", fits[i]));
-                }
-                txt = mapScriptOrigin.Replace(flag, replace.Append(string.Format("\t\t\t{0}\n", flag)));
-
-                flag = "//Names";
-                fits.Clear();
-                for (int i = 0; i < strs.Length; i++)
-                {
-                    if (strs[i].Contains("public const string") || strs[i].Contains(flag))
-                    {
-                        fits.Add(strs[i]);
-                    }
-                }
-                if (fits.Count == 0)
-                {
-                    fits.Add(flag);
-                }
-                panelfitString = string.Format("public const string {0} = \"{0}\"; ", panelName);
-                for (int i = 0; i < fits.Count; i++)
-                {
-                    if (fits[i].Contains(panelfitString))
-                    {
-                        fits.RemoveAt(i);
-                        break;
-                    }
-                }
-                tmp = string.Format("\t\t\t{0}", panelfitString);
-                fits.Insert(0, tmp);
-                replace = "";
-                for (int i = 0; i < fits.Count - 1; i++)
-                {
-                    replace = replace.Append(string.Format("{0}\n", fits[i]));
-                }
-                txt = txt.Replace(flag, replace.Append(string.Format("\t\t\t{0}\n", flag)));
-
-                WriteTxt(path, txt, null,ns);
+                string namerp = "";
+                var sto = CheckNameSto(UIMapDir);
+                sto.map.ForEach(_nm => {
+                    namerp = namerp.Append("\t\tpublic const string " + _nm.panelName + " = " + "\"" + _nm.panelName + "\";\n");
+                    replace = replace.Append("\t\t\t" + _nm.content + ",\n");
+                });
+                WriteTxt(path, mapScriptOrigin.Replace("//Names", namerp).Replace("//ToDo", replace), null, ns);
             }
-            private static void WriteTxt(string writePath, string source, Func<string, string> func,string ns)
+            private void WriteMap(string path, string panelName, string ns,string modelType)
+            {
+                var sto = CheckNameSto(UIMapDir);
+                string content= string.Format("{2} {0} ,System.Tuple.Create(typeof({1}),typeof({0}View),typeof({0}ViewModel)){3}", panelName, modelType, "{", "}");
+                sto.AddMap(panelName, content);
+                sto.ns = ns;
+                sto.workspace = UIMapDir;
+                EditorTools.ScriptableObjectTool.Update(sto);
+                WriteMap(path,ns);
+            }
+            private static void WriteTxt(string writePath, string source, Func<string, string> func, string ns)
             {
                 source = source.Replace("#User#", EditorTools.ProjectConfig.UserName)
                          .Replace("#UserSCRIPTNAME#", Path.GetFileNameWithoutExtension(writePath))
@@ -457,12 +466,12 @@ namespace IFramework.UI
             "\t\t//write your args fields here\n" +
             "\t}\n" +
             "}";
-            private const string modelOrigin=head+
+            private const string modelOrigin = head +
             "namespace #UserNameSpace#\n" +
             "{\n" +
             "\tpublic class #UserSCRIPTNAME# : IModel\n" +
             "\t{\n" +
-            "\t\t//write your model fields here\n"+
+            "\t\t//write your model fields here\n" +
             "\t}\n" +
             "}";
             private const string vmDesignScriptOrigin = head +
@@ -582,10 +591,10 @@ namespace IFramework.UI
             private const string mapScriptOrigin = head +
            "namespace #UserNameSpace#\n" +
            "{\n" +
-            "\tpartial class #UserSCRIPTNAME#\n"+
-            "\t{\n"+
-            "//Names\n"+
-            "\t}\n"+
+            "\tpartial class #UserSCRIPTNAME#\n" +
+            "\t{\n" +
+            "//Names\n" +
+            "\t}\n" +
            "\tpublic partial class #UserSCRIPTNAME# \n" +
            "\t{\n" +
            "\t\tpublic static System.Collections.Generic.Dictionary<string, System.Tuple<System.Type, System.Type, System.Type>> map = \n" +

@@ -36,11 +36,11 @@ namespace IFramework.UI.Example
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                module.Get(UIMap_MVVM.Panel01);
+               // module.Get(UIMap_MVVM.Panel01);
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
-                module.Get(UIMap_MVVM.Panel02);
+                //module.Get(UIMap_MVVM.Panel02);
 
             }
         }
