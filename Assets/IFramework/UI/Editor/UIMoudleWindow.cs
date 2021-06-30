@@ -82,6 +82,12 @@ namespace IFramework.UI
                     this.modelTypes = last.modelTypes;
                     this.modelType = last.modelType;
                 }
+                modelTypes = typeof(IModel).GetSubTypesInAssemblys()
+                  .Where(type => !type.IsAbstract && type.IsClass)
+                  .Select((type) =>
+                  {
+                      return type.FullName;
+                  }).ToList();
             }
             public override void OnDisable()
             {
@@ -267,7 +273,7 @@ namespace IFramework.UI
                     }
                     WriteView(viewType, vmType, panel.GetType(), paneltype, ns);
                     WriteVM(vmType, viewType, ns);
-                    WriteMap(UIMapDir.CombinePath(UIMap_CSName), panel.name, ns, modelType);
+                    WriteMap(UIMapDir.CombinePath(UIMap_CSName), panel.name, ns, modelType,panel.GetType());
                     AssetDatabase.Refresh();
                 }
                 GUILayout.Space(10);
@@ -424,10 +430,10 @@ namespace IFramework.UI
                 });
                 WriteTxt(path, mapScriptOrigin.Replace("//Names", namerp).Replace("//ToDo", replace), null, ns);
             }
-            private void WriteMap(string path, string panelName, string ns,string modelType)
+            private void WriteMap(string path, string panelName, string ns,string modelType,Type panelType)
             {
                 var sto = CheckNameSto(UIMapDir);
-                string content= string.Format("{2} {0} ,System.Tuple.Create(typeof({1}),typeof({0}View),typeof({0}ViewModel)){3}", panelName, modelType, "{", "}");
+                string content= string.Format("{2} {0} ,System.Tuple.Create(typeof({1}),typeof({4}.{5}View),typeof({4}.{5}ViewModel)){3}", panelName, modelType, "{", "}",ns,panelType.Name);
                 sto.AddMap(panelName, content);
                 sto.ns = ns;
                 sto.workspace = UIMapDir;
