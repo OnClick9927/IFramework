@@ -218,9 +218,9 @@ namespace IFramework
         /// <typeparam name="type"></typeparam>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public static bool SubscribeRootMessage<type>(IMessageListener listener)
+        public static void SubscribeRootMessage<type>(IMessageListener listener)
         {
-            return env.modules.Message.Subscribe<type>(listener);
+            env.modules.Message.Subscribe<type>(listener);
         }
         /// <summary>
         /// 取消监听
@@ -228,9 +228,9 @@ namespace IFramework
         /// <typeparam name="type"></typeparam>
         /// <param name="listener"></param>
         /// <returns></returns>
-        public static bool UnSubscribeRootMessage<type>(IMessageListener listener)
+        public static void UnSubscribeRootMessage<type>(IMessageListener listener)
         {
-            return env.modules.Message.UnSubscribe<type>(listener);
+            env.modules.Message.UnSubscribe<type>(listener);
         }
         /// <summary>
         /// 发布消息

@@ -14,6 +14,7 @@ namespace IFramework.UI.Example
 		public UnityEngine.UI.Text Count_Text;
 		public UnityEngine.UI.Button BTn_ADD;
 		public UnityEngine.UI.Button BTn_SUB;
+        public UnityEngine.UI.Button BTn_Next;
 
-	}
+    }
 }

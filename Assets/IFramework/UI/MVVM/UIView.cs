@@ -6,6 +6,7 @@
  *Description:    IFramework
  *History:        2018.11--
 *********************************************************************************/
+using IFramework.Modules.Message;
 using IFramework.Modules.MVVM;
 using System;
 using UnityEngine.Events;
@@ -24,7 +25,10 @@ namespace IFramework.UI
         private ViewEventType _lastState = ViewEventType.None;
 
         public ViewEventType lastState { get { return _lastState; } }
-
+        protected void Publish(IEventArgs args, MessageUrgencyType type = MessageUrgencyType.Common)
+        {
+            this.message.Publish(this.GetType(), args, type);
+        }
         protected virtual void Show()
         {
             panel.Show();

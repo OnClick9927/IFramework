@@ -8,65 +8,69 @@
 *********************************************************************************/
 namespace IFramework.UI.Example
 {
-	public partial class Panel01View
-	{
-		protected override void BindProperty()
-		{
-			base.BindProperty();
+    public partial class Panel01View
+    {
+        protected override void BindProperty()
+        {
+            base.BindProperty();
             this.handler.BindProperty(() => { this.Count_Text.text = this.Tcontext.count.ToString(); });
-			//ToDo
-		}
+            //ToDo
+        }
 
-		protected override void OnClear()
-		{
-		}
+        protected override void OnClear()
+        {
+        }
 
-		protected override void OnLoad()
-		{
+        protected override void OnLoad()
+        {
             BindBUtton(this.BTn_ADD, () =>
             {
-                this.message.Publish(this, new Panel01Args().SetType(Panel01ArgsEventType.Add));
+                Publish(new Panel01Args().SetType(Panel01ArgsEventType.Add));
             });
             BindBUtton(this.BTn_SUB, () =>
             {
-                this.message.Publish(this, new Panel01Args().SetType(Panel01ArgsEventType.Sub));
+                Publish(new Panel01Args().SetType(Panel01ArgsEventType.Sub));
+            });
+            BindBUtton(this.BTn_Next, () =>
+            {
+                Publish(new Panel01Args().SetType(Panel01ArgsEventType.Next));
             });
         }
 
-		protected override void OnPop(IFramework.UI.UIEventArgs arg)
-		{
+        protected override void OnPop(IFramework.UI.UIEventArgs arg)
+        {
             Hide();
-		}
+        }
 
-		protected override void OnPress(IFramework.UI.UIEventArgs arg)
-		{
+        protected override void OnPress(IFramework.UI.UIEventArgs arg)
+        {
             Hide();
-		}
+        }
 
-		protected override void OnTop(IFramework.UI.UIEventArgs arg)
-		{
+        protected override void OnTop(IFramework.UI.UIEventArgs arg)
+        {
             Show();
-		}
+        }
 
-		protected override void OnShow()
-		{
-		}
+        protected override void OnShow()
+        {
+        }
 
-		protected override void OnHide()
-		{
-		}
+        protected override void OnHide()
+        {
+        }
 
-		protected override void OnPause()
-		{
-		}
+        protected override void OnPause()
+        {
+        }
 
-		protected override void OnUnPause()
-		{
-		}
+        protected override void OnUnPause()
+        {
+        }
 
-		protected override void OnClose()
-		{
-		}
+        protected override void OnClose()
+        {
+        }
 
-	}
+    }
 }

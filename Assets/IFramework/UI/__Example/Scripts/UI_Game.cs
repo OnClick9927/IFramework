@@ -13,9 +13,9 @@ using IFramework;
 using UnityEngine;
 namespace IFramework.UI.Example
 {
-    public class UI_Game : Game,IPanelLoader
+    public class UI_Game : Game, IPanelLoader
     {
-        UIModule module;
+        public UIModule module;
         public override void Init()
         {
             module = modules.GetModule<UIModule>("Example");
@@ -31,17 +31,17 @@ namespace IFramework.UI.Example
 
         public override void Startup()
         {
+            module.Get(UIMap_MVVM.Panel01);
         }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-               // module.Get(UIMap_MVVM.Panel01);
+                module.Get(UIMap_MVVM.Panel01);
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
-                //module.Get(UIMap_MVVM.Panel02);
-
+                module.Get(UIMap_MVVM.Panel02);
             }
         }
     }

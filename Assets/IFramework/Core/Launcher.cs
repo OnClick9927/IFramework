@@ -7,18 +7,32 @@
  *History:        2018.11--
 *********************************************************************************/
 using IFramework.Modules;
+using IFramework.Singleton;
 using System;
 using UnityEngine;
 
 namespace IFramework
 {
-    [AddComponentMenu("IFramework/Launcher")]
-	public class Launcher:MonoBehaviour
-	{
-        public static Launcher instance;
+    [MonoSingletonPath("IFramework/Launcher")]
+    public class Launcher : MonoSingleton<Launcher>
+    {
         [Header("Can't be Null")]
-        public Game game;
-        public const EnvironmentType envType = EnvironmentType.Ev1;
+        private Game _game;
+        public Game game
+        {
+            get { return _game; }
+            set
+            {
+                _game = value;
+                if (_game != null)
+                {
+                    _game.Init();
+                    _game.Startup();
+                }
+            }
+        }
+        public static EnvironmentType envType;
+
         public static IEnvironment env { get { return Framework.GetEnv(envType); } }
         public static IFrameworkModules modules { get { return env.modules; } }
 
@@ -32,13 +46,7 @@ namespace IFramework
 
         private void Awake()
         {
-            DontDestroyOnLoad(this.gameObject);
-            if (game == null)
-                game = GetComponent<Game>();
-            instance = this;
             Framework.CreateEnv(envType).InitWithAttribute();
-            game.Init();
-            game.Startup();
         }
         private void OnDisable()
         {
@@ -51,7 +59,7 @@ namespace IFramework
         }
         private void FixedUpdate()
         {
-            if (onFixUpdate!=null)
+            if (onFixUpdate != null)
             {
                 onFixUpdate();
             }

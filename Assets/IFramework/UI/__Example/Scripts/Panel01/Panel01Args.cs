@@ -10,7 +10,7 @@ namespace IFramework.UI.Example
 {
     public enum Panel01ArgsEventType
     {
-        Add,Sub
+        Add,Sub,Next
     }
 
     public class Panel01Args : IEventArgs, IUIEvent<Panel01ArgsEventType, Panel01Args>

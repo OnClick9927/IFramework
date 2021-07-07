@@ -114,7 +114,6 @@ namespace IFramework
 
                 public const string host = "https://www.aicxz.com/api/v1";
 
-                public const string getSignupCode = host + "/User/GetSinupRandomCode";
                 public const string login = host + "/User/Login";
                 public const string loginWithToken = host + "/User/LoginWithToken";
                 public const string putpackage = host + "/Pkg/PutPkg";

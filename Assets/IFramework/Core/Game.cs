@@ -11,15 +11,17 @@ using UnityEngine;
 
 namespace IFramework
 {
-    [RequireComponent(typeof(Launcher))]
 	public abstract class Game:MonoBehaviour
 	{
-        public EnvironmentType envType { get { return Launcher.envType; } }
+        public EnvironmentType envType = EnvironmentType.Ev1;
         public IEnvironment env { get { return Launcher.env; } }
         public IFrameworkModules modules { get { return Launcher.modules; } }
-
-       
-
+        private void Awake()
+        {
+            Launcher.envType = envType;
+            Launcher.Instance.game = this;
+            transform.parent = Launcher.Instance.transform;
+        }
         public abstract void Init();
         public abstract void Startup();
 	}

@@ -13,6 +13,7 @@ namespace IFramework.UI.Example
 		private UnityEngine.UI.Text Count_Text { get { return Tpanel.Count_Text; } }
 		private UnityEngine.UI.Button BTn_ADD { get { return Tpanel.BTn_ADD; } }
 		private UnityEngine.UI.Button BTn_SUB { get { return Tpanel.BTn_SUB; } }
+        private UnityEngine.UI.Button BTn_Next { get { return Tpanel.BTn_Next; } }
 
-	}
+    }
 }

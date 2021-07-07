@@ -521,7 +521,7 @@ namespace IFramework
                     }
                 }
                 GUILayout.Space(10);
-                if (string.IsNullOrEmpty(_creater.ns) || !_creater.ns.Contains(EditorTools.ProjectConfig.NameSpace))
+                if (string.IsNullOrEmpty(_creater.ns) || !_creater.ns.StartsWith(EditorTools.ProjectConfig.NameSpace))
                 {
                     _creater.ns = EditorTools.ProjectConfig.NameSpace;
                 }

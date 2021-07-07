@@ -33,6 +33,9 @@ namespace IFramework.UI.Example
                     case Panel01ArgsEventType.Sub:
                         this.count--;
                         break;
+                    case Panel01ArgsEventType.Next:
+                        Launcher.Instance.game.As<UI_Game>().module.Get(UIMap_MVVM.Panel02);
+                        break;
                     default:
                         break;
                 }
