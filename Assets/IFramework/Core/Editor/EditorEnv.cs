@@ -80,7 +80,7 @@ namespace IFramework
                         "Assets/Project/Textures",
                         "Assets/Project/Images",
                         "Assets/Project/Scripts",
-                        "Assets/Project/Sences",
+                        "Assets/Project/Scenes",
                         "Assets/Project/Prefabs",
                         "Assets/Project/Resources",
                         "Assets/StreamingAssets",

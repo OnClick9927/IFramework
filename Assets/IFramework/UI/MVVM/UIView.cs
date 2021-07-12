@@ -45,10 +45,6 @@ namespace IFramework.UI
         {
             panel.UnPause();
         }
-        public virtual void Close()
-        {
-            panel.Close();
-        }
 
         protected UIView Bind(Text text, Func<string> getter)
         {

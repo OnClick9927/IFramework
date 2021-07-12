@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace IFramework.Tweens
 {
-    [MonoSingletonPath("IFramework.Tweens")]
+    [MonoSingletonPath("IFramework/Tweens")]
     class TweenSingleton:MonoSingletonPropertyClass<TweenSingleton>
     {
         public const EnvironmentType envType = EnvironmentType.Extra0;
@@ -53,9 +53,10 @@ namespace IFramework.Tweens
                 Framework.extra0.Update();
             }
         }
-        private void OnDestroy()
+        private void OnDisable()
         {
             Framework.extra0.Dispose();
         }
+      
     }
 }

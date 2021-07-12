@@ -424,7 +424,6 @@ namespace IFramework.Hotfix.Lua
              "----self:Hide()" + "\n" +
              "----self:Pause()" + "\n" +
              "----self:UnPause()" + "\n" +
-             "----self:Close()" + "\n" +
              "----self:BindButton(btn, func)" + "\n" +
              "----self:UnBindButton(btn)" + "\n" +
              "----self:GetComponent(path, type)" + "\n" +

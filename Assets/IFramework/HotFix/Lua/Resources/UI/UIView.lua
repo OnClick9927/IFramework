@@ -146,9 +146,6 @@ end
 function UIView:UnPause()
     self.panel:UnPause()
 end
-function UIView:Close()
-    self.panel:Close()
-end
 
 --- 以下是回调
 

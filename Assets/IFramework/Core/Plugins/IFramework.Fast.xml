@@ -1,0 +1,635 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IFramework.Fast</name>
+    </assembly>
+    <members>
+        <member name="T:IFramework.Fast.EnvironmentEntity`1">
+            <summary>
+            实体容器
+            </summary>
+            <typeparam name="TEnvironmentEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.EnvironmentEntity`1.self">
+            <summary>
+            跟实例
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.EnvironmentEntity`1.envType">
+            <summary>
+            环境类型
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.EnvironmentEntity`1.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.Initialize">
+            <summary>
+            初始化
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.Update">
+            <summary>
+            刷新
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.Destory">
+            <summary>
+            消灭
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.OnDispose">
+            <summary>
+            销毁
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.GetModel``1">
+            <summary>
+            获取根model
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.GetUtility``1">
+            <summary>
+            获取根工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.SubscribeMessage``1(IFramework.Modules.Message.MessageListener)">
+            <summary>
+            注册根消息
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.UnSubscribeMessage``1(IFramework.Modules.Message.MessageListener)">
+            <summary>
+            取消监听根消息
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.PublishMessage``1(IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布根消息
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.SendCommand(IFramework.ICommand)">
+            <summary>
+            发布根命令
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.SetModel``1(``0)">
+            <summary>
+            设置根数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="model"></param>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.SetUtility``1(``0)">
+            <summary>
+            设置根工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <param name="utility"></param>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.GetValue``1">
+            <summary>
+            获取根数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.EnvironmentEntity`1.SetValue``1(``0)">
+            <summary>
+            设置根数据
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t"></param>
+        </member>
+        <member name="T:IFramework.Fast.FastEx">
+            <summary>
+            扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetOtherSystemEntity``1(IFramework.Fast.ICanGetOtherSystemEntity)">
+            <summary>
+            获取其他系统
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetModel``1(IFramework.Fast.ICanGetModel)">
+            <summary>
+            获取数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetModel``2(IFramework.Fast.ICanGetOtherModel)">
+            <summary>
+            获取其他系统数据
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="TModel"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetEnvironmentModel``1(IFramework.Fast.ICanGetOtherModel)">
+            <summary>
+            获取根数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetUtility``1(IFramework.Fast.ICanGetOtherUtility)">
+            <summary>
+            获取工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetUtilty``2(IFramework.Fast.ICanGetOtherUtility)">
+            <summary>
+            获取其它系统工具
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="TUtility"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.GetEnvironmentUtility``1(IFramework.Fast.ICanGetOtherUtility)">
+            <summary>
+            获取根工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.PublishMessage``1(IFramework.Fast.ICanPublishMessage,IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.PublishMessage``2(IFramework.Fast.ICanPublishOtherMessage,IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布其他系统消息
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.PublishEnvironmentMessage``1(IFramework.Fast.ICanPublishOtherMessage,IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布根消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.SubscribeMessage``1(IFramework.Fast.ICanListenMessage,IFramework.Modules.Message.MessageListener)">
+            <summary>
+            注册监听消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.SubscribeMessage``2(IFramework.Fast.ICanListenOtherMessage,IFramework.Modules.Message.MessageListener)">
+            <summary>
+            注册监听其他系统消息
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.SubscribeEnvironmentMessage``1(IFramework.Fast.ICanListenOtherMessage,IFramework.Modules.Message.MessageListener)">
+            <summary>
+            注册监听根消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.UnSubscribeMessage``1(IFramework.Fast.ICanListenMessage,IFramework.Modules.Message.MessageListener)">
+            <summary>
+            取消监听消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.UnSubscribeMessage``2(IFramework.Fast.ICanListenOtherMessage,IFramework.Modules.Message.MessageListener)">
+            <summary>
+            取消监听其它系统消息
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.UnSubscribeEnvironmentMessage``1(IFramework.Fast.ICanListenOtherMessage,IFramework.Modules.Message.MessageListener)">
+            <summary>
+            取消监听根消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.FastEx.SendCommand``1(IFramework.Fast.ICanSendCommand,``0)">
+            <summary>
+            发送命令
+            </summary>
+            <typeparam name="TCommand"></typeparam>
+            <param name="obj"></param>
+            <param name="command"></param>
+        </member>
+        <member name="T:IFramework.Fast.ICanGetModel">
+            <summary>
+            可以获取数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanGetOtherModel">
+            <summary>
+            可以获取其他系统数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanGetOtherSystemEntity">
+            <summary>
+            可以获取其他系统实例
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanGetOtherUtility">
+            <summary>
+            可以获取其他系统工具
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanGetUtility">
+            <summary>
+            可以获取工具
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanListenMessage">
+            <summary>
+            可以监听消息
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanListenOtherMessage">
+            <summary>
+            可以监听其它系统消息
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanPublishMessage">
+            <summary>
+            可以发布消息
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanPublishOtherMessage">
+            <summary>
+            可以发布其他系统消息
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ICanSendCommand">
+            <summary>
+            可以发送命令
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.View`2">
+            <summary>
+            界面
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="TEnvironmentEntity"></typeparam>
+        </member>
+        <member name="T:IFramework.Fast.FastEntity`1">
+            <summary>
+            快速实体
+            </summary>
+            <typeparam name="TEnvironmentEntity"></typeparam>
+        </member>
+        <member name="M:IFramework.Fast.FastEntity`1.Inject">
+            <summary>
+            注入
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.FastEntity`1.GetEnvironmentEnitity">
+            <summary>
+            获取根实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:IFramework.Fast.FastEntity`1.EnvironmentEntity">
+            <summary>
+            所属环境实体
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.Processor`2">
+            <summary>
+            数据处理
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+            <typeparam name="TEnvironmentEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.Processor`2.systemEntity">
+            <summary>
+            实体
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.Processor`2.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.Processor`2.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.Processor`2.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.Processor`2.GetSystemEntity">
+            <summary>
+            获取所属系统实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Fast.IBelongToEnvironmentEntity">
+            <summary>
+            属于环境实例
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.IBelongToEnvironmentEntity.GetEnvironmentEnitity">
+            <summary>
+            获取环境实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Fast.IBelongToEnvironmentEntity`1">
+            <summary>
+            属于环境实例
+            </summary>
+            <typeparam name="TEnvironmentEntity"></typeparam>
+        </member>
+        <member name="T:IFramework.Fast.IBelongToSystemEntity">
+            <summary>
+            属于 系统实例
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.IBelongToSystemEntity.GetSystemEntity">
+            <summary>
+            获取系统
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Fast.IBelongToSystemEntity`1">
+            <summary>
+            属于系统实例
+            </summary>
+            <typeparam name="TSystemEntity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.IBelongToSystemEntity`1.systemEntity">
+            <summary>
+            实例
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.IEvvironmentEntity">
+            <summary>
+            容器
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.SystemEntity`1">
+            <summary>
+            子实体
+            </summary>
+            <typeparam name="TEnvironmentEnity"></typeparam>
+        </member>
+        <member name="P:IFramework.Fast.SystemEntity`1.name">
+            <summary>
+            标记
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.SystemEntity`1.container">
+            <summary>
+            数据容器
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.SystemEntity`1.message">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.Awake">
+            <summary>
+            初始化
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.SubscribeMessage``1(IFramework.Modules.Message.MessageListener)">
+            <summary>
+            注册消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.UnSubscribeMessage``1(IFramework.Modules.Message.MessageListener)">
+            <summary>
+            取消监听
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.PublishMessage``1(IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.SendCommand(IFramework.ICommand)">
+            <summary>
+            发送命令
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.GetModel``1">
+            <summary>
+            获取数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.GetUtility``1">
+            <summary>
+            获取工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.SetModel``1(``0)">
+            <summary>
+            设置数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="model"></param>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.SetUtility``1(``0)">
+            <summary>
+            设置工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <param name="utility"></param>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.GetValue``1">
+            <summary>
+            获取值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.SystemEntity`1.SetValue``1(``0)">
+            <summary>
+            设置值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t"></param>
+        </member>
+        <member name="T:IFramework.Fast.IProcessor">
+            <summary>
+            数据逻辑处理
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.IProcessor.env">
+            <summary>
+            环境
+            </summary>
+        </member>
+        <member name="T:IFramework.Fast.ISystemEntity">
+            <summary>
+            子实例
+            </summary>
+        </member>
+        <member name="P:IFramework.Fast.ISystemEntity.name">
+            <summary>
+            名字
+            </summary>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.GetValue``1">
+            <summary>
+            获取值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.SetValue``1(``0)">
+            <summary>
+            设置值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="t"></param>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.GetModel``1">
+            <summary>
+            获取数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.GetUtility``1">
+            <summary>
+            获取工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.SubscribeMessage``1(IFramework.Modules.Message.MessageListener)">
+            <summary>
+            注册消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.UnSubscribeMessage``1(IFramework.Modules.Message.MessageListener)">
+            <summary>
+            取消监听
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="listener"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.PublishMessage``1(IFramework.IEventArgs,IFramework.Modules.Message.MessageUrgencyType)">
+            <summary>
+            发布消息
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="args"></param>
+            <param name="priority"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.SendCommand(IFramework.ICommand)">
+            <summary>
+            发送命令
+            </summary>
+            <param name="command"></param>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.SetModel``1(``0)">
+            <summary>
+            设置数据
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="model"></param>
+        </member>
+        <member name="M:IFramework.Fast.ISystemEntity.SetUtility``1(``0)">
+            <summary>
+            设置工具
+            </summary>
+            <typeparam name="TUtility"></typeparam>
+            <param name="utility"></param>
+        </member>
+        <member name="T:IFramework.Fast.IUtility">
+            <summary>
+            工具
+            </summary>
+        </member>
+    </members>
+</doc>

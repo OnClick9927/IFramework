@@ -127,6 +127,6 @@ namespace IFramework.GUITool
         public static GUIStyle whiteMiniLabel = Get(EditorStyles.whiteMiniLabel);
         public static GUIStyle wordWrappedLabel = Get(EditorStyles.wordWrappedLabel);
         public static GUIStyle wordWrappedMiniLabel = Get(EditorStyles.wordWrappedMiniLabel);
-
+        public static GUIStyle SelectionRect = Get("SelectionRect");
     }
 }

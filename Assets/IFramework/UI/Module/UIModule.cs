@@ -56,7 +56,7 @@ namespace IFramework.UI
         #endregion
         private IGroups _groups;
         private List<IPanelLoader> _loaders;
-        private Dictionary<UILayer, List<WeakReference<UIPanel>>> _panelOrders;
+        private Dictionary<UILayer, List<UIPanel>> _panelOrders;
         private Stack<UIPanel> stack;
         private Stack<UIPanel> memory;
         /// <summary>
@@ -149,21 +149,14 @@ namespace IFramework.UI
             UILayer layer = panel.layer;
             int order = panel.layerOrder;
             if (!_panelOrders.ContainsKey(layer))
-                _panelOrders.Add(layer, new List<WeakReference<UIPanel>>());
+                _panelOrders.Add(layer, new List<UIPanel>());
             var list = _panelOrders[layer];
             _orderHelp.Clear();
 
             for (int i = list.Count - 1; i >= 0; i--)
             {
-                UIPanel _tmp;
-                if (!list[i].TryGetTarget(out _tmp))
-                {
-                    list.Remove(list[i]);
-                }
-                else
-                {
-                    _orderHelp.Add(_tmp);
-                }
+                UIPanel _tmp = list[i];
+                _orderHelp.Add(_tmp);
             }
             if (_orderHelp.Contains(panel)) return;
             _orderHelp.Sort((a, b) => { return a.layerOrder - b.layerOrder; });
@@ -182,7 +175,20 @@ namespace IFramework.UI
             {
                 panel.transform.SetSiblingIndex(sbindex);
             }
-            list.Add(new WeakReference<UIPanel>(panel));
+            list.Add(panel);
+        }
+
+        private void DestroyPanel(UIPanel panel)
+        {
+            if (ExistInStack(panel))
+            {
+                Log.E(string.Format("{0} still usefull ,you can't  close it", GetType()));
+            }
+            else
+            {
+                _panelOrders[panel.layer].Remove(panel);
+                GameObject.Destroy(panel.gameObject);
+            }
         }
     }
     /// <summary>
@@ -296,6 +302,7 @@ namespace IFramework.UI
                 if (p != null && !ExistInStack(p))
                 {
                     _groups.UnSubscribe(p);
+                    DestroyPanel(p);
                 }
             }
         }
@@ -368,6 +375,7 @@ namespace IFramework.UI
                 {
                     this._groups.OnClose(name);
                     _groups.UnSubscribe(panel);
+                    DestroyPanel(panel);
                 }
             }
         }
@@ -484,7 +492,7 @@ namespace IFramework.UI
             stack = new Stack<UIPanel>();
             memory = new Stack<UIPanel>();
             _loaders = new List<IPanelLoader>();
-            _panelOrders = new Dictionary<UILayer, List<WeakReference<UIPanel>>>();
+            _panelOrders = new Dictionary<UILayer, List<UIPanel>>();
         }
         protected override void OnDispose()
         {
@@ -503,5 +511,11 @@ namespace IFramework.UI
                 _groups.Update();
             }
         }
+
+
+#if UNITY_EDITOR
+        public Stack<UIPanel> GetStack() { return stack; }
+        public Stack<UIPanel> GetMemory() { return memory; }
+#endif
     }
 }

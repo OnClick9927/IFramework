@@ -95,19 +95,6 @@ namespace IFramework.UI
         {
             gameObject.SetActive(true);
         }
-        /// <summary>
-        /// 关闭/删除ui物体
-        /// </summary>
-        public void Close()
-        {
-            if (module.ExistInStack(this))
-            {
-                Log.E(string.Format("{0} still usefull ,you can't  close it", GetType()));
-            }
-            else
-            {
-                GameObject.Destroy(gameObject);
-            }
-        }
+
     }
 }

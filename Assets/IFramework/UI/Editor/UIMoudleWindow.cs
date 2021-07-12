@@ -33,7 +33,117 @@ namespace IFramework.UI
             public virtual void OnEnable() { }
             public virtual void OnDisable() { }
         }
+        [Serializable]
+        public class UIModuleStackWatch: UIMoudleWindowTab
+        {
+            private const string key = "UIModuleStackWatch";
+            public override string name { get { return "Stack_Watch"; } }
+            private UIModule module;
+            [SerializeField] private EnvironmentType type= EnvironmentType.Ev1;
+            [SerializeField] private string moduleName = "default";
+            private SearchField search;
+            public override void OnGUI()
+            {
+                type = (EnvironmentType)EditorGUILayout.EnumPopup("EnvType", type);
+                if (!EditorApplication.isPlaying) return;
+                GUILayout.BeginHorizontal();
+                {
+                    GUILayout.Label("ModuleName");
+                    GUILayout.Label("");
+                    search.OnGUI(GUILayoutUtility.GetLastRect());
+                    GUILayout.EndHorizontal();
+                }
 
+                if (module==null)
+                {
+                    Search_onEndEdit(moduleName);
+                }
+                if (module == null) return;
+                GUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("GoBack"))
+                    {
+                        module.GoBack();
+                    }
+                    if (GUILayout.Button("GoForward"))
+                    {
+                        module.GoForWard();
+                    }
+                    if (GUILayout.Button("ClearMemory"))
+                    {
+                        module.ClearMemory();
+                    }
+                    GUILayout.EndHorizontal();
+                }
+                var stack = module.GetStack();
+                var memory = module.GetMemory();
+                int count = stack.Count;
+                GUILayout.Label($"StackCount: {count}\t\tMemoryCount: {memory.Count}");
+                GUILayout.Label("Name\t\tLayer\t\tLayerOrder");
+                scroll = GUILayout.BeginScrollView(scroll);
+                {
+                    stack.Reverse().ForEach((p) =>
+                    {
+                        count--;
+                        string format = $"S-{p.name}\t\t{p.layer}\t\t{p.layerOrder}";
+                        if (count==0)
+                            format = $"C-{p.name}\t\t{p.layer}\t\t{p.layerOrder}";
+                        GUILayout.Label(format);
+                        var rect = GUILayoutUtility.GetLastRect();
+                        Event e = Event.current;
+                        if (count == 0 && e.type == EventType.Repaint)
+                        {
+                            GUIStyles.SelectionRect.Draw(rect, false, false, false, false);
+                        }
+                        if (rect.Contains(e.mousePosition) && e.clickCount == 2)
+                        {
+                            Selection.activeGameObject = p.gameObject;
+                        }
+
+                    });
+                    memory.ForEach((p) =>
+                    {
+                        string format = $"M-{p.name}\t\t{p.layer}\t\t{p.layerOrder}";
+                        GUILayout.Label(format);
+                        var rect = GUILayoutUtility.GetLastRect();
+                        Event e = Event.current;
+
+                        if (rect.Contains(e.mousePosition) && e.clickCount == 2)
+                        {
+                            Selection.activeGameObject = p.gameObject;
+                        }
+                    });
+                    GUILayout.EndScrollView();
+                }
+               
+            }
+            Vector2 scroll;
+            public override void OnDisable()
+            {
+                EditorTools.Prefs.SetObject<UIModuleStackWatch, UIModuleStackWatch>(key, this);
+            }
+            public override void OnEnable()
+            {
+                var last = EditorTools.Prefs.GetObject<UIModuleStackWatch, UIModuleStackWatch>(key);
+                if (last!=null)
+                {
+                    this.type = last.type;
+                    this.moduleName = last.moduleName;
+                }
+                search = new SearchField(moduleName, null, 0);
+                search.onEndEdit += Search_onEndEdit;
+            }
+
+            private void Search_onEndEdit(string obj)
+            {
+                moduleName = obj;
+                var env = Framework.GetEnv(type);
+                if (env!=null && env.inited)
+                {
+                    module = env.modules.GetModule<UIModule>(moduleName);
+                }
+            }
+        }
         [Serializable]
         public class MVVM_GenCodeView : UIMoudleWindowTab
         {
@@ -467,7 +577,7 @@ namespace IFramework.UI
             private const string argsOrigin = head +
             "namespace #UserNameSpace#\n" +
             "{\n" +
-            "\tpublic class #UserSCRIPTNAME# : IEventArgs\n" +
+            "\tpublic class #UserSCRIPTNAME# : IFramework.IEventArgs\n" +
             "\t{\n" +
             "\t\t//write your args fields here\n" +
             "\t}\n" +
@@ -475,7 +585,7 @@ namespace IFramework.UI
             private const string modelOrigin = head +
             "namespace #UserNameSpace#\n" +
             "{\n" +
-            "\tpublic class #UserSCRIPTNAME# : IModel\n" +
+            "\tpublic class #UserSCRIPTNAME# : IFramework.IModel\n" +
             "\t{\n" +
             "\t\t//write your model fields here\n" +
             "\t}\n" +
@@ -636,6 +746,8 @@ namespace IFramework.UI
                 item.OnEnable();
             }
             viewIndex = EditorTools.Prefs.GetInt<UIMoudleWindow>(key, viewIndex);
+            EditorApplication.hierarchyChanged += () =>{ Repaint(); };
+
         }
         private void OnDisable()
         {
@@ -649,8 +761,6 @@ namespace IFramework.UI
         {
             viewIndex = GUILayout.Toolbar(viewIndex, _names);
             _tabs[_names[viewIndex]].OnGUI();
-
-            //  this.Repaint();
         }
     }
 }

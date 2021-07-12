@@ -14,10 +14,18 @@ namespace IFramework.UI
     public struct ViewEvent: IUIEvent<ViewEventType, ViewEvent>
     {
         private ViewEventType _type;
+        private IEventArgs _panelArgs;
+
+        public IEventArgs panelArgs { get { return _panelArgs; } }
         public ViewEventType type { get { return _type; } }
         public ViewEvent SetType(ViewEventType type)
         {
             _type = type;
+            return this;
+        }
+        public ViewEvent SetPanelArgs(IEventArgs arg)
+        {
+            _panelArgs = arg;
             return this;
         }
     }

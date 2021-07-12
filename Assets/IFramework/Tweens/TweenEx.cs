@@ -102,7 +102,10 @@ namespace IFramework.Tweens
         public static ITween<T> DoGoto<T>(T start, T end, float duration, Func<T> getter, Action<T> setter, bool snap, EnvironmentType env= EnvironmentType.Extra0) where T : struct
         {
 #if UNITY_EDITOR
-            env = EnvironmentType.Ev0;
+            if (!UnityEditor.EditorApplication.isPlaying && !Application.isPlaying)
+            {
+                env = EnvironmentType.Ev0;
+            }
 #endif
             var tween = AllocateSingleTween<T>(env);
             tween.Config(start, end, duration, getter, setter, snap);
@@ -112,7 +115,10 @@ namespace IFramework.Tweens
         public static ITween<T> DoGoto<T>(T[] array, float duration, Func<T> getter, Action<T> setter, bool snap, EnvironmentType env = EnvironmentType.Extra0) where T : struct
         {
 #if UNITY_EDITOR
-            env = EnvironmentType.Ev0;
+            if (!UnityEditor.EditorApplication.isPlaying && !Application.isPlaying)
+            {
+                env = EnvironmentType.Ev0;
+            }
 #endif
             var tween = AllocateArrayTween<T>(env);
             tween.Config(array, duration, getter, setter, snap);
