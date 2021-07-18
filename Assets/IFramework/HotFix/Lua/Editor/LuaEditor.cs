@@ -140,7 +140,7 @@ namespace IFramework.Hotfix.Lua
                 }
             }
 
-            public override string name { get { return "MVVN_GenCode_Lua"; } }
+            public override string name { get { return "MVVM_Gen_Lua"; } }
             private NamesSto sto;
             private NamesSto CheckNameSto(string work)
             {

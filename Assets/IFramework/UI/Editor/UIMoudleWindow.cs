@@ -148,7 +148,7 @@ namespace IFramework.UI
         public class MVVM_GenCodeView : UIMoudleWindowTab
         {
             private const string key = "MVVM_GenCodeView";
-            public override string name { get { return "MVVN_GenCode_CS"; } }
+            public override string name { get { return "MVVM_Gen_CS"; } }
             [SerializeField] private string UIMapDir="Assets/Project";
             [SerializeField]
             private string PanelGenDir
@@ -204,31 +204,6 @@ namespace IFramework.UI
                 EditorTools.Prefs.SetObject<MVVM_GenCodeView, MVVM_GenCodeView>(key, this);
             }
             private int hashID;
-            private bool DropdownButton(int id, Rect position, GUIContent content)
-            {
-                Event e = Event.current;
-                switch (e.type)
-                {
-                    case EventType.MouseDown:
-                        if (position.Contains(e.mousePosition) && e.button == 0)
-                        {
-                            Event.current.Use();
-                            return true;
-                        }
-                        break;
-                    case EventType.KeyDown:
-                        if (GUIUtility.keyboardControl == id && e.character == '\n')
-                        {
-                            Event.current.Use();
-                            return true;
-                        }
-                        break;
-                    case EventType.Repaint:
-                        GUIStyles.BoldLabel.Draw(position, content, id, false);
-                        break;
-                }
-                return false;
-            }
             public override void OnGUI()
             {
                 if (EditorApplication.isCompiling)
@@ -325,32 +300,28 @@ namespace IFramework.UI
                 GUILayout.BeginHorizontal();
                 {
                     GUILayout.Label("Click To Select Model Type", GUIStyles.toolbar);
-                    GUILayout.Label("");
-                    Rect pos = GUILayoutUtility.GetLastRect();
-
-                    int ctrlId = GUIUtility.GetControlID(hashID, FocusType.Keyboard, pos);
+                     Rect pos = GUILayoutUtility.GetLastRect();
+                    if (GUILayout.Button(new GUIContent(string.Format("ModelType: {0}", modelType)), GUIStyles.label))
                     {
-                        if (DropdownButton(ctrlId, pos, new GUIContent(string.Format("ModelType: {0}", modelType))))
+                        if (modelTypes == null)
                         {
-                            if (modelTypes == null)
-                            {
-                                EditorWindow.focusedWindow.ShowNotification(new GUIContent("Fresh Model Types"));
-                                return;
-                            }
-                            int index = -1;
-                            for (int i = 0; i < modelTypes.Count; i++)
-                            {
-                                if (modelTypes[i] == modelType)
-                                {
-                                    index = i; break;
-                                }
-                            }
-                            SearchablePopup.Show(pos, modelTypes.ToArray(), index, (i, str) =>
-                            {
-                                modelType = str;
-                            });
+                            EditorWindow.focusedWindow.ShowNotification(new GUIContent("Fresh Model Types"));
+                            return;
                         }
+                        int index = -1;
+                        for (int i = 0; i < modelTypes.Count; i++)
+                        {
+                            if (modelTypes[i] == modelType)
+                            {
+                                index = i; break;
+                            }
+                        }
+                        SearchablePopup.Show(pos, modelTypes.ToArray(), index, (i, str) =>
+                        {
+                            modelType = str;
+                        });
                     }
+
 
                     GUILayout.EndHorizontal();
                 }

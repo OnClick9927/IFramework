@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace IFramework.GUITool
 {
-    public abstract class GUIBase :DisposableObject
+    public abstract class GUIBase :Unit
     {
         public Rect position { get; private set; }
 

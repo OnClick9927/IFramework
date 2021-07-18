@@ -23,7 +23,7 @@ namespace IFramework.Tweens
         public bool snap { get; set; }
         public LoopType loopType { get; set; }
         public abstract int loop { get; set; }
-        protected static IPercentConverter defaultConverter = ValueCurveCoverter.Default;
+        protected static IPercentConverter defaultConverter = EaseCoverter.Default;
         public abstract IPercentConverter converter { get; set; }
 
 

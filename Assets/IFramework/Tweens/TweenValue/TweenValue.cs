@@ -16,7 +16,7 @@ namespace IFramework.Tweens
     [ScriptVersion(22)]
     abstract class TweenValue : RecyclableObject
     {
-        private IPercentConverter _converter = ValueCurveCoverter.Default;
+        private IPercentConverter _converter = EaseCoverter.Default;
         private ISequenceNode _node;
         private float _time;
 
@@ -62,7 +62,7 @@ namespace IFramework.Tweens
             }
             onCompelete = null;
             _time = 0;
-            _converter = ValueCurveCoverter.Default;
+            _converter = EaseCoverter.Default;
             compeleted = false;
         }
 

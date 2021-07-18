@@ -11,14 +11,29 @@ using UnityEngine;
 namespace IFramework
 {
     public static partial class TransformExtension
-	{
-		public static T LocalIdentity<T>(this T selfComponent) where T : Component
-		{
-			selfComponent.transform.localPosition = Vector3.zero;
-			selfComponent.transform.localRotation = Quaternion.identity;
-			selfComponent.transform.localScale = Vector3.one;
-			return selfComponent;
-		}
+    {
+        public static T MakeComponentExist<T>(this T selfComponent) where T : Component
+        {
+            T t;
+            t = selfComponent.GetComponent<T>();
+            return t == null ? selfComponent.gameObject.AddComponent<T>() : t;
+        }
+        public static void RmoveComponent<T>(this T selfComponent) where T : Component
+        {
+            T t;
+            t = selfComponent.GetComponent<T>();
+            if (t!=null)
+            {
+                Object.Destroy(t);
+            }
+        }
+        public static T LocalIdentity<T>(this T selfComponent) where T : Component
+        {
+            selfComponent.transform.localPosition = Vector3.zero;
+            selfComponent.transform.localRotation = Quaternion.identity;
+            selfComponent.transform.localScale = Vector3.one;
+            return selfComponent;
+        }
         public static string GetPath(this Transform transform)
         {
             var sb = new System.Text.StringBuilder();
@@ -37,7 +52,7 @@ namespace IFramework
                 }
             }
         }
-      
+
 
     }
 }

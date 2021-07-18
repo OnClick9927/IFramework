@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b52aff99a9a61cb4280bcfc07abebff9, type: 3}
   m_Name: LanKeys
   m_EditorClassIdentifier: 
-  keys: []
+  keys:
+  - 7777
+  - 8888

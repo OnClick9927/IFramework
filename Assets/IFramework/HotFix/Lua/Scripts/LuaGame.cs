@@ -21,10 +21,7 @@ namespace IFramework.Hotfix.Lua
         }
 
         public UnityModules unityModules = new UnityModules();
-        public override void Init()
-        {
-           
-        }
+
         public override void Startup()
         {
             onUpdateCompelete += Assets.PrepareDefault;

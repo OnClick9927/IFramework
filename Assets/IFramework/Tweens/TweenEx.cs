@@ -40,11 +40,6 @@ namespace IFramework.Tweens
 
 
 
-        public static ITween SetCurve(this ITween tween, ValueCurve curve)
-        {
-            var converter = ValueCurveCoverter.Allocate<ValueCurveCoverter>(tween.env).Config(curve);
-            return tween.SetConverter(converter);
-        }
         public static ITween SetAnimationCurve(this ITween tween, AnimationCurve curve)
         {
             var converter = AnimationCurveCoverter.Allocate<AnimationCurveCoverter>(tween.env).Config(curve);

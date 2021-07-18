@@ -18,7 +18,7 @@ using IFramework.Modules.Message;
 
 namespace IFramework
 {
-    class EditorEnv
+    public class EditorEnv
     {
         public interface IFileInitializer
         {

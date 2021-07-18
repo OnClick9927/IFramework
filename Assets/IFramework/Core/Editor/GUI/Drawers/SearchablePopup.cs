@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace IFramework.GUITool
 {
-    class SearchablePopup : PopupWindowContent
+    public class SearchablePopup : PopupWindowContent
     {
         public static void Show(Rect position, string[] options, int current, Action<int, string> onVakueChange, int width = 400)
         {

@@ -12,6 +12,7 @@ namespace IFramework.Tweens
 {
     public class EaseCoverter:RecyclableObject, IPercentConverter<Ease>
     {
+        public static EaseCoverter Default = new EaseCoverter();
         private Ease _ease = Ease.Linear;
         private static float Evaluate(Ease easeType, float time, float duration)
         {

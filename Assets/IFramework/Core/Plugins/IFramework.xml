@@ -20,25 +20,220 @@
             描述
             </summary>
         </member>
-        <member name="T:IFramework.DisposableObject">
+        <member name="T:IFramework.BitConverterEx">
             <summary>
-            基类
+            byte[]转换
             </summary>
         </member>
-        <member name="P:IFramework.DisposableObject.disposed">
+        <member name="M:IFramework.BitConverterEx.BytesToHexString(System.Byte[],System.Boolean)">
             <summary>
-            是否已经释放
+            string
             </summary>
+            <param name="bytes"></param>
+            <param name="lower"></param>
+            <returns></returns>
         </member>
-        <member name="M:IFramework.DisposableObject.OnDispose">
+        <member name="M:IFramework.BitConverterEx.HexStringToBytes(System.String)">
             <summary>
-            释放时
+            byte[]
             </summary>
+            <param name="hex"></param>
+            <returns></returns>
         </member>
-        <member name="M:IFramework.DisposableObject.Dispose">
+        <member name="M:IFramework.BitConverterEx.ToInt16(System.Byte[],System.Int32)">
             <summary>
-            释放
+            short
             </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToInt32(System.Byte[],System.Int32)">
+            <summary>
+            int
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToInt64(System.Byte[],System.Int32)">
+            <summary>
+            long
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToUInt16(System.Byte[],System.Int32)">
+            <summary>
+            ushort
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToUInt32(System.Byte[],System.Int32)">
+            <summary>
+            uint
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToUInt64(System.Byte[],System.Int32)">
+            <summary>
+            ulong
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToSingle(System.Byte[],System.Int32)">
+            <summary>
+            float
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToDouble(System.Byte[],System.Int32)">
+            <summary>
+            double
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToDecimal(System.Byte[],System.Int32)">
+            <summary>
+            ToDecimal
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToGuid(System.Byte[],System.Int32)">
+            <summary>
+            Guid
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToSByte(System.Byte[],System.Int32)">
+            <summary>
+            sbyte
+            </summary>
+            <param name="bytes"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToBoolean(System.Byte[],System.Int32)">
+            <summary>
+            bool
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.ToChar(System.Byte[],System.Int32)">
+            <summary>
+            char
+            </summary>
+            <param name="buffer"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.SByte)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Char)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Boolean)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Int16)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Int32)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Int64)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.UInt16)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.UInt32)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.UInt64)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Single)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Double)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Decimal)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.BitConverterEx.GetBytes(System.Guid)">
+            <summary>
+            byte[]
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
         </member>
         <member name="T:IFramework.IEnvironment">
             <summary>
@@ -707,58 +902,16 @@
             可有可无的
             </summary>
         </member>
-        <member name="T:IFramework.Modules.IFrameworkModuleContainer">
+        <member name="T:IFramework.Modules.Recorder.ValueState`1">
             <summary>
-            模块容器
-            </summary>
-        </member>
-        <member name="M:IFramework.Modules.IFrameworkModuleContainer.CreateModule(System.Type,System.String)">
-            <summary>
-            创建模块
-            </summary>
-            <param name="type"></param>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Modules.IFrameworkModuleContainer.CreateModule``1(System.String)">
-            <summary>
-            创建模块
+            包含数值的状态
             </summary>
             <typeparam name="T"></typeparam>
-            <param name="name"></param>
-            <returns></returns>
         </member>
-        <member name="M:IFramework.Modules.IFrameworkModuleContainer.GetModule(System.Type,System.String)">
+        <member name="P:IFramework.Modules.Recorder.ValueState`1.value">
             <summary>
-            获取模块
+            数值
             </summary>
-            <param name="type"></param>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Modules.IFrameworkModuleContainer.GetModule``1(System.String)">
-            <summary>
-            获取模块
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Modules.IFrameworkModuleContainer.FindModule(System.Type,System.String)">
-            <summary>
-            查找模块
-            </summary>
-            <param name="type"></param>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Modules.IFrameworkModuleContainer.FindModule``1(System.String)">
-            <summary>
-            查找模块
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="name"></param>
-            <returns></returns>
         </member>
         <member name="T:IFramework.Modules.Recorder.ActionGroupState">
             <summary>
@@ -1002,6 +1155,59 @@
             <typeparam name="T"></typeparam>
             <param name="t"></param>
             <param name="redo"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Modules.IFrameworkModuleContainer">
+            <summary>
+            模块容器
+            </summary>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.CreateModule(System.Type,System.String)">
+            <summary>
+            创建模块
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.CreateModule``1(System.String)">
+            <summary>
+            创建模块
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.GetModule(System.Type,System.String)">
+            <summary>
+            获取模块
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.GetModule``1(System.String)">
+            <summary>
+            获取模块
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.FindModule(System.Type,System.String)">
+            <summary>
+            查找模块
+            </summary>
+            <param name="type"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Modules.IFrameworkModuleContainer.FindModule``1(System.String)">
+            <summary>
+            查找模块
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="name"></param>
             <returns></returns>
         </member>
         <member name="T:IFramework.Modules.Config.ConfigModule">
@@ -2643,6 +2849,1136 @@
             刷新
             </summary>
         </member>
+        <member name="T:IFramework.FloatEx">
+            <summary>
+            静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.FloatEx.Abs(System.Single)">
+            <summary>
+                    取绝对值
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.Clamp(System.Single,System.Single,System.Single)">
+            <summary>
+            限制在 min-max之间
+            </summary>
+            <param name="self"></param>
+            <param name="min"></param>
+            <param name="max"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.Clamp01(System.Single)">
+            <summary>
+            限制在0-1
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.Floor(System.Single)">
+            <summary>
+            获取比self小的最大整数
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.Repeat(System.Single,System.Single)">
+            <summary>
+            从0-length 重复
+            </summary>
+            <param name="self"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.RoundToInt(System.Single)">
+            <summary>
+            找到最近的 int
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.Lerp(System.Single,System.Single,System.Single)">
+            <summary>
+            插值
+            </summary>
+            <param name="self"></param>
+            <param name="end"></param>
+            <param name="pecent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.FloatEx.AsInt(System.Single)">
+            <summary>
+            强制转换
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.IEnumerableEx">
+            <summary>
+            集合静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            遍历集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.ForEach``1(``0[],System.Action{``0})">
+            <summary>
+            遍历集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.ForEach``1(``0[],System.Action{System.Int32,``0})">
+            <summary>
+            遍历集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.ReverseForEach``1(System.Collections.Generic.List{``0},System.Action{``0})">
+            <summary>
+            反向遍历集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.ForEach``1(System.Collections.Generic.List{``0},System.Action{System.Int32,``0})">
+            <summary>
+            遍历集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.CopyTo``1(System.Collections.Generic.List{``0},System.Collections.Generic.List{``0},System.Int32,System.Int32)">
+            <summary>
+            拷贝本集合数据到另一个集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self">源集合</param>
+            <param name="to">目标集合</param>
+            <param name="begin">开始下表</param>
+            <param name="end">结束下标</param>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.Merge``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1}[])">
+            <summary>
+            混合字典
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="dictionary"></param>
+            <param name="dictionaries"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.ForEach``2(System.Collections.Generic.Dictionary{``0,``1},System.Action{``0,``1})">
+            <summary>
+            遍历字典
+            </summary>
+            <typeparam name="K"></typeparam>
+            <typeparam name="V"></typeparam>
+            <param name="self"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:IFramework.IEnumerableEx.AddRange``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1},System.Boolean)">
+            <summary>
+            添加字段到字典
+            </summary>
+            <typeparam name="K"></typeparam>
+            <typeparam name="V"></typeparam>
+            <param name="self"></param>
+            <param name="addInDict"></param>
+            <param name="isOverride"></param>
+        </member>
+        <member name="T:IFramework.IntEx">
+            <summary>
+            int 静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.IntEx.isPrimeNumber(System.Int32)">
+            <summary>
+            是不是素数
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IntEx.Swap(System.Int32,System.Int32@)">
+            <summary>
+            交换两个数
+            </summary>
+            <param name="self"></param>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IntEx.Clamp(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            约束数值大小
+            </summary>
+            <param name="self"></param>
+            <param name="max"></param>
+            <param name="min"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IntEx.Lerp(System.Int32,System.Single,System.Single)">
+            <summary>
+            线性插值  self  +（end-self）* percent
+            </summary>
+            <param name="self"></param>
+            <param name="end"></param>
+            <param name="pecent"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.IOEx">
+            <summary>
+            文件扩展
+            </summary>
+        </member>
+        <member name="T:IFramework.IOEx.FileSizeLev">
+            <summary>
+            文件大小等级
+            </summary>
+        </member>
+        <member name="M:IFramework.IOEx.GetFileSize(System.Int64)">
+            <summary>
+            获取文件的 带等级的大小
+            结果中间有空格
+            </summary>
+            <param name="length">文件长度</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetFileLength(System.String)">
+            <summary>
+            获取文件长度
+            </summary>
+            <param name="filePath">文件路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetFileSize(System.String)">
+            <summary>
+            获取文件的 带等级的大小通过文件路径
+            结果中间有空格
+            </summary>
+            <param name="filePath">文件路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.ReadText(System.String,System.Text.Encoding)">
+            <summary>
+            读取 string
+            </summary>
+            <param name="path">路径</param>
+            <param name="encoding">文件编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.WriteText(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            写入 string
+            </summary>
+            <param name="path">路径</param>
+            <param name="content">写入内容</param>
+            <param name="encoding">文件编码</param>
+        </member>
+        <member name="M:IFramework.IOEx.ReadBytes(System.String)">
+            <summary>
+            读取字节流
+            </summary>
+            <param name="path">路径</param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.WriteBytes(System.String,System.Byte[])">
+            <summary>
+            写入字节流
+            </summary>
+            <param name="path">路径</param>
+            <param name="buff">字节流</param>
+        </member>
+        <member name="M:IFramework.IOEx.GetSubDirs(System.String)">
+            <summary>
+            获取一个路径下的子文件夹
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetSubFiles(System.String,System.Boolean,System.String)">
+            <summary>
+            获取一个路径下子文件
+            </summary>
+            <param name="path"></param>
+            <param name="isAll"></param>
+            <param name="suffix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.IsDirectory(System.String)">
+            <summary>
+            是否是一个文件夹
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.ClearDir(System.String)">
+            <summary>
+            清空文件夹
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="M:IFramework.IOEx.RemoveEmptyDirectory(System.String)">
+            <summary>
+            移除空文件夹
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.CombinePath(System.String,System.String)">
+            <summary>
+            拼接路径
+            </summary>
+            <param name="path"></param>
+            <param name="toCombinePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.CombinePath(System.String,System.String[])">
+            <summary>
+            拼接路径
+            </summary>
+            <param name="path"></param>
+            <param name="paths"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetFileName(System.String)">
+            <summary>
+            获取文件名
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetFileNameWithoutExtend(System.String)">
+            <summary>
+            获取没有后缀的文件名
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetFileExtendName(System.String)">
+            <summary>
+            获取文件后缀
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetDirPath(System.String)">
+            <summary>
+            获取文件夹路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.GetLastDirName(System.String)">
+            <summary>
+            获取上一层文件夹名
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.ToRegularPath(System.String)">
+            <summary>
+            规范路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.ToRemotePath(System.String)">
+            <summary>
+            转为远程路径
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.IOEx.MakeDirectoryExist(System.String)">
+            <summary>
+            如果文件夹不存在则创建
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="T:IFramework.ObjectEx">
+            <summary>
+            object 静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.ObjectEx.As``1(System.Object)">
+            <summary>
+            强转
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.ObjectEx.Is``1(System.Object)">
+            <summary>
+            对象是否是该类型
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.StringEx">
+            <summary>
+            string静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.StringEx.ReplaceFirst(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            替换第一个符合的字符串
+            </summary>
+            <param name="self"></param>
+            <param name="oldValue"></param>
+            <param name="newValue"></param>
+            <param name="startAt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.RemoveString(System.String,System.String[])">
+            <summary>
+            移除字符串
+            </summary>
+            <param name="self"></param>
+            <param name="targets"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.SplitAndTrim(System.String,System.Char[])">
+            <summary>
+            分割 并且去掉空格
+            </summary>
+            <param name="self"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.Cut(System.String,System.String,System.String)">
+            <summary>
+            截取俩字符串中间的字符
+            </summary>
+            <param name="self"></param>
+            <param name="front"></param>
+            <param name="behind"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.CutAfter(System.String,System.String)">
+            <summary>
+            截取指定字符串后的字符
+            </summary>
+            <param name="self"></param>
+            <param name="front"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.CutBefore(System.String,System.String)">
+            <summary>
+            截取指定字符串前的字符
+            </summary>
+            <param name="str"></param>
+            <param name="behind"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.UpperFirst(System.String)">
+            <summary>
+            第一个字符大写
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.LowerFirst(System.String)">
+            <summary>
+            第一个字符小写
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.ToUnixLineEndings(System.String)">
+            <summary>
+            字符串结尾转Unix编码
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.AppendHead(System.String,System.String)">
+            <summary>
+            在字符串前拼接字符串
+            </summary>
+            <param name="self"></param>
+            <param name="toPrefix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.Append(System.String,System.String)">
+            <summary>
+            拼接字符串
+            </summary>
+            <param name="self"></param>
+            <param name="toAppend"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.Append(System.String,System.String[])">
+            <summary>
+            拼接字符串
+            </summary>
+            <param name="self"></param>
+            <param name="toAppend"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx.AddSpacedBetwwenWord(System.String)">
+            <summary>
+            在字符串之间加空格，根据大小写
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.StringEx_Regex">
+            <summary>
+            正则
+            </summary>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsMail(System.String)">
+            <summary>
+            是否是邮箱
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsCellPhoneNumber(System.String)">
+            <summary>
+            是否是电话
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsAge(System.String)">
+            <summary>
+            是否是年龄
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsPassWord(System.String)">
+            <summary>
+            是否是密码
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.HasChinese(System.String)">
+            <summary>
+            是否包含中文
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsUrl(System.String)">
+            <summary>
+            是否是网址
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsIPv4(System.String)">
+            <summary>
+            是否是IPV4
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.IsLegalFieldName(System.String)">
+            <summary>
+            是否是合法字段名称
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.RemoveChinese(System.String)">
+            <summary>
+            移除中文
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.Removeletters(System.String)">
+            <summary>
+            移除字母
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.RemoveNumbers(System.String)">
+            <summary>
+            移除数字
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.RemoveNumbers(System.String,System.Int32,System.Int32)">
+            <summary>
+            移除数字
+            </summary>
+            <param name="self"></param>
+            <param name="minLen"></param>
+            <param name="maxLen"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.RemoveNumbers(System.String,System.Int32)">
+            <summary>
+            移除数字
+            </summary>
+            <param name="self"></param>
+            <param name="minLen"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.StringEx_Regex.RemoveNotNumber(System.String)">
+            <summary>
+            留下数字
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.TypeEx">
+            <summary>
+            Type静态扩展
+            </summary>
+        </member>
+        <member name="M:IFramework.TypeEx.GetSubTypesInAssembly(System.Type)">
+            <summary>
+            获取当前程序集中的类型的子类，3.5有问题
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.TypeEx.GetSubTypesInAssemblys(System.Type)">
+            <summary>
+            获取所有程序集中的类型的子类，3.5有问题
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.TypeEx.CreatInstance(System.Type)">
+            <summary>
+            实例化
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.TypeEx.IsExtendInterface(System.Type,System.Type)">
+            <summary>
+            是否继承接口
+            </summary>
+            <param name="self"></param>
+            <param name="Interface"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.TypeEx.IsSubclassOfGeneric(System.Type,System.Type)">
+            <summary>
+            是否继承自泛型类
+            </summary>
+            <param name="self"></param>
+            <param name="genericType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.TypeEx.GetTypeTree(System.Type)">
+            <summary>
+            获取类型树
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.TypeEx.GetExtensionMethods(System.Type,System.Reflection.Assembly)">
+            <summary>
+            获取程序集下的静态扩展
+            </summary>
+            <param name="self"></param>
+            <param name="assembly"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Unit">
+            <summary>
+            基类
+            </summary>
+        </member>
+        <member name="P:IFramework.Unit.disposed">
+            <summary>
+            是否已经释放
+            </summary>
+        </member>
+        <member name="M:IFramework.Unit.OnDispose">
+            <summary>
+            释放时
+            </summary>
+        </member>
+        <member name="M:IFramework.Unit.Dispose">
+            <summary>
+            释放
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarMap2X">
+            <summary>
+            二维A* 地图
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap2X.Item(IFramework.Point2)">
+            <summary>
+            便于调用点位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap2X.walkSideways">
+            <summary>
+            是否可以斜着走
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.#ctor">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.GetHCost(IFramework.Utility.Astar.AStarNode2X,IFramework.Utility.Astar.AStarNode2X)">
+            <summary>
+            计算地图上两点距离
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.GetNeighborNodes(IFramework.Utility.Astar.AStarNode2X)">
+            <summary>
+            获取邻居节点
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.ReadMap``1(System.Func{``0,IFramework.Utility.Astar.AStarNodeType},``0[0:,0:],System.Boolean)">
+            <summary>
+            加载地图
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="func">更具输入数据转化为NodeType</param>
+            <param name="arr">二维数组</param>
+            <param name="walkSideways">是否可以斜着走</param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap2X.Reset">
+            <summary>
+            重置地图数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarMap3X">
+            <summary>
+            三维A* 地图
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap3X.walkSideways">
+            <summary>
+            是否可以斜着走
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.#ctor">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarMap3X.Item(IFramework.Point3)">
+            <summary>
+            便于调用点位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.ReadMap``1(System.Func{``0,IFramework.Utility.Astar.AStarNodeType},``0[0:,0:,0:],System.Boolean)">
+            <summary>
+            加载地图
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="func">更具输入数据转化为NodeType</param>
+            <param name="arr">二维数组</param>
+            <param name="walkSideways">是否可以斜着走</param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.GetHCost(IFramework.Utility.Astar.AStarNode3X,IFramework.Utility.Astar.AStarNode3X)">
+            <summary>
+            计算地图上两点距离
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.GetNeighborNodes(IFramework.Utility.Astar.AStarNode3X)">
+            <summary>
+            获取邻居节点
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarMap3X.Reset">
+            <summary>
+            重置地图数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarNode2X">
+            <summary>
+            二维 A* 地图节点
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode2X.nodeType">
+            <summary>
+            节点类型（是否可以行走）
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode2X.parentNode">
+            <summary>
+            父节点，用于返回路径
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode2X.mapPos">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.#ctor(IFramework.Point2,IFramework.Utility.Astar.AStarNodeType)">
+            <summary>
+            ctor
+            </summary>
+            <param name="mapPos"></param>
+            <param name="nodeType"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            设置默认父节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            尝试更新最短距离
+            </summary>
+            <param name="g"></param>
+            <param name="h"></param>
+            <param name="trySetNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode2X.Reset">
+            <summary>
+            重置节点数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarNode3X">
+            <summary>
+            三维 A* 地图节点
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode3X.nodeType">
+            <summary>
+            节点类型（是否可以行走）
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode3X.parentNode">
+            <summary>
+            父节点，用于返回路径
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.AStarNode3X.mapPos">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.#ctor(IFramework.Point3,IFramework.Utility.Astar.AStarNodeType)">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            设置默认父节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            尝试更新最短距离
+            </summary>
+            <param name="g"></param>
+            <param name="h"></param>
+            <param name="trySetNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.AStarNode3X.Reset">
+            <summary>
+            重置节点数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.AStarNodeType">
+            <summary>
+            节点类型
+            </summary>
+        </member>
+        <member name="F:IFramework.Utility.Astar.AStarNodeType.Wall">
+            <summary>
+            不可行走
+            </summary>
+        </member>
+        <member name="F:IFramework.Utility.Astar.AStarNodeType.Walkable">
+            <summary>
+            可行走
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.IAstarMap`1">
+            <summary>
+            地图
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:IFramework.Utility.Astar.IAstarMap`1.walkSideways">
+            <summary>
+            是否可以斜着走
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAstarMap`1.GetNeighborNodes(`0)">
+            <summary>
+            获取邻居节点
+            </summary>
+            <param name="node"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAstarMap`1.GetHCost(`0,`0)">
+            <summary>
+            获取两点之间距离
+            </summary>
+            <param name="start"></param>
+            <param name="end"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAstarMap`1.Reset">
+            <summary>
+            重置数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.IAStarNode">
+            <summary>
+            A*节点
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.IAStarNode.nodeType">
+            <summary>
+            节点类型
+            </summary>
+        </member>
+        <member name="P:IFramework.Utility.Astar.IAStarNode.parentNode">
+            <summary>
+            父节点，用于寻路递归
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarNode.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            设置默认父节点
+            </summary>
+            <param name="node"></param>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarNode.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
+            <summary>
+            尝试刷新数据
+            </summary>
+            <param name="g"></param>
+            <param name="h"></param>
+            <param name="trySetNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarNode.Reset">
+            <summary>
+            重置数据
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Astar.IAStarSearcher`2">
+            <summary>
+            A* 路径搜寻者
+            </summary>
+            <typeparam name="Node">A* 节点类型</typeparam>
+            <typeparam name="Map">A* 地图leix</typeparam>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarSearcher`2.Search(`0,`0)">
+            <summary>
+            寻路
+            </summary>
+            <param name="start">起点</param>
+            <param name="end">终点</param>
+            <returns>节点路径</returns>
+        </member>
+        <member name="M:IFramework.Utility.Astar.IAStarSearcher`2.LoadMap(`1)">
+            <summary>
+            加载 A* 地图
+            </summary>
+            <param name="map"></param>
+        </member>
+        <member name="T:IFramework.Utility.DeepCopy">
+            <summary>
+            深拷贝
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.ReflectionDeepCopy``1(``0)">
+            <summary>
+            0.9281 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.ReflectionDeepCopy(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.XmlDeepCopy``1(``0)">
+            <summary>
+            1.6543 public
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.DeepCopy.BinaryDeepCopy``1(``0)">
+            <summary>
+            1.7278 [Serializable]
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Encryption.HashEncode.GetSecurity">
+            得到随机哈希加密字符串
+        </member>
+        <member name="M:IFramework.Utility.Encryption.HashEncode.GetRandomValue">
+            得到一个随机数值
+        </member>
+        <member name="M:IFramework.Utility.Encryption.HashEncode.HashEncoding(System.String)">
+            哈希加密一个字符串
+        </member>
+        <member name="M:IFramework.Utility.Encryption.RsaEncryption.RSAKey(System.String@,System.String@)">
+            <summary>
+            RSA 的密钥产生 产生私钥 和公钥 
+            </summary>
+        </member>
+        <member name="T:IFramework.Utility.Encryption.XorEncryption">
+            <summary>
+            加密解密相关的实用函数。
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Encryption.XorEncryption.GetXorBytes(System.Byte[],System.Byte[],System.Int32)">
+            <param name="bytes">原始二进制流。</param>
+            <param name="code">异或二进制流。</param>
+            <param name="length">异或计算长度，若小于 0，则计算整个二进制流。</param>
+            <returns>异或后的二进制流。</returns>
+        </member>
+        <member name="M:IFramework.Utility.Encryption.XorEncryption.GetSelfXorBytes(System.Byte[],System.Byte[])">
+            此方法将复用并改写传入的 bytes 作为返回值，而不额外分配内存空间。
+        </member>
+        <member name="T:IFramework.Utility.ProcessUtil">
+            <summary>
+            进程工具
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.ProcessUtil.CreateProcess(System.String,System.String,System.String)">
+            <summary>
+            创建进程
+            </summary>
+            <param name="cmd"></param>
+            <param name="args"></param>
+            <param name="workingDir"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.ProcessUtil.OuputLog(System.Diagnostics.Process,System.Boolean)">
+            <summary>
+            进程输出Log
+            </summary>
+            <param name="p"></param>
+            <param name="isThrowExcpetion"></param>
+        </member>
+        <member name="M:IFramework.Utility.ProcessUtil.OpenFloder(System.String)">
+            <summary>
+            打开文件夹
+            </summary>
+            <param name="path"></param>
+        </member>
+        <member name="T:IFramework.Utility.Verifier">
+            <summary>
+            校验相关的实用函数
+            </summary>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetCrc32(System.Byte[])">
+            <summary>
+             计算二进制流的 CRC32。
+            </summary>
+            <param name="bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetCrc32(System.String)">
+            <summary>
+             计算指定文件的 CRC32。
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetMD5(System.Byte[])">
+            <summary>
+            计算二进制流的 MD5。
+            </summary>
+            <param name="bytes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetFileMD5(System.String)">
+            <summary>
+             计算指定文件的 CRC32。
+            </summary>
+            <param name="path"></param>
+            <returns></returns>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.GetStringMD5(System.String)">
+            <summary>
+            获取字符串 MD5
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="T:IFramework.Utility.Verifier.Crc32">
+            <summary>
+            CRC32 算法。
+            </summary>
+        </member>
+        <member name="F:IFramework.Utility.Verifier.Crc32.DefaultPolynomial">
+            默认多项式。
+        </member>
+        <member name="F:IFramework.Utility.Verifier.Crc32.DefaultSeed">
+            默认种子数。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.#ctor">
+            初始化 CRC32 类的新实例。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.#ctor(System.UInt32,System.UInt32)">
+            初始化 CRC32 类的新实例。
+            <param name="polynomial">指定的多项式。</param>
+            <param name="seed">指定的种子数。</param>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.Initialize">
+            初始化 Crc32 类的实现。
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.HashCore(System.Byte[],System.Int32,System.Int32)">
+            将写入对象的数据路由到哈希算法以计算哈希值。
+            <param name="array">要计算其哈希代码的输入。</param>
+            <param name="ibStart">字节数组中的偏移量，从该位置开始使用数据。</param>
+            <param name="cbSize">字节数组中用作数据的字节数。</param>
+        </member>
+        <member name="M:IFramework.Utility.Verifier.Crc32.HashFinal">
+            在加密流对象处理完最后的数据后完成哈希计算。
+        </member>
         <member name="T:IFramework.IBelongToEnvironment">
             <summary>
             属于环境
@@ -2740,16 +4076,6 @@
             描述内容
             </summary>
         </member>
-        <member name="T:IFramework.IDisposableObject">
-            <summary>
-            积累接口
-            </summary>
-        </member>
-        <member name="P:IFramework.IDisposableObject.disposed">
-            <summary>
-            是否释放
-            </summary>
-        </member>
         <member name="T:IFramework.IModel">
             <summary>
             模型
@@ -2763,6 +4089,16 @@
         <member name="P:IFramework.IUniqueIDObject.guid">
             <summary>
             唯一id
+            </summary>
+        </member>
+        <member name="T:IFramework.IUnit">
+            <summary>
+            积累接口
+            </summary>
+        </member>
+        <member name="P:IFramework.IUnit.disposed">
+            <summary>
+            是否释放
             </summary>
         </member>
         <member name="T:IFramework.IValueContainer`1">
@@ -3021,287 +4357,6 @@
             <summary>
             释放
             </summary>
-        </member>
-        <member name="T:IFramework.FloatExtension">
-            <summary>
-            静态扩展
-            </summary>
-        </member>
-        <member name="M:IFramework.FloatExtension.Abs(System.Single)">
-            <summary>
-                    取绝对值
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.Clamp(System.Single,System.Single,System.Single)">
-            <summary>
-            限制在 min-max之间
-            </summary>
-            <param name="self"></param>
-            <param name="min"></param>
-            <param name="max"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.Clamp01(System.Single)">
-            <summary>
-            限制在0-1
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.Floor(System.Single)">
-            <summary>
-            获取比self小的最大整数
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.Repeat(System.Single,System.Single)">
-            <summary>
-            从0-length 重复
-            </summary>
-            <param name="self"></param>
-            <param name="length"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.RoundToInt(System.Single)">
-            <summary>
-            找到最近的 int
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.Lerp(System.Single,System.Single,System.Single)">
-            <summary>
-            插值
-            </summary>
-            <param name="self"></param>
-            <param name="end"></param>
-            <param name="pecent"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FloatExtension.AsInt(System.Single)">
-            <summary>
-            强制转换
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="T:IFramework.FrameworkBitConverter">
-            <summary>
-            byte[]转换
-            </summary>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.BytesToHexString(System.Byte[],System.Boolean)">
-            <summary>
-            string
-            </summary>
-            <param name="bytes"></param>
-            <param name="lower"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.HexStringToBytes(System.String)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="hex"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToInt16(System.Byte[],System.Int32)">
-            <summary>
-            short
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToInt32(System.Byte[],System.Int32)">
-            <summary>
-            int
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToInt64(System.Byte[],System.Int32)">
-            <summary>
-            long
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToUInt16(System.Byte[],System.Int32)">
-            <summary>
-            ushort
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToUInt32(System.Byte[],System.Int32)">
-            <summary>
-            uint
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToUInt64(System.Byte[],System.Int32)">
-            <summary>
-            ulong
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToSingle(System.Byte[],System.Int32)">
-            <summary>
-            float
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToDouble(System.Byte[],System.Int32)">
-            <summary>
-            double
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToDecimal(System.Byte[],System.Int32)">
-            <summary>
-            ToDecimal
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToGuid(System.Byte[],System.Int32)">
-            <summary>
-            Guid
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToSByte(System.Byte[],System.Int32)">
-            <summary>
-            sbyte
-            </summary>
-            <param name="bytes"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToBoolean(System.Byte[],System.Int32)">
-            <summary>
-            bool
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.ToChar(System.Byte[],System.Int32)">
-            <summary>
-            char
-            </summary>
-            <param name="buffer"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.SByte)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Char)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Boolean)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Int16)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Int32)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Int64)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.UInt16)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.UInt32)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.UInt64)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Single)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Double)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Decimal)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.FrameworkBitConverter.GetBytes(System.Guid)">
-            <summary>
-            byte[]
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
         </member>
         <member name="T:IFramework.FrameworkEnvironment">
             <summary>
@@ -6217,296 +7272,6 @@
             <param name="action">方法</param>
             <param name=" envType"></param>
         </member>
-        <member name="T:IFramework.IEnumerableExtension">
-            <summary>
-            集合静态扩展
-            </summary>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
-            <summary>
-            遍历集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.ForEach``1(``0[],System.Action{``0})">
-            <summary>
-            遍历集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.ForEach``1(``0[],System.Action{System.Int32,``0})">
-            <summary>
-            遍历集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.ReverseForEach``1(System.Collections.Generic.List{``0},System.Action{``0})">
-            <summary>
-            反向遍历集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.ForEach``1(System.Collections.Generic.List{``0},System.Action{System.Int32,``0})">
-            <summary>
-            遍历集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.CopyTo``1(System.Collections.Generic.List{``0},System.Collections.Generic.List{``0},System.Int32,System.Int32)">
-            <summary>
-            拷贝本集合数据到另一个集合
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="self">源集合</param>
-            <param name="to">目标集合</param>
-            <param name="begin">开始下表</param>
-            <param name="end">结束下标</param>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.Merge``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1}[])">
-            <summary>
-            混合字典
-            </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
-            <param name="dictionary"></param>
-            <param name="dictionaries"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.ForEach``2(System.Collections.Generic.Dictionary{``0,``1},System.Action{``0,``1})">
-            <summary>
-            遍历字典
-            </summary>
-            <typeparam name="K"></typeparam>
-            <typeparam name="V"></typeparam>
-            <param name="self"></param>
-            <param name="action"></param>
-        </member>
-        <member name="M:IFramework.IEnumerableExtension.AddRange``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1},System.Boolean)">
-            <summary>
-            添加字段到字典
-            </summary>
-            <typeparam name="K"></typeparam>
-            <typeparam name="V"></typeparam>
-            <param name="self"></param>
-            <param name="addInDict"></param>
-            <param name="isOverride"></param>
-        </member>
-        <member name="T:IFramework.IntExtension">
-            <summary>
-            int 静态扩展
-            </summary>
-        </member>
-        <member name="M:IFramework.IntExtension.isPrimeNumber(System.Int32)">
-            <summary>
-            是不是素数
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IntExtension.Swap(System.Int32,System.Int32@)">
-            <summary>
-            交换两个数
-            </summary>
-            <param name="self"></param>
-            <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IntExtension.Clamp(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            约束数值大小
-            </summary>
-            <param name="self"></param>
-            <param name="max"></param>
-            <param name="min"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IntExtension.Lerp(System.Int32,System.Single,System.Single)">
-            <summary>
-            线性插值  self  +（end-self）* percent
-            </summary>
-            <param name="self"></param>
-            <param name="end"></param>
-            <param name="pecent"></param>
-            <returns></returns>
-        </member>
-        <member name="T:IFramework.IO">
-            <summary>
-            文件扩展
-            </summary>
-        </member>
-        <member name="T:IFramework.IO.FileSizeLev">
-            <summary>
-            文件大小等级
-            </summary>
-        </member>
-        <member name="M:IFramework.IO.GetFileSize(System.Int64)">
-            <summary>
-            获取文件的 带等级的大小
-            结果中间有空格
-            </summary>
-            <param name="length">文件长度</param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetFileLength(System.String)">
-            <summary>
-            获取文件长度
-            </summary>
-            <param name="filePath">文件路径</param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetFileSize(System.String)">
-            <summary>
-            获取文件的 带等级的大小通过文件路径
-            结果中间有空格
-            </summary>
-            <param name="filePath">文件路径</param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.ReadText(System.String,System.Text.Encoding)">
-            <summary>
-            读取 string
-            </summary>
-            <param name="path">路径</param>
-            <param name="encoding">文件编码</param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.WriteText(System.String,System.String,System.Text.Encoding)">
-            <summary>
-            写入 string
-            </summary>
-            <param name="path">路径</param>
-            <param name="content">写入内容</param>
-            <param name="encoding">文件编码</param>
-        </member>
-        <member name="M:IFramework.IO.ReadBytes(System.String)">
-            <summary>
-            读取字节流
-            </summary>
-            <param name="path">路径</param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.WriteBytes(System.String,System.Byte[])">
-            <summary>
-            写入字节流
-            </summary>
-            <param name="path">路径</param>
-            <param name="buff">字节流</param>
-        </member>
-        <member name="M:IFramework.IO.GetSubDirs(System.String)">
-            <summary>
-            获取一个路径下的子文件夹
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetSubFiles(System.String,System.Boolean,System.String)">
-            <summary>
-            获取一个路径下子文件
-            </summary>
-            <param name="path"></param>
-            <param name="isAll"></param>
-            <param name="suffix"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.IsDirectory(System.String)">
-            <summary>
-            是否是一个文件夹
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.ClearDir(System.String)">
-            <summary>
-            清空文件夹
-            </summary>
-            <param name="path"></param>
-        </member>
-        <member name="M:IFramework.IO.RemoveEmptyDirectory(System.String)">
-            <summary>
-            移除空文件夹
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.CombinePath(System.String,System.String)">
-            <summary>
-            拼接路径
-            </summary>
-            <param name="path"></param>
-            <param name="toCombinePath"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.CombinePath(System.String,System.String[])">
-            <summary>
-            拼接路径
-            </summary>
-            <param name="path"></param>
-            <param name="paths"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetFileName(System.String)">
-            <summary>
-            获取文件名
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetFileNameWithoutExtend(System.String)">
-            <summary>
-            获取没有后缀的文件名
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetFileExtendName(System.String)">
-            <summary>
-            获取文件后缀
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetDirPath(System.String)">
-            <summary>
-            获取文件夹路径
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.GetLastDirName(System.String)">
-            <summary>
-            获取上一层文件夹名
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.ToRegularPath(System.String)">
-            <summary>
-            规范路径
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.IO.ToRemotePath(System.String)">
-            <summary>
-            转为远程路径
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
         <member name="T:IFramework.IEventArgs">
             <summary>
             框架内传递的所有消息的基类
@@ -6532,27 +7297,6 @@
             <summary>
             自旋锁信号
             </summary>
-        </member>
-        <member name="T:IFramework.ObjectExtension">
-            <summary>
-            object 静态扩展
-            </summary>
-        </member>
-        <member name="M:IFramework.ObjectExtension.As``1(System.Object)">
-            <summary>
-            强转
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.ObjectExtension.Is``1(System.Object)">
-            <summary>
-            对象是否是该类型
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <returns></returns>
         </member>
         <member name="T:IFramework.ObjectPool`1">
             <summary>
@@ -6583,11 +7327,6 @@
         <member name="M:IFramework.ObjectPool`1.#ctor">
             <summary>
             Ctor
-            </summary>
-        </member>
-        <member name="M:IFramework.ObjectPool`1.Dispose">
-            <summary>
-            释放
             </summary>
         </member>
         <member name="M:IFramework.ObjectPool`1.OnDispose">
@@ -6658,277 +7397,6 @@
             </summary>
             <param name="t"></param>
             <param name="arg"></param>
-        </member>
-        <member name="T:IFramework.StringExtension">
-            <summary>
-            string静态扩展
-            </summary>
-        </member>
-        <member name="M:IFramework.StringExtension.ReplaceFirst(System.String,System.String,System.String,System.Int32)">
-            <summary>
-            替换第一个符合的字符串
-            </summary>
-            <param name="self"></param>
-            <param name="oldValue"></param>
-            <param name="newValue"></param>
-            <param name="startAt"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.RemoveString(System.String,System.String[])">
-            <summary>
-            移除字符串
-            </summary>
-            <param name="self"></param>
-            <param name="targets"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.SplitAndTrim(System.String,System.Char[])">
-            <summary>
-            分割 并且去掉空格
-            </summary>
-            <param name="self"></param>
-            <param name="separator"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.Cut(System.String,System.String,System.String)">
-            <summary>
-            截取俩字符串中间的字符
-            </summary>
-            <param name="self"></param>
-            <param name="front"></param>
-            <param name="behind"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.CutAfter(System.String,System.String)">
-            <summary>
-            截取指定字符串后的字符
-            </summary>
-            <param name="self"></param>
-            <param name="front"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.CutBefore(System.String,System.String)">
-            <summary>
-            截取指定字符串前的字符
-            </summary>
-            <param name="str"></param>
-            <param name="behind"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.UpperFirst(System.String)">
-            <summary>
-            第一个字符大写
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.LowerFirst(System.String)">
-            <summary>
-            第一个字符小写
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.ToUnixLineEndings(System.String)">
-            <summary>
-            字符串结尾转Unix编码
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.AppendHead(System.String,System.String)">
-            <summary>
-            在字符串前拼接字符串
-            </summary>
-            <param name="self"></param>
-            <param name="toPrefix"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.Append(System.String,System.String)">
-            <summary>
-            拼接字符串
-            </summary>
-            <param name="self"></param>
-            <param name="toAppend"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.Append(System.String,System.String[])">
-            <summary>
-            拼接字符串
-            </summary>
-            <param name="self"></param>
-            <param name="toAppend"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension.AddSpacedBetwwenWord(System.String)">
-            <summary>
-            在字符串之间加空格，根据大小写
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="T:IFramework.StringExtension_Regex">
-            <summary>
-            正则
-            </summary>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsMail(System.String)">
-            <summary>
-            是否是邮箱
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsCellPhoneNumber(System.String)">
-            <summary>
-            是否是电话
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsAge(System.String)">
-            <summary>
-            是否是年龄
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsPassWord(System.String)">
-            <summary>
-            是否是密码
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.HasChinese(System.String)">
-            <summary>
-            是否包含中文
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsUrl(System.String)">
-            <summary>
-            是否是网址
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsIPv4(System.String)">
-            <summary>
-            是否是IPV4
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.IsLegalFieldName(System.String)">
-            <summary>
-            是否是合法字段名称
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.RemoveChinese(System.String)">
-            <summary>
-            移除中文
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.Removeletters(System.String)">
-            <summary>
-            移除字母
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.RemoveNumbers(System.String)">
-            <summary>
-            移除数字
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.RemoveNumbers(System.String,System.Int32,System.Int32)">
-            <summary>
-            移除数字
-            </summary>
-            <param name="self"></param>
-            <param name="minLen"></param>
-            <param name="maxLen"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.RemoveNumbers(System.String,System.Int32)">
-            <summary>
-            移除数字
-            </summary>
-            <param name="self"></param>
-            <param name="minLen"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.StringExtension_Regex.RemoveNotNumber(System.String)">
-            <summary>
-            留下数字
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="T:IFramework.TypeExtension">
-            <summary>
-            Type静态扩展
-            </summary>
-        </member>
-        <member name="M:IFramework.TypeExtension.GetSubTypesInAssembly(System.Type)">
-            <summary>
-            获取当前程序集中的类型的子类，3.5有问题
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.TypeExtension.GetSubTypesInAssemblys(System.Type)">
-            <summary>
-            获取所有程序集中的类型的子类，3.5有问题
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.TypeExtension.CreatInstance(System.Type)">
-            <summary>
-            实例化
-            </summary>
-            <param name="self"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.TypeExtension.IsExtendInterface(System.Type,System.Type)">
-            <summary>
-            是否继承接口
-            </summary>
-            <param name="self"></param>
-            <param name="Interface"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.TypeExtension.IsSubclassOfGeneric(System.Type,System.Type)">
-            <summary>
-            是否继承自泛型类
-            </summary>
-            <param name="self"></param>
-            <param name="genericType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.TypeExtension.GetTypeTree(System.Type)">
-            <summary>
-            获取类型树
-            </summary>
-            <param name="t"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.TypeExtension.GetExtensionMethods(System.Type,System.Reflection.Assembly)">
-            <summary>
-            获取程序集下的静态扩展
-            </summary>
-            <param name="self"></param>
-            <param name="assembly"></param>
-            <returns></returns>
         </member>
         <member name="T:IFramework.Serialization.DataTable.DataColumn">
             <summary>
@@ -7072,7 +7540,7 @@
             <param name="rowReader">行读者</param>
             <param name="explainer">数据解释器</param>
         </member>
-        <member name="M:IFramework.Serialization.DataTable.DataReader.Dispose">
+        <member name="M:IFramework.Serialization.DataTable.DataReader.OnDispose">
             <summary>
             释放
             </summary>
@@ -7145,7 +7613,7 @@
             <param name="rowWriter">行写者</param>
             <param name="explainer">数据解释器</param>
         </member>
-        <member name="M:IFramework.Serialization.DataTable.DataWriter.Dispose">
+        <member name="M:IFramework.Serialization.DataTable.DataWriter.OnDispose">
             <summary>
             释放
             </summary>
@@ -7285,12 +7753,7 @@
             初始化
             </summary>
         </member>
-        <member name="M:IFramework.Singleton.Singleton`1.System#IDisposable#Dispose">
-            <summary>
-            注销
-            </summary>
-        </member>
-        <member name="M:IFramework.Singleton.Singleton`1.OnDispose">
+        <member name="M:IFramework.Singleton.Singleton`1.Dispose">
             <summary>
             注销
             </summary>
@@ -7355,555 +7818,9 @@
             初始化
             </summary>
         </member>
-        <member name="M:IFramework.Singleton.SingletonPropertyClass`1.OnDispose">
+        <member name="M:IFramework.Singleton.SingletonPropertyClass`1.Dispose">
             <summary>
             注销
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.AStarMap2X">
-            <summary>
-            二维A* 地图
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarMap2X.Item(IFramework.Point2)">
-            <summary>
-            便于调用点位
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarMap2X.walkSideways">
-            <summary>
-            是否可以斜着走
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap2X.#ctor">
-            <summary>
-            Ctor
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap2X.GetHCost(IFramework.Utility.Astar.AStarNode2X,IFramework.Utility.Astar.AStarNode2X)">
-            <summary>
-            计算地图上两点距离
-            </summary>
-            <param name="start"></param>
-            <param name="end"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap2X.GetNeighborNodes(IFramework.Utility.Astar.AStarNode2X)">
-            <summary>
-            获取邻居节点
-            </summary>
-            <param name="node"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap2X.ReadMap``1(System.Func{``0,IFramework.Utility.Astar.AStarNodeType},``0[0:,0:],System.Boolean)">
-            <summary>
-            加载地图
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="func">更具输入数据转化为NodeType</param>
-            <param name="arr">二维数组</param>
-            <param name="walkSideways">是否可以斜着走</param>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap2X.Reset">
-            <summary>
-            重置地图数据
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.AStarMap3X">
-            <summary>
-            三维A* 地图
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarMap3X.walkSideways">
-            <summary>
-            是否可以斜着走
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap3X.#ctor">
-            <summary>
-            Ctor
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarMap3X.Item(IFramework.Point3)">
-            <summary>
-            便于调用点位
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap3X.ReadMap``1(System.Func{``0,IFramework.Utility.Astar.AStarNodeType},``0[0:,0:,0:],System.Boolean)">
-            <summary>
-            加载地图
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="func">更具输入数据转化为NodeType</param>
-            <param name="arr">二维数组</param>
-            <param name="walkSideways">是否可以斜着走</param>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap3X.GetHCost(IFramework.Utility.Astar.AStarNode3X,IFramework.Utility.Astar.AStarNode3X)">
-            <summary>
-            计算地图上两点距离
-            </summary>
-            <param name="start"></param>
-            <param name="end"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap3X.GetNeighborNodes(IFramework.Utility.Astar.AStarNode3X)">
-            <summary>
-            获取邻居节点
-            </summary>
-            <param name="node"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarMap3X.Reset">
-            <summary>
-            重置地图数据
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.AStarNode2X">
-            <summary>
-            二维 A* 地图节点
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarNode2X.nodeType">
-            <summary>
-            节点类型（是否可以行走）
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarNode2X.parentNode">
-            <summary>
-            父节点，用于返回路径
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarNode2X.mapPos">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode2X.#ctor(IFramework.Point2,IFramework.Utility.Astar.AStarNodeType)">
-            <summary>
-            ctor
-            </summary>
-            <param name="mapPos"></param>
-            <param name="nodeType"></param>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode2X.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
-            <summary>
-            设置默认父节点
-            </summary>
-            <param name="node"></param>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode2X.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
-            <summary>
-            尝试更新最短距离
-            </summary>
-            <param name="g"></param>
-            <param name="h"></param>
-            <param name="trySetNode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode2X.Reset">
-            <summary>
-            重置节点数据
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.AStarNode3X">
-            <summary>
-            三维 A* 地图节点
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarNode3X.nodeType">
-            <summary>
-            节点类型（是否可以行走）
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarNode3X.parentNode">
-            <summary>
-            父节点，用于返回路径
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.AStarNode3X.mapPos">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode3X.#ctor(IFramework.Point3,IFramework.Utility.Astar.AStarNodeType)">
-            <summary>
-            ctor
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode3X.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
-            <summary>
-            设置默认父节点
-            </summary>
-            <param name="node"></param>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode3X.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
-            <summary>
-            尝试更新最短距离
-            </summary>
-            <param name="g"></param>
-            <param name="h"></param>
-            <param name="trySetNode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.AStarNode3X.Reset">
-            <summary>
-            重置节点数据
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.AStarNodeType">
-            <summary>
-            节点类型
-            </summary>
-        </member>
-        <member name="F:IFramework.Utility.Astar.AStarNodeType.Wall">
-            <summary>
-            不可行走
-            </summary>
-        </member>
-        <member name="F:IFramework.Utility.Astar.AStarNodeType.Walkable">
-            <summary>
-            可行走
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.IAstarMap`1">
-            <summary>
-            地图
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-        <member name="P:IFramework.Utility.Astar.IAstarMap`1.walkSideways">
-            <summary>
-            是否可以斜着走
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAstarMap`1.GetNeighborNodes(`0)">
-            <summary>
-            获取邻居节点
-            </summary>
-            <param name="node"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAstarMap`1.GetHCost(`0,`0)">
-            <summary>
-            获取两点之间距离
-            </summary>
-            <param name="start"></param>
-            <param name="end"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAstarMap`1.Reset">
-            <summary>
-            重置数据
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.IAStarNode">
-            <summary>
-            A*节点
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.IAStarNode.nodeType">
-            <summary>
-            节点类型
-            </summary>
-        </member>
-        <member name="P:IFramework.Utility.Astar.IAStarNode.parentNode">
-            <summary>
-            父节点，用于寻路递归
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAStarNode.SetDefaultParent(IFramework.Utility.Astar.IAStarNode)">
-            <summary>
-            设置默认父节点
-            </summary>
-            <param name="node"></param>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAStarNode.TryUpdateFCost(System.Single,System.Single,IFramework.Utility.Astar.IAStarNode)">
-            <summary>
-            尝试刷新数据
-            </summary>
-            <param name="g"></param>
-            <param name="h"></param>
-            <param name="trySetNode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAStarNode.Reset">
-            <summary>
-            重置数据
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Astar.IAStarSearcher`2">
-            <summary>
-            A* 路径搜寻者
-            </summary>
-            <typeparam name="Node">A* 节点类型</typeparam>
-            <typeparam name="Map">A* 地图leix</typeparam>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAStarSearcher`2.Search(`0,`0)">
-            <summary>
-            寻路
-            </summary>
-            <param name="start">起点</param>
-            <param name="end">终点</param>
-            <returns>节点路径</returns>
-        </member>
-        <member name="M:IFramework.Utility.Astar.IAStarSearcher`2.LoadMap(`1)">
-            <summary>
-            加载 A* 地图
-            </summary>
-            <param name="map"></param>
-        </member>
-        <member name="T:IFramework.Utility.DeepCopy">
-            <summary>
-            深拷贝
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.DeepCopy.ReflectionDeepCopy``1(``0)">
-            <summary>
-            0.9281 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.DeepCopy.ReflectionDeepCopy(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.DeepCopy.XmlDeepCopy``1(``0)">
-            <summary>
-            1.6543 public
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.DeepCopy.BinaryDeepCopy``1(``0)">
-            <summary>
-            1.7278 [Serializable]
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Encryption.HashEncode.GetSecurity">
-            得到随机哈希加密字符串
-        </member>
-        <member name="M:IFramework.Utility.Encryption.HashEncode.GetRandomValue">
-            得到一个随机数值
-        </member>
-        <member name="M:IFramework.Utility.Encryption.HashEncode.HashEncoding(System.String)">
-            哈希加密一个字符串
-        </member>
-        <member name="M:IFramework.Utility.Encryption.RsaEncryption.RSAKey(System.String@,System.String@)">
-            <summary>
-            RSA 的密钥产生 产生私钥 和公钥 
-            </summary>
-        </member>
-        <member name="T:IFramework.Utility.Encryption.XorEncryption">
-            <summary>
-            加密解密相关的实用函数。
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Encryption.XorEncryption.GetXorBytes(System.Byte[],System.Byte[],System.Int32)">
-            <param name="bytes">原始二进制流。</param>
-            <param name="code">异或二进制流。</param>
-            <param name="length">异或计算长度，若小于 0，则计算整个二进制流。</param>
-            <returns>异或后的二进制流。</returns>
-        </member>
-        <member name="M:IFramework.Utility.Encryption.XorEncryption.GetSelfXorBytes(System.Byte[],System.Byte[])">
-            此方法将复用并改写传入的 bytes 作为返回值，而不额外分配内存空间。
-        </member>
-        <member name="T:IFramework.Utility.ProcessUtil">
-            <summary>
-            进程工具
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.ProcessUtil.CreateProcess(System.String,System.String,System.String)">
-            <summary>
-            创建进程
-            </summary>
-            <param name="cmd"></param>
-            <param name="args"></param>
-            <param name="workingDir"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.ProcessUtil.OuputLog(System.Diagnostics.Process,System.Boolean)">
-            <summary>
-            进程输出Log
-            </summary>
-            <param name="p"></param>
-            <param name="isThrowExcpetion"></param>
-        </member>
-        <member name="M:IFramework.Utility.ProcessUtil.OpenFloder(System.String)">
-            <summary>
-            打开文件夹
-            </summary>
-            <param name="path"></param>
-        </member>
-        <member name="T:IFramework.Utility.Verifier">
-            <summary>
-            校验相关的实用函数
-            </summary>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.GetCrc32(System.Byte[])">
-            <summary>
-             计算二进制流的 CRC32。
-            </summary>
-            <param name="bytes"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.GetCrc32(System.String)">
-            <summary>
-             计算指定文件的 CRC32。
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.GetMD5(System.Byte[])">
-            <summary>
-            计算二进制流的 MD5。
-            </summary>
-            <param name="bytes"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.GetFileMD5(System.String)">
-            <summary>
-             计算指定文件的 CRC32。
-            </summary>
-            <param name="path"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.GetStringMD5(System.String)">
-            <summary>
-            获取字符串 MD5
-            </summary>
-            <param name="str"></param>
-            <returns></returns>
-        </member>
-        <member name="T:IFramework.Utility.Verifier.Crc32">
-            <summary>
-            CRC32 算法。
-            </summary>
-        </member>
-        <member name="F:IFramework.Utility.Verifier.Crc32.DefaultPolynomial">
-            默认多项式。
-        </member>
-        <member name="F:IFramework.Utility.Verifier.Crc32.DefaultSeed">
-            默认种子数。
-        </member>
-        <member name="M:IFramework.Utility.Verifier.Crc32.#ctor">
-            初始化 CRC32 类的新实例。
-        </member>
-        <member name="M:IFramework.Utility.Verifier.Crc32.#ctor(System.UInt32,System.UInt32)">
-            初始化 CRC32 类的新实例。
-            <param name="polynomial">指定的多项式。</param>
-            <param name="seed">指定的种子数。</param>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.Crc32.Initialize">
-            初始化 Crc32 类的实现。
-        </member>
-        <member name="M:IFramework.Utility.Verifier.Crc32.HashCore(System.Byte[],System.Int32,System.Int32)">
-            将写入对象的数据路由到哈希算法以计算哈希值。
-            <param name="array">要计算其哈希代码的输入。</param>
-            <param name="ibStart">字节数组中的偏移量，从该位置开始使用数据。</param>
-            <param name="cbSize">字节数组中用作数据的字节数。</param>
-        </member>
-        <member name="M:IFramework.Utility.Verifier.Crc32.HashFinal">
-            在加密流对象处理完最后的数据后完成哈希计算。
-        </member>
-        <member name="T:IFramework.ValueCurve">
-            <summary>
-            用于取值的曲线
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.count">
-            <summary>
-            点的总个数
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.step">
-            <summary>
-            步长
-            </summary>
-        </member>
-        <member name="M:IFramework.ValueCurve.#ctor(System.Collections.Generic.List{IFramework.Point2},System.Single)">
-            <summary>
-            ctor
-            </summary>
-            <param name="points"></param>
-            <param name="step"></param>
-        </member>
-        <member name="M:IFramework.ValueCurve.AddPoint(IFramework.Point2)">
-            <summary>
-            添加点
-            </summary>
-            <param name="point"></param>
-        </member>
-        <member name="M:IFramework.ValueCurve.RemovePoint(IFramework.Point2)">
-            <summary>
-            移除点
-            </summary>
-            <param name="point"></param>
-        </member>
-        <member name="M:IFramework.ValueCurve.GetStep(System.Int32)">
-            <summary>
-            获取一步
-            </summary>
-            <param name="step"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.ValueCurve.GetPercent(System.Single)">
-            <summary>
-            按照百分比获取步
-            </summary>
-            <param name="mul"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.ValueCurve.GetYWithX(System.Single)">
-            <summary>
-            通过x获取y
-            </summary>
-            <param name="x"></param>
-            <returns></returns>
-        </member>
-        <member name="M:IFramework.ValueCurve.ClacSteps">
-            <summary>
-            计算每一步
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.ccurve">
-            <summary>
-            0，0 -- 1，1 对称往上拱起
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.scurve">
-            <summary>
-             0，0 -- 1，1 s形状
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.linecurve">
-            <summary>
-             0，0 -- 1，1 直线
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.ccurve_rough">
-            <summary>
-            0，0 -- 1，1 对称往上拱起(粗糙)
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.scurve_rough">
-            <summary>
-             0，0 -- 1，1 s形状(粗糙)
-            </summary>
-        </member>
-        <member name="P:IFramework.ValueCurve.linecurve_rough">
-            <summary>
-             0，0 -- 1，1 直线(粗糙)
             </summary>
         </member>
         <member name="T:IFramework.ValueMap">

@@ -21,7 +21,7 @@ using UnityEditor.ProjectWindowCallback;
 
 namespace IFramework
 {
-    static class CopyAsset
+    public static class CopyAsset
     {
         class CreateAssetAction : EndNameEditAction
         {
@@ -458,31 +458,6 @@ namespace IFramework
                 list.Insert(0, typeof(MonoBehaviour));
                 baseTypes = list.ConvertAll((type) => { return type.FullName; });
             }
-            private bool DropdownButton(int id, Rect position)
-            {
-                Event e = Event.current;
-                switch (e.type)
-                {
-                    case EventType.MouseDown:
-                        if (position.Contains(e.mousePosition) && e.button == 0)
-                        {
-                            Event.current.Use();
-                            return true;
-                        }
-                        break;
-                    case EventType.KeyDown:
-                        if (GUIUtility.keyboardControl == id && e.character == '\n')
-                        {
-                            Event.current.Use();
-                            return true;
-                        }
-                        break;
-                    case EventType.Repaint:
-                        //Styles.BoldLabel.Draw(position, content, id, false);
-                        break;
-                }
-                return false;
-            }
 
             public override void OnInspectorGUI()
             {
@@ -505,21 +480,17 @@ namespace IFramework
                     }
                 }
                 GUIContent content = new GUIContent("Base Class : " + _creater.type, "Click to choose Base Class");
-                GUILayout.Label(content, GUIStyles.Get("PreDropDown"),GUILayout.ExpandWidth(true));
-                Rect pos = GUILayoutUtility.GetLastRect();
-                int ctrlId = GUIUtility.GetControlID(GetHashCode(), FocusType.Keyboard, pos);
+                if (GUILayout.Button(content, GUIStyles.toolbarDropDown, GUILayout.ExpandWidth(true)))
                 {
-                    if (DropdownButton(ctrlId, pos))
+                    Rect pos = GUILayoutUtility.GetLastRect();
+                    SearchablePopup.Show(pos, baseTypes.ToArray(), _creater.searchIndex, (i, str) =>
                     {
-
-                        SearchablePopup.Show(pos, baseTypes.ToArray(), _creater.searchIndex, (i, str) =>
-                        {
-                            _creater.searchIndex = i;
-                            _creater.type = baseTypes[_creater.searchIndex];
-                        });
-                        GUIUtility.ExitGUI();
-                    }
+                        _creater.searchIndex = i;
+                        _creater.type = baseTypes[_creater.searchIndex];
+                    });
+                    GUIUtility.ExitGUI();
                 }
+
                 GUILayout.Space(10);
                 if (string.IsNullOrEmpty(_creater.ns) || !_creater.ns.StartsWith(EditorTools.ProjectConfig.NameSpace))
                 {
@@ -791,7 +762,7 @@ namespace IFramework
             }
         }
     }
-    static partial class EditorTools
+    public static partial class EditorTools
     {
         public static class DragAndDropTool
         {

@@ -19,7 +19,7 @@ local onApplicationPause = Delegate()
 function Awake()
     require("GlobalDefine")
     Lock_G()
-    Define("Game", Launcher.instance.game)
+    Define("Game", Launcher.Instance.game)
 
     Launcher.env:BindUpdate(Update)
     Launcher.BindFixedUpdate(FixUpdate)

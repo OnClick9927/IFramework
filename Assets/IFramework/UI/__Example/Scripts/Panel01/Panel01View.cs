@@ -23,15 +23,15 @@ namespace IFramework.UI.Example
 
         protected override void OnLoad()
         {
-            BindBUtton(this.BTn_ADD, () =>
+            BindButton(this.BTn_ADD, () =>
             {
                 Publish(new Panel01Args().SetType(Panel01ArgsEventType.Add));
             });
-            BindBUtton(this.BTn_SUB, () =>
+            BindButton(this.BTn_SUB, () =>
             {
                 Publish(new Panel01Args().SetType(Panel01ArgsEventType.Sub));
             });
-            BindBUtton(this.BTn_Next, () =>
+            BindButton(this.BTn_Next, () =>
             {
                 Publish(new Panel01Args().SetType(Panel01ArgsEventType.Next));
             });

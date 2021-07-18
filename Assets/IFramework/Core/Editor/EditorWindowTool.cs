@@ -27,7 +27,7 @@ namespace IFramework
 
     }
     [OnEnvironmentInit(EnvironmentType.Ev0)]
-    static class EditorWindowTool
+    public static class EditorWindowTool
     {
         public enum DockType
         {

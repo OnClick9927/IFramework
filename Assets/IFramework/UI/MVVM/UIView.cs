@@ -25,9 +25,9 @@ namespace IFramework.UI
         private ViewEventType _lastState = ViewEventType.None;
 
         public ViewEventType lastState { get { return _lastState; } }
-        protected void Publish(IEventArgs args, MessageUrgencyType type = MessageUrgencyType.Common)
+        protected void Publish(IEventArgs args)
         {
-            this.message.Publish(this.GetType(), args, type);
+            this.message.Publish(this.GetType(), args);
         }
         protected virtual void Show()
         {
@@ -116,7 +116,7 @@ namespace IFramework.UI
             input.onValidateInput = callback;
             return this;
         }
-        protected UIView BindBUtton(Button button, UnityAction callback)
+        protected UIView BindButton(Button button, UnityAction callback)
         {
             button.onClick.AddListener(callback);
             return this;

@@ -218,6 +218,8 @@ namespace IFramework.Language
         private void UpdateLanGroup()
         {
             EditorTools.ScriptableObjectTool.Update(_group);
+            EditorTools.ScriptableObjectTool.Update(_keyGroup);
+
         }
         private void OnDisable()
         {
@@ -305,7 +307,7 @@ namespace IFramework.Language
                 ShowNotification(new GUIContent("Value Can't be Null"));
                 return;
             }
-            if (_keys.Contains(pair.key))
+            if (!_keys.Contains(pair.key))
             {
                 ShowNotification(new GUIContent("key Can't be find"));
                 return;
@@ -625,15 +627,10 @@ namespace IFramework.Language
 
                     GUILayout.BeginHorizontal();
                     {
+                        GUILayout.Label(new GUIContent(string.Format("Key: {0}", tmpLanPair.key)));
+                        Rect pos = GUILayoutUtility.GetLastRect();
                         GUILayout.FlexibleSpace();
-                        GUILayout.Label(EditorGUIUtility.IconContent("editicon.sml"), GUILayout.Width(smallBtnSize));
-                        GUILayout.EndHorizontal();
-                    }
-
-                    Rect pos = GUILayoutUtility.GetLastRect();
-                    int ctrlId = GUIUtility.GetControlID(hashID, FocusType.Keyboard, pos);
-                    {
-                        if (DropdownButton(ctrlId, pos, new GUIContent(string.Format("Key: {0}", tmpLanPair.key))))
+                        if (GUILayout.Button(EditorGUIUtility.IconContent("editicon.sml"),GUIStyles.label, GUILayout.Width(smallBtnSize)))
                         {
                             int index = -1;
                             for (int i = 0; i < window._keys.Count; i++)
@@ -649,7 +646,9 @@ namespace IFramework.Language
                                 window.Repaint();
                             });
                         }
+                        GUILayout.EndHorizontal();
                     }
+
                     GUILayout.BeginHorizontal();
                     GUILayout.Label("Val", GUILayout.Width(describeWidth));
                     tmpLanPair.value = EditorGUILayout.TextField(tmpLanPair.value);
@@ -666,31 +665,6 @@ namespace IFramework.Language
                     GUILayout.EndVertical();
                 }
 
-            }
-            private bool DropdownButton(int id, Rect position, GUIContent content)
-            {
-                Event e = Event.current;
-                switch (e.type)
-                {
-                    case EventType.MouseDown:
-                        if (position.Contains(e.mousePosition) && e.button == 0)
-                        {
-                            Event.current.Use();
-                            return true;
-                        }
-                        break;
-                    case EventType.KeyDown:
-                        if (GUIUtility.keyboardControl == id && e.character == '\n')
-                        {
-                            Event.current.Use();
-                            return true;
-                        }
-                        break;
-                    case EventType.Repaint:
-                        Styles.BoldLabel.Draw(position, content, id, false);
-                        break;
-                }
-                return false;
             }
 
             [SerializeField] private bool keyFoldon;
@@ -742,9 +716,9 @@ namespace IFramework.Language
                 GUILayout.BeginArea(rect.Zoom(AnchorType.MiddleCenter, -10));
                 Tool();
                 GUILayout.Space(5);
-                AddLanPairFunc();
-                GUILayout.Space(5);
                 CreateLanKey();
+                GUILayout.Space(5);
+                AddLanPairFunc();
                 GUILayout.Space(5);
                 LanGroupKeysView();
                 GUILayout.EndArea();

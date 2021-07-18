@@ -985,7 +985,7 @@ namespace IFramework
                         if (GUILayout.Button(Contents.select, GUILayout.Width(Contents.gap * 5)))
                         {
                             var str = EditorUtility.OpenFolderPanel("AssetPath", Application.dataPath, "");
-                            if (str.Contains("Assets") && IO.IsDirectory(str))
+                            if (str.Contains("Assets") && IOEx.IsDirectory(str))
                             {
                                 _upload.assetPath = str.ToAssetsPath();
                                 _upload.name = Path.GetFileNameWithoutExtension(_upload.assetPath);

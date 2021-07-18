@@ -12,23 +12,13 @@ namespace IFramework.AAEX
 {
     public class AAGame : Game
     {
-        private void Awake()
-        {
-            Assets.onPrepareBegin +=()=> { onPrepareBegin?.Invoke(); } ;
-            Assets.onPrepareCompelete += () => { onPrepareCompelete?.Invoke(); };
-            Assets.onPrepareProgress += (value) => { onPrepareProgress?.Invoke(value); };
+        public event Action onUpdateBegin { add { Assets.onUpdateBegin += value; } remove { Assets.onUpdateBegin -= value; } }
+        public event Action onUpdateCompelete { add { Assets.onUpdateCompelete += value; } remove { Assets.onUpdateCompelete -= value; } }
+        public event Action<float> onUpdateProgress { add { Assets.onUpdateProgress += value; } remove { Assets.onUpdateProgress -= value; } }
 
-            Assets.onUpdateBegin += () => { onUpdateBegin?.Invoke(); };
-            Assets.onUpdateCompelete += () => { onUpdateCompelete?.Invoke(); };
-            Assets.onUpdateProgress += (value) => { onUpdateProgress?.Invoke(value); };
-        }
-        public event Action onUpdateBegin;
-        public event Action onUpdateCompelete;
-        public event Action<float> onUpdateProgress;
-
-        public event Action onPrepareBegin;
-        public event Action onPrepareCompelete;
-        public event Action<float> onPrepareProgress;
+        public event Action onPrepareBegin { add { Assets.onPrepareBegin += value; } remove { Assets.onPrepareBegin -= value; } }
+        public event Action onPrepareCompelete { add { Assets.onPrepareCompelete += value; } remove { Assets.onPrepareCompelete -= value; } }
+        public event Action<float> onPrepareProgress { add { Assets.onPrepareProgress += value; } remove { Assets.onPrepareProgress -= value; } }
         public override void Init()
         {
         }
