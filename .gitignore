@@ -1,0 +1,12 @@
+/.vs
+/IFramework/Properties
+/IFramework/bin
+Framework/.vs/
+Framework/Example/bin/
+Plugins/
+Framework/IFramework/obj/
+Framework/IFramework.UnityPlugin/obj/
+Framework/Example/obj/
+Framework/packages/
+Framework/IFramework.Tests/bin/
+Framework/IFramework.Tests/obj/

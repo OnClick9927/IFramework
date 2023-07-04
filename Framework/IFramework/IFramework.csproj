@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CC07690F-50EE-492C-B67F-632B074A8AF0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IFramework</RootNamespace>
+    <AssemblyName>IFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Plugins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>..\..\Plugins\IFramework.xml</DocumentationFile>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <NoWarn>
+    </NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IFramework\Environment\Environment.cs" />
+    <Compile Include="IFramework\Environment\EnvironmentType.cs" />
+    <Compile Include="IFramework\Environment\Framework.cs" />
+    <Compile Include="IFramework\Environment\IEnvironment.cs" />
+    <Compile Include="IFramework\Environment\ITimeCalculator.cs" />
+    <Compile Include="IFramework\Environment\OnEnvironmentInitAttribute.cs" />
+    <Compile Include="IFramework\Environment\TimeCalculator.cs" />
+    <Compile Include="IFramework\Ex.cs" />
+    <Compile Include="IFramework\IAwaitable.cs" />
+    <Compile Include="IFramework\IAwaiter.cs" />
+    <Compile Include="IFramework\IEventArgs.cs" />
+    <Compile Include="IFramework\Log\CSLogger.cs" />
+    <Compile Include="IFramework\Log\ILoger.cs" />
+    <Compile Include="IFramework\Log\ILogRecorder.cs" />
+    <Compile Include="IFramework\Log\Log.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Coroutine.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\CoroutineAwaiter.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\CoroutineState.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\ICoroutine.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForDays.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForFrame.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForFrames.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForHours.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForMilliseconds.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForMinutes.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForSeconds.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForTicks.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitForTimeSpan.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitUtil.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\WaitWhile.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Instruction\YieldInstruction.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Module\CoroutineModule.cs" />
+    <Compile Include="IFramework\Modules\Coroutine\Module\ICoroutineModule.cs" />
+    <Compile Include="IFramework\Modules\IModules.cs" />
+    <Compile Include="IFramework\Modules\Inject\IInjectModule.cs" />
+    <Compile Include="IFramework\Modules\Inject\InjectAttribute.cs" />
+    <Compile Include="IFramework\Modules\Inject\InjectModule.cs" />
+    <Compile Include="IFramework\Modules\Inject\InjectModule.InjectInstanceMap.cs" />
+    <Compile Include="IFramework\Modules\Inject\InjectModule.InjectMap.cs" />
+    <Compile Include="IFramework\Modules\Inject\InjectModule.InjectTypeMap.cs" />
+    <Compile Include="IFramework\Modules\Loom\LoomModule.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\IMessage.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\IMessageListener.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\Message.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\MessageAwaiter.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\MessageErrorCode.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\MessageListener.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\MessageState.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\MessageUrgency.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\MessageUrgencyType.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\HandlerQueue.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\MessageQueue.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\String\IStringMessageModule.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\String\StringHandlerQueue.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\String\StringMessageModule.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\String\StringMessageQueue.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\Subject.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\SubjectType.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\SubscribeAction.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\Type\IMessageModule.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\Type\MessageModule.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\Type\TypeHandlerQueue.cs" />
+    <Compile Include="IFramework\Modules\Message\Module\Type\TypeMessageQueue.cs" />
+    <Compile Include="IFramework\Modules\Module.cs" />
+    <Compile Include="IFramework\Modules\ModulePriority.cs" />
+    <Compile Include="IFramework\Modules\Modules.cs" />
+    <Compile Include="IFramework\Modules\Recorder\Module\ICommand.cs" />
+    <Compile Include="IFramework\Modules\Recorder\Module\IOperationRecorderModule.cs" />
+    <Compile Include="IFramework\Modules\Recorder\Module\OperationRecorderEx.cs" />
+    <Compile Include="IFramework\Modules\Recorder\Module\OperationRecorderModule.cs" />
+    <Compile Include="IFramework\Modules\Recorder\Module\OperationRecorderModule.HeadState.cs" />
+    <Compile Include="IFramework\Modules\Recorder\States\ActionGroupState.cs" />
+    <Compile Include="IFramework\Modules\Recorder\States\ActionState.cs" />
+    <Compile Include="IFramework\Modules\Recorder\States\BaseState.cs" />
+    <Compile Include="IFramework\Modules\Recorder\States\CommandGroupState.cs" />
+    <Compile Include="IFramework\Modules\Recorder\States\CommandState.cs" />
+    <Compile Include="IFramework\Modules\Timer\Entity\EntityState.cs" />
+    <Compile Include="IFramework\Modules\Timer\Entity\InnerType.cs" />
+    <Compile Include="IFramework\Modules\Timer\Entity\ITimerEntity.cs" />
+    <Compile Include="IFramework\Modules\Timer\Entity\TimerEntity.cs" />
+    <Compile Include="IFramework\Modules\Timer\Module\ITimerModule.cs" />
+    <Compile Include="IFramework\Modules\Timer\Module\TimerModule.cs" />
+    <Compile Include="IFramework\Modules\UpdateModule.cs" />
+    <Compile Include="IFramework\ObjectPool.cs" />
+    <Compile Include="IFramework\Queue\FastPriorityQueue.cs" />
+    <Compile Include="IFramework\Queue\FastPriorityQueueNode.cs" />
+    <Compile Include="IFramework\Queue\GenericPriorityQueue.cs" />
+    <Compile Include="IFramework\Queue\GenericPriorityQueueNode.cs" />
+    <Compile Include="IFramework\Queue\IFixedSizePriorityQueue.cs" />
+    <Compile Include="IFramework\Queue\IPriorityQueue.cs" />
+    <Compile Include="IFramework\Queue\SimplePriorityQueue.cs" />
+    <Compile Include="IFramework\Queue\StablePriorityQueue.cs" />
+    <Compile Include="IFramework\Queue\StablePriorityQueueNode.cs" />
+    <Compile Include="IFramework\Singleton\ISingleton.cs" />
+    <Compile Include="IFramework\Singleton\Singleton.cs" />
+    <Compile Include="IFramework\Singleton\SingletonCollection.cs" />
+    <Compile Include="IFramework\Singleton\SingletonCreator.cs" />
+    <Compile Include="IFramework\Singleton\SingletonProperty.cs" />
+    <Compile Include="IFramework\Singleton\SingletonPropertyClass.cs" />
+    <Compile Include="IFramework\Unit.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

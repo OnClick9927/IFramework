@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IFramework", "IFramework\IFramework.csproj", "{CC07690F-50EE-492C-B67F-632B074A8AF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{A26FFA53-1C22-4871-93B2-ADE332BEB037}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC07690F-50EE-492C-B67F-632B074A8AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC07690F-50EE-492C-B67F-632B074A8AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC07690F-50EE-492C-B67F-632B074A8AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC07690F-50EE-492C-B67F-632B074A8AF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A26FFA53-1C22-4871-93B2-ADE332BEB037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A26FFA53-1C22-4871-93B2-ADE332BEB037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A26FFA53-1C22-4871-93B2-ADE332BEB037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A26FFA53-1C22-4871-93B2-ADE332BEB037}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6883D5EF-3A9B-4499-AF69-3439DB7F24C8}
+	EndGlobalSection
+EndGlobal
