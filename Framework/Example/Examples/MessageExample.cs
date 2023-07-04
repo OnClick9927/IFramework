@@ -23,10 +23,10 @@ namespace Example
             public Listener()
             {
                 //以Listen方法为回调监听IPub的消息
-                Framework.GetEnv(EnvironmentType.Ev0).modules.message.Subscribe<IPub>(Listen);
+                Framework.GetEnv(EnvironmentType.Ev0).modules.GetModule<MessageModule>().Subscribe<IPub>(Listen);
 
                 //以监听器类注册监听MessageExample的消息
-                Framework.GetEnv(EnvironmentType.Ev0).modules.message.Subscribe<MessageExample>(this);
+                Framework.GetEnv(EnvironmentType.Ev0).modules.GetModule<MessageModule>().Subscribe<MessageExample>(this);
                 Log.L("已对IPub和MessageExample的消息监听进行注册");
             }
 
@@ -41,7 +41,7 @@ namespace Example
         protected override void Start()
         {
             //获取消息模块
-            messageModule = Framework.GetEnv(EnvironmentType.Ev0).modules.message;
+            messageModule = Framework.GetEnv(EnvironmentType.Ev0).modules.GetModule<MessageModule>();
 
             Log.L("设置可以监听注册的类型的所有子类型");
             messageModule.fitSubType = true;

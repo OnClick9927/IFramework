@@ -1,5 +1,6 @@
 ﻿using System;
 using IFramework;
+using IFramework.Message;
 using IFramework.Recorder;
 
 namespace Example
@@ -28,7 +29,7 @@ namespace Example
         }
 
         //获取模块
-        IOperationRecorderModule recorderModule { get { return Framework.GetEnv(EnvironmentType.Ev0).modules.recoder; } }
+        IOperationRecorderModule recorderModule { get { return Framework.GetEnv(EnvironmentType.Ev0).modules.GetModule<OperationRecorderModule>(); } }
 
         protected override void Start()
         {

@@ -14,7 +14,7 @@ namespace Example
         protected override void Start()
         {
             //获取协程模块
-            coroutineModule = Framework.GetEnv(EnvironmentType.Ev0).modules.coroutine;
+            coroutineModule = Framework.GetEnv(EnvironmentType.Ev0).modules.GetModule<CoroutineModule>();
 
             //调用协程示例方法
             CoroutineExample();

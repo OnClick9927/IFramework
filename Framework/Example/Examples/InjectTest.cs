@@ -73,7 +73,7 @@ namespace Example
         protected override void Start()
         {
             //获取容器
-            container = Framework.GetEnv(EnvironmentType.Ev0).modules.inject;
+            container = Framework.GetEnv(EnvironmentType.Ev0).modules.GetModule<InjectModule>();
 
             Log.L("");
 

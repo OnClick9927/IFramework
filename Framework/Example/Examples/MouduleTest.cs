@@ -63,16 +63,16 @@ namespace Example
             Log.L("调用模块的Say方法：");
             module.Say();
 
-            Log.L("使用模块的UnBind方法将模块从容器中去除");
-            Log.L("UnBind方法传入参数dispose默认为true，在没有任何引用时释放掉这个对象");
-            module.UnBind(false);
+            //Log.L("使用模块的UnBind方法将模块从容器中去除");
+            //Log.L("UnBind方法传入参数dispose默认为true，在没有任何引用时释放掉这个对象");
+            //module.UnBind(false);
 
-            Log.L("可以使用Bind方法将模块绑定到容器中\n");
-            module.Bind(moduleContainer);
+            //Log.L("可以使用Bind方法将模块绑定到容器中\n");
+            //module.Bind(moduleContainer);
 
-            module.UnBind();
-            Log.L("由于当前方法块中还存在module变量引用这个模块，所以还是能调用模块的Say方法");
-            module.Say();
+            //module.UnBind();
+            //Log.L("由于当前方法块中还存在module变量引用这个模块，所以还是能调用模块的Say方法");
+            //module.Say();
 
             Log.L("");
             Log.L("使用容器的GetModule方法可以获取容器中对应的模块，如果不存在则自动创建");
