@@ -66,7 +66,6 @@
     <Compile Include="IFramework\Ex.cs" />
     <Compile Include="IFramework\IAwaitable.cs" />
     <Compile Include="IFramework\IAwaiter.cs" />
-    <Compile Include="IFramework\IEventArgs.cs" />
     <Compile Include="IFramework\Log\CSLogger.cs" />
     <Compile Include="IFramework\Log\ILoger.cs" />
     <Compile Include="IFramework\Log\ILogRecorder.cs" />
@@ -97,6 +96,7 @@
     <Compile Include="IFramework\Modules\Inject\InjectModule.InjectMap.cs" />
     <Compile Include="IFramework\Modules\Inject\InjectModule.InjectTypeMap.cs" />
     <Compile Include="IFramework\Modules\Loom\LoomModule.cs" />
+    <Compile Include="IFramework\Modules\Message\IEventArgs.cs" />
     <Compile Include="IFramework\Modules\Message\Message\IMessage.cs" />
     <Compile Include="IFramework\Modules\Message\Message\IMessageListener.cs" />
     <Compile Include="IFramework\Modules\Message\Message\Message.cs" />
