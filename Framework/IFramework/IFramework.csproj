@@ -96,7 +96,7 @@
     <Compile Include="IFramework\Modules\Inject\InjectModule.InjectMap.cs" />
     <Compile Include="IFramework\Modules\Inject\InjectModule.InjectTypeMap.cs" />
     <Compile Include="IFramework\Modules\Loom\LoomModule.cs" />
-    <Compile Include="IFramework\Modules\Message\IEventArgs.cs" />
+    <Compile Include="IFramework\Modules\Message\Message\IEventArgs.cs" />
     <Compile Include="IFramework\Modules\Message\Message\IMessage.cs" />
     <Compile Include="IFramework\Modules\Message\Message\IMessageListener.cs" />
     <Compile Include="IFramework\Modules\Message\Message\Message.cs" />
