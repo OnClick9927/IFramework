@@ -1,4 +1,4 @@
-﻿namespace IFramework
+﻿namespace IFramework.Message
 {
     /// <summary>
     /// 框架内传递的所有消息的基类
