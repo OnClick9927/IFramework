@@ -9,9 +9,7 @@ while(true)
     Console.Write("Thanks For EveryOne Who Used It Once!")
 ```
 
-## 近期Star趋势
-[![Stargazers over time](https://starchart.cc/OnClick9927/IFramework.svg)](https://starchart.cc/OnClick9927/IFramework)
-
+[![Stargazers over time](https://starchart.cc/OnClick9927/IFramework.svg?variant=adaptive)](https://starchart.cc/OnClick9927/IFramework)
 
 
 # FAQ
